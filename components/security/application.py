@@ -1,7 +1,14 @@
 from flask import render_template
+from pylon.core.tools import log  # pylint: disable=E0611,E0401
 
 
 def applications_scanners_config(context, slot, payload):
+    if not context.slot_manager.callbacks.get("security_scanners"):
+        log.warning("No one scanner for security application was installed")
+        return render_template(
+            f"security/app/application-scanners.html",
+            config=payload
+        )
     context.slot_manager.callbacks["left_col_scanners"] = (
         context.slot_manager.callbacks["security_scanners"][
             :
