@@ -4,7 +4,7 @@ from pylon.core.tools import log  # pylint: disable=E0611,E0401
 
 def applications_scanners_config(context, slot, payload):
     if not context.slot_manager.callbacks.get("security_scanners"):
-        log.warning("No one scanner for security application was installed")
+        log.warning("No scanners for security application were installed")
         return render_template(
             f"security/app/application-scanners.html",
             config=payload
