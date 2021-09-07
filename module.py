@@ -93,12 +93,13 @@ class Module(module.ModuleModel):
         return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
+        import random
         try:
             groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
         except Empty:
             groups = []
         return render_template(
-            "project_wizard.html",
+            "wizard/project_wizard.html",
             group_options=groups,
-            cache_prevent=None
+            cache_prevent=random.random()
         )
