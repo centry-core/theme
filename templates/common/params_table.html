@@ -21,7 +21,7 @@
                         <th scope="col" data-sortable="true" data-field="default" data-formatter=inputFormatter>Default value</th>
                         <th scope="col" data-sortable="true" data-field="type" data-formatter=dataTypeFormatter>Data Type</th>
                         <th scope="col" data-sortable="true" data-field="description" data-formatter=inputFormatter>Description</th>
-                        <th scope="col" data-sortable="true" data-formatter=parametersDeleteFormatter>&nbsp;</th>
+                        <th scope="col" data-field="action" data-formatter=parametersDeleteFormatter>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,9 @@
                         <td>{{row.default}}</td>
                         <td>{{row.type}}</td>
                         <td>{{row.description}}</td>
+                        {% if (row.name not in disabled_names) %}
                         <td></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -40,7 +42,7 @@
     </div>
     <div class="row pt-2">
         <div class="col">
-            <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('params_list')"><i class="fas fa-plus"></i>Add Parameter</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('params_list')"><i class="fas fa-plus mr-2"></i>Add Parameter</button>
         </div>
     </div>
 </div>
