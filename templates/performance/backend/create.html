@@ -62,15 +62,6 @@
                                 <label class="custom-control-label" for="compile">Compile tests for Gatling</label>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-control-label" for="region">Worker region</label>
-                            <p><small>Region (Interceptor queue) in which to run the test</small></p>
-                            <select class="selectpicker show-tick form-control" id="region" data-style="btn-gray">
-                                {% for item in config.regions %}
-                                <option>{{item}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
                     </div>
                     <div class="col-6">
                         <div class="card card-x card-source">
@@ -161,62 +152,112 @@
                         </div>
                     </div>
                 </div>
+                <div class="section">
+                    <div class="row">
+                        <div class="col">
+                            <h7>Load configuration</h7>
+                            <p><h13>Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel runner</h13></p>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-6">
+                            <label class="form-control-label" for="region">Engine location</label>
+                            <select class="selectpicker show-tick form-control" id="region" data-style="btn-gray">
+                                {% for item in config.regions %}
+                                <option>{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <label class="form-control-label" for="repo_pass">Runners</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-minus"></i></button>
+                              </div>
+                              <input type="text" class="form-control form-control-borderless" aria-label="Text input with radio button">
+                              <div class="input-group-append">
+                                  <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-plus"></i></button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <label class="form-control-label">CPU Cores</label>
+                            <div class="input-group">
+                                <input type="text" data-tag="cpu" class="form-control form-control-alternative" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <label class="form-control-label" for="repo_pass">Memory, Gb</label>
+                            <div class="input-group">
+                                <input type="text" data-tag="memory" class="form-control form-control-alternative" placeholder="4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col">
+                            <button type="button" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i> Add Location</button>
+                        </div>
+                    </div>
+                </div>
+                {{ template_slot("params_table", payload={"caption": "Test Parameters"}) | safe }}
                 {{ template_slot("reporting_config", payload={"name": "createTestModal", "cogs": True}) | safe }}
-                <div class="row pl-4 bg-light">
-                    <div class="col">
-                        <h4 class="mb-0">ADVANCED PARAMETERS</h4>
-                        <p class="mb-0"><small>Configure parameters for test runner, test data and network setting</small></p>
-                    </div>
-                    <div class="col">
-                        <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-4 mr-2" onclick="toggleAdvanced('advancedBackend')"><i class="fas fa-chevron-down"></i></button>
+                <div class="section">
+                    <div class="row">
+                        <div class="col">
+                            <h7>ADVANCED PARAMETERS</h7>
+                            <p><h13>Configure parameters for test runner, test data and network setting</h13></p>
                         </div>
-                    </div>
-                </div>
-                <div class="row pr-4 pl-4 bg-light" id="advancedBackend" style="display:none">
-                    <div class="col-6">
-                        <div class="card ml-0 mr-0" id="extCard">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label mt-0">Custom plugins and extensions</label>
-                                    <p><small>Bucket and file for your customizations</small></p>
-                                </div>
-                                <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('extCard', 'bucket/file', 'path/to/file')"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card ml-0 mr-0" id="splitCSV">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label mt-0">Split CSV</label>
-                                    <p><small>Distribute CSV data across load generators</small></p>
-                                </div>
-                                <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addCSVSplit('splitCSV')"><i class="fas fa-plus"></i></button>
-                                </div>
+                        <div class="col">
+                            <div class="col-xs text-right">
+                                <button type="button" class="btn btn-nooutline-secondary mr-2" onclick="toggleAdvanced('advancedBackend')"><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="card ml-0 mr-0" id="dnsCard">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label mt-0">DNS Override</label>
-                                    <p><small>Specify alternative IP addresses for hostnames used in your test scenario</small></p>
+                    <div class="row pt-4" id="advancedBackend" style="display:none">
+                        <div class="col-6">
+                            <div class="card card-x card-row-1" id="extCard">
+                                <div class="card-header">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-fill">
+                                            <h9 class="flex-grow-1">Custom plugins and extensions</h9>
+                                            <p><h13>Bucket and file for your customizations</h13></p>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addParam('extCard', 'bucket/file', 'path/to/file')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addDNSOverride('dnsCard')"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="card card-x card-row-1" id="splitCSV">
+                                <div class="card-header">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-fill">
+                                            <h9 class="flex-grow-1">Split CSV</h9>
+                                            <p><h13>Distribute CSV data across load generators</h13></p>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addCSVSplit('splitCSV')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-x card-row-1" id="dnsCard">
+                                <div class="card-header">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-fill">
+                                            <h9 class="flex-grow-1">DNS Override</h9>
+                                            <p><h13>Specify alternative IPs for hosts used in your script</h13></p>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addParam('dnsCard', 'hostname.company.com', '0.0.0.0')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row p-3 bg-light">
-                    <div class="col"></div>
-                </div>
-                <div class="row p-4">
-                    <div class="col"></div>
                 </div>
             </div>
         </div>

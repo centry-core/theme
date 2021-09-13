@@ -1,0 +1,54 @@
+
+{% set caption = config.caption | default("Test Parameters1") -%}
+{% set table_data = config.default_params | default([]) -%}
+{% set description = config.description | default("You may also create additional parameters with ability to change them in subsequent test runs") -%}
+{% set disabled_names = config.disabled_names | default(["test name"]) -%}
+
+<div class="section">
+    <div class="row">
+        <div class="col">
+            <h7>{{caption}}</h7>
+            <p><h13>{{description}}</h13></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless params-table"  id="params_list"
+                   data-toggle="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" data-sortable="true" data-field="name" data-formatter=inputFormatter>Name</th>
+                        <th scope="col" data-sortable="true" data-field="default" data-formatter=inputFormatter>Default value</th>
+                        <th scope="col" data-sortable="true" data-field="type" data-formatter=dataTypeFormatter>Data Type</th>
+                        <th scope="col" data-sortable="true" data-field="description" data-formatter=inputFormatter>Description</th>
+                        <th scope="col" data-sortable="true" data-formatter=parametersDeleteFormatter>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in table_data %}
+                    <tr>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>
+                        <td>{{row.default}}</td>
+                        <td>{{row.type}}</td>
+                        <td>{{row.description}}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row pt-2">
+        <div class="col">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('params_list')"><i class="fas fa-plus"></i>Add Parameter</button>
+        </div>
+    </div>
+</div>
+<!--<script>-->
+<!--    $('.params-table').on('toggle.bs.table', function(ev) {-->
+<!--        var table_data = {{table_data}};-->
+<!--        table_data.forEach(function(index){-->
+<!--            $(ev.target).bootstrapTable('append', this)-->
+<!--        })-->
+<!--    });-->
+<!--</script>-->

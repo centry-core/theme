@@ -45,6 +45,12 @@ def reporting_config(context, slot, payload):
     return render_template(f"common/reporting-config.html", config=payload)
 
 
+def params_table(context, slot, payload):
+    payload["default_params"] = [{"name": "test name", "default": "asasasasas", "type": "List",
+                                  "description": "asdasdasdasdasd asdasdas asdasdasd"}]
+    return render_template(f"common/params_table.html", config=payload)
+
+
 def render_tests_result_page(context, slot, payload):
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
