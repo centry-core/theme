@@ -1,6 +1,4 @@
-<div class="row" id="findings">
-    <div class="col-12 pr-5 pl-5">
-        <div class="card">
+        <div class="card card-12" id="findings">
             <div class="card-header">
                 <div class="row">
                     <div class="col-2"><h2>Findings</h2></div>
@@ -8,10 +6,13 @@
                         <div class="btn-toolbar justify-content-end" role="toolbar"
                              aria-label="Toolbar with button groups">
                             <div class="btn-group" style="margin-right: 10px" role="group" aria-label="filters">
-                                <button type="button" class="btn btn-secondary">ALL</button>
-                                <button type="button" class="btn btn-secondary">VALID</button>
-                                <button type="button" class="btn btn-secondary">FALSE POSITIVES</button>
-                                <button type="button" class="btn btn-secondary">IGNORED</button>
+                                {% for item in ['All', 'Valid', 'False positive', 'Ignored'] %}
+                                     <button type="button" class="btn btn-secondary" onclick="statusFilter(this.innerText)">{{ item }}</button>
+                                {% endfor %}
+<!--                                <button type="button" class="btn btn-secondary">ALL</button>-->
+<!--                                <button type="button" class="btn btn-secondary">VALID</button>-->
+<!--                                <button type="button" class="btn btn-secondary">FALSE POSITIVES</button>-->
+<!--                                <button type="button" class="btn btn-secondary">IGNORED</button>-->
                             </div>
                             <button type="button" class="btn btn-32 btn-secondary"><i class="fas fa-filter"></i>
                             </button>
@@ -25,17 +26,15 @@
                                 <div class="dropdown-menu" aria-labelledby="bulkActionsBtn" id="bulkActions">
                                     <a class="dropdown-item submenu" href="#">Change severity</a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Critical</a>
-                                        <a class="dropdown-item" href="#">High</a>
-                                        <a class="dropdown-item" href="#">Medium</a>
-                                        <a class="dropdown-item" href="#">Low</a>
-                                        <a class="dropdown-item" href="#">Info</a>
+                                        {% for item in ['Critical', 'High', 'Medium', 'Low', 'Info'] %}
+                                            <a class="dropdown-item" href="#" onclick="bulkModify('severity', this.text)">{{ item }}</a>
+                                        {% endfor %}
                                     </div>
                                     <a class="dropdown-item submenu" href="#">Change status</a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Valid</a>
-                                        <a class="dropdown-item" href="#">False positive</a>
-                                        <a class="dropdown-item" href="#">Ignore</a>
+                                        {% for item in ['Valid', 'False positive', 'Ignored'] %}
+                                            <a class="dropdown-item" href="#" onclick="bulkModify('status', this.text)">{{ item }}</a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +53,7 @@
                   data-detail-view="true"
                   data-detail-view-icon="true"
                   data-filter-control="true"
-                  data-detail-formatter="detailFormatter"
+                  data-detail-formatter="findingsDetail"
                 >
                   <thead class="thead-light">
                     <tr>
@@ -75,8 +74,6 @@
                 </table>
             </div>
         </div>
-    </div>
-</div>
 
 
 <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
