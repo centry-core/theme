@@ -145,8 +145,8 @@
                                 <th scope="col" data-sortable="true" data-field="false_positive">False Positive</th>
                                 <th scope="col" data-sortable="true" data-field="excluded">Excl</th>
                                 <th scope="col" data-sortable="true" data-field="info">Info</th>
-                                <th scope="col" data-sortable="true" data-field="tags">Tag</th>
-                                <th scope="col" data-field="test_status.status">Status</th>
+                                <th scope="col" data-sortable="true" data-field="tags" data-formatter="reportsTagFormatter">Tag</th>
+                                <th scope="col" data-field="test_status.status" data-formatter="reportsStatusFormatter">Status</th>
                             </tr>
                         </thead>
                     </table>
@@ -161,3 +161,4 @@
 
 <script src="{{ url_for('static', filename='assets/js/components/security.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/js/components/reporting.js') }}" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app_list.css') }}"/>
