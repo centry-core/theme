@@ -1,164 +1,316 @@
-<div class="card-12">
-    <div class="row">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="text-gray" id="title">Tests</h3>
-                        </div>
-                        <div class="col">
-                            <ul id="tests-control" class="nav nav-pills justify-content-end">
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button type="button" id="create-test" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#createApplicationTest">
-                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
-                                    </button>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button id="filter-test" onclick="filters()" class="btn btn-secondary btn-sm">
-                                        <span class="btn-inner--icon"><i class="fa fa-filter"></i></span>
-                                    </button>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button id="delete-test" onclick="deleteTasks()" class="btn btn-secondary btn-sm" disabled>
-                                        <span class="btn-inner--icon"><i class="fa fa-trash-alt"></i></span>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+<!--<div class="card-12">-->
+<!--    <div class="row">-->
+<!--        <div class="col-6">-->
+<!--            <div class="card">-->
+<!--                <div class="card-header">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col">-->
+<!--                            <h3 class="text-gray" id="title">Tests</h3>-->
+<!--                        </div>-->
+<!--                        <div class="col">-->
+<!--                            <ul id="tests-control" class="nav nav-pills justify-content-end">-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button type="button" id="create-test" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#createApplicationTest">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-plus"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button id="filter-test" onclick="filters()" class="btn btn-secondary btn-sm">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-filter"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button id="delete-test" onclick="deleteTasks()" class="btn btn-secondary btn-sm" disabled>-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-trash-alt"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-body card-table">-->
+<!--                    <table class="table table-borderless"-->
+<!--                           id="tests-list"-->
+<!--                           data-unique-id="id"-->
+<!--                           data-toggle="table"-->
+<!--                            data-side-pagination="server"-->
+<!--                            data-url="/api/v1/security/{{config.id}}/dast"-->
+<!--                            data-page-size=3-->
+<!--                            data-pagination="true"-->
+<!--                    >-->
+<!--                        <thead class="thead-light">-->
+<!--                            <tr>-->
+<!--                                <th scope="col" data-checkbox="true"></th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="name">Name</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="urls_to_scan">Urls</th>-->
+<!--                                <th scope="col" data-sortable="true" data-visible="false" data-field="test_uid">Uuid</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="tools">Tools</th>-->
+<!--                                <th scope="col" data-field="lg_type" data-formatter="actions_buttons" data-events="status_events">-->
+<!--                                    Actions-->
+<!--                                </th>-->
+<!--                            </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="col-6">-->
+<!--            <div class="card">-->
+<!--                <div class="card-header">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col">-->
+<!--                            <h3 class="text-gray" id="suites">Thresholds</h3>-->
+<!--                        </div>-->
+<!--                        <div class="col">-->
+<!--                            <ul id="suite-control" class="nav nav-pills justify-content-end">-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <a id="create-suite" href="/tests/backend" class="btn btn-secondary btn-sm">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-plus"></i></span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button id="filter-suites" onclick="filters()" class="btn btn-secondary btn-sm">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-filter"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button id="delete-suite" onclick="deleteTasks()" class="btn btn-secondary btn-sm" disabled>-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-trash-alt"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-body card-table">-->
+<!--                    <table class="table table-borderless"-->
+<!--                        id="suite-list"-->
+<!--                        data-toggle="table"-->
+<!--                        data-side-pagination="server"-->
+<!--                        data-virtual-scroll="true">-->
+<!--                        <thead class="thead-light">-->
+<!--                            <tr>-->
+<!--                                <th scope="col" data-checkbox="true"></th>-->
+<!--                                <th data-visible="false" data-field="id">index</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="tests_count">Tests Count</th>-->
+<!--                                <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runners</th>-->
+<!--                                <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>-->
+<!--                            </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row mt-3">-->
+<!--        <div class="col-12">-->
+<!--            <div class="card">-->
+<!--            <div class="card-header">-->
+<!--                <div class="row align-items-center">-->
+<!--                        <div class="col">-->
+<!--                            <h3 class="text-gray" id="results">Results</h3>-->
+<!--                        </div>-->
+<!--                        <div class="col">-->
+<!--                            <ul id="results-control" class="nav nav-pills justify-content-end">-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <a id="add-tag" href="/tests/backend" class="btn btn-secondary btn-sm">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fas fa-tag"></i></span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item mr-2 mr-md-0">-->
+<!--                                    <button id="refresh" onclick="filters()" class="btn btn-secondary btn-sm">-->
+<!--                                        <span class="btn-inner&#45;&#45;icon"><i class="fa fa-sync"></i></span>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--            </div>-->
+<!--            <div class="card-body card-table">-->
+<!--                <table class="table table-borderless"-->
+<!--                        id="results-list"-->
+<!--                        data-toggle="table"-->
+<!--                        data-side-pagination="server"-->
+<!--                        data-url="/api/v1/security/{{config.id}}/dast/results"-->
+<!--                        data-virtual-scroll="true">-->
+<!--                        <thead class="thead-light">-->
+<!--                            <tr>-->
+<!--                                <th scope="col" data-checkbox="true"></th>-->
+<!--                                <th data-visible="false" data-field="id">index</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="name" data-formatter="test_name_button">Name</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="start_date">Start</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="duration">Duration</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="findings">Findings</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="false_positive">False Positive</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="excluded">Excl</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="info">Info</th>-->
+<!--                                <th scope="col" data-sortable="true" data-field="tags" data-formatter="reportsTagFormatter">Tag</th>-->
+<!--                                <th scope="col" data-field="test_status.status" data-formatter="reportsStatusFormatter">Status</th>-->
+<!--                            </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+<div class="d-flex">
+    <div class="card card-x">
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <h2>Tests</h2>
                 </div>
-                <div class="card-body card-table">
-                    <table class="table table-borderless"
-                           id="tests-list"
-                           data-unique-id="id"
-                           data-toggle="table"
-                            data-side-pagination="server"
-                            data-url="/api/v1/security/{{config.id}}/dast"
-                            data-page-size=3
-                            data-pagination="true"
-                    >
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col" data-checkbox="true"></th>
-                                <th scope="col" data-sortable="true" data-field="name">Name</th>
-                                <th scope="col" data-sortable="true" data-field="urls_to_scan">Urls</th>
-                                <th scope="col" data-sortable="true" data-visible="false" data-field="test_uid">Uuid</th>
-                                <th scope="col" data-sortable="true" data-field="tools">Tools</th>
-                                <th scope="col" data-field="lg_type" data-formatter="actions_buttons" data-events="status_events">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="col-8">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-filter"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-trash-alt"></i></button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="text-gray" id="suites">Thresholds</h3>
-                        </div>
-                        <div class="col">
-                            <ul id="suite-control" class="nav nav-pills justify-content-end">
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <a id="create-suite" href="/tests/backend" class="btn btn-secondary btn-sm">
-                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
-                                    </a>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button id="filter-suites" onclick="filters()" class="btn btn-secondary btn-sm">
-                                        <span class="btn-inner--icon"><i class="fa fa-filter"></i></span>
-                                    </button>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button id="delete-suite" onclick="deleteTasks()" class="btn btn-secondary btn-sm" disabled>
-                                        <span class="btn-inner--icon"><i class="fa fa-trash-alt"></i></span>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-table">
-                    <table class="table table-borderless"
-                        id="suite-list"
-                        data-toggle="table"
-                        data-side-pagination="server"
-                        data-virtual-scroll="true">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col" data-checkbox="true"></th>
-                                <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="tests_count">Tests Count</th>
-                                <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runners</th>
-                                <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+
+            <div class="card-body card-table card-quater">
+                <table class="table table-borderless"
+                       id="tests-list"
+                       data-unique-id="id"
+                       data-toggle="table"
+                       data-side-pagination="server"
+                       data-url="/api/v1/security/{{config.id}}/dast"
+                       data-page-size=5
+                       data-pagination="true"
+                >
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col" data-checkbox="true"></th>
+                        <th scope="col" data-sortable="true" data-field="name">Name</th>
+                        <th scope="col" data-sortable="true" data-field="urls_to_scan">Urls</th>
+                        <th scope="col" data-sortable="true" data-visible="false" data-field="test_uid">Uuid</th>
+                        <th scope="col" data-sortable="true" data-field="tools">Tools</th>
+                        <!--                        <th scope="col" data-field="lg_type" data-formatter="actions_buttons"-->
+                        <!--                            data-events="status_events">-->
+                        <!--                            Actions-->
+                        <!--                        </th>-->
+                        <th scope="col" data-align="right" data-cell-style="cellStyle"
+                            data-formatter=testActions>Actions
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12">
-            <div class="card">
-            <div class="card-header">
-                <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="text-gray" id="results">Results</h3>
-                        </div>
-                        <div class="col">
-                            <ul id="results-control" class="nav nav-pills justify-content-end">
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <a id="add-tag" href="/tests/backend" class="btn btn-secondary btn-sm">
-                                        <span class="btn-inner--icon"><i class="fas fa-tag"></i></span>
-                                    </a>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0">
-                                    <button id="refresh" onclick="filters()" class="btn btn-secondary btn-sm">
-                                        <span class="btn-inner--icon"><i class="fa fa-sync"></i></span>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+
+    <div class="card card-x">
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <h2>Thresholds</h2>
+                </div>
+                <div class="col-8">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-filter"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-trash-alt"></i></button>
                     </div>
+                </div>
             </div>
+
+        </div>
+        <div class="card-body card-table card-quater">
+            <table class="table table-borderless"
+                   id="threshold-list"
+                   data-toggle="table"
+                   data-side-pagination="server"
+                   data-virtual-scroll="true">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" data-checkbox="true"></th>
+                    <th data-visible="false" data-field="id">index</th>
+                    <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
+                    <th scope="col" data-sortable="true" data-field="tests_count">Tests Count</th>
+                    <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runners</th>
+                    <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="card card-12">
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <h2>Results</h2>
+                </div>
+                <div class="col-8">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-filter"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary"><i
+                                class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-body card-table">
                 <table class="table table-borderless"
-                        id="results-list"
-                        data-toggle="table"
-                        data-side-pagination="server"
-                        data-url="/api/v1/security/{{config.id}}/dast/results"
-                        data-virtual-scroll="true">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col" data-checkbox="true"></th>
-                                <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter="test_name_button">Name</th>
-                                <th scope="col" data-sortable="true" data-field="start_date">Start</th>
-                                <th scope="col" data-sortable="true" data-field="duration">Duration</th>
-                                <th scope="col" data-sortable="true" data-field="findings">Findings</th>
-                                <th scope="col" data-sortable="true" data-field="false_positive">False Positive</th>
-                                <th scope="col" data-sortable="true" data-field="excluded">Excl</th>
-                                <th scope="col" data-sortable="true" data-field="info">Info</th>
-                                <th scope="col" data-sortable="true" data-field="tags" data-formatter="reportsTagFormatter">Tag</th>
-                                <th scope="col" data-field="test_status.status" data-formatter="reportsStatusFormatter">Status</th>
-                            </tr>
-                        </thead>
-                    </table>
+                       id="results-list"
+                       data-toggle="table"
+                       data-side-pagination="server"
+                       data-url="/api/v1/security/{{config.id}}/dast/results"
+                       data-virtual-scroll="true">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col" data-checkbox="true"></th>
+                        <th data-visible="false" data-field="id">index</th>
+                        <th scope="col" data-sortable="true" data-field="name" data-formatter="test_name_button">Name
+                        </th>
+                        <th scope="col" data-sortable="true" data-field="start_date">Start</th>
+                        <th scope="col" data-sortable="true" data-field="duration">Duration</th>
+                        <th scope="col" data-sortable="true" data-field="findings">Findings</th>
+                        <th scope="col" data-sortable="true" data-field="false_positive">False Positive</th>
+                        <th scope="col" data-sortable="true" data-field="excluded">Excl</th>
+                        <th scope="col" data-sortable="true" data-field="info">Info</th>
+                        <th scope="col" data-sortable="true" data-field="tags" data-formatter="reportsTagFormatter">
+                            Tag
+                        </th>
+                        <th scope="col" data-field="test_status.status" data-formatter="reportsStatusFormatter">Status
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
             </div>
         </div>
-        </div>
-
-    </div>
-
 </div>
+
+
 {{ template_slot("create_test", payload=config)|safe }}
 
+<!--<script src="{{ url_for('static', filename='vendor/design-system/assets/js/table.js') }}"-->
+<!--        type="text/javascript"></script>-->
 <script src="{{ url_for('static', filename='js/components/security.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app_list.css') }}"/>
