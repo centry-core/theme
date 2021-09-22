@@ -32,7 +32,7 @@
                         </th>
                         <th scope="col" data-sortable="true" data-cell-style="nameStyle" data-field="entrypoint">
                             Entrypoint</th>
-                        <th scope="col" data-align="center" data-sortable="true" data-formatter=lgFormatter
+                        <th scope="col" data-align="center" data-sortable="true" data-formatter=backendLgFormatter
                             data-field="job_type">Tool</th>
                         <th scope="col" data-align="right" data-cell-style="cellStyle"
                             data-formatter=backendTestActionFormatter>Actions</th>
@@ -82,7 +82,7 @@
                    id="results-list"
                    data-toggle="table"
                    data-side-pagination="server"
-                   data-url="/api/v1/backend/{{config.id}}"
+                   data-url="/api/v1/reports/{{config.id}}"
                    data-page-size=5
                    data-unique-id="id"
                    data-pagination="true"
@@ -92,13 +92,13 @@
                         <th scope="col" data-checkbox="true"></th>
                         <th data-visible="false" data-field="id">index</th>
                         <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                        <th scope="col" data-sortable="true" data-field="start_date">Date</th>
+                        <th scope="col" data-sortable="true" data-field="start_time">Date</th>
                         <th scope="col" data-sortable="true" data-field="duration">Duration</th>
-                        <th scope="col" data-sortable="true" data-field="lg_type">vUsers</th>
-                        <th scope="col" data-sortable="true" data-field="env">Env</th>
-                        <th scope="col" data-sortable="true" data-field="test_type">Test Type</th>
-                        <th scope="col" data-sortable="true" data-field="tps">TPS</th>
-                        <th scope="col" data-sortable="true" data-field="fail_rate">Fail Rate</th>
+                        <th scope="col" data-sortable="true" data-field="vusers">vUsers</th>
+                        <th scope="col" data-sortable="true" data-field="environment">Env</th>
+                        <th scope="col" data-sortable="true" data-field="type">Test Type</th>
+                        <th scope="col" data-sortable="true" data-field="throughput">TPS</th>
+                        <th scope="col" data-sortable="true" data-field="failure_rate">Fail Rate</th>
                         <th scope="col" data-sortable="true" data-field="tags">Tags</th>
                         <th scope="col" data-sortable="true" data-field="status">Status</th>
                     </tr>
