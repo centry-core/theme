@@ -80,6 +80,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("security_findings_table", result_findings)
         self.context.slot_manager.register_callback("security_artifacts_table", result_artifacts)
         self.context.slot_manager.register_callback("security_logs_list", tests_logs)
+
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 
