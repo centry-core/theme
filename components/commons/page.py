@@ -6,12 +6,6 @@ def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
     page = request.args.get('page', '')
-    print('context', context.__dict__)
-    print('slot', slot)
-    print('payload', payload)
-    print('*'*88)
-    print(context.slot_manager.callbacks.get("integrations"))
-    print('*'*88)
     try:
         if page:
             return render_template(f"{chapter.lower()}/{module.lower()}/{page.lower()}.html", active_chapter=chapter,
