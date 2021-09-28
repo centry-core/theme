@@ -68,10 +68,13 @@
 
                     {{ template_slot("findings_processing", payload=config) | safe }}
 
-                    {{ template_slot("reporting_config", payload=config) | safe }}
+<!--                    {{ template_slot("reporting_config", payload=config) | safe }}-->
+                    <div class="row d-flex">
+                        {{ template_slot("security_reporters", payload=config) | safe }}
+                    </div>
+
 
                 </div>
             </div>
         </div>
-    </div>
 </div>
