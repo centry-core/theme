@@ -56,6 +56,8 @@ def source_card(context, slot, payload):
 def render_tests_result_page(context, slot, payload):
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
+    test_data = context.rpc_manager.timeout(5).security_results_or_404(request.args.get('result_test_id'))
+    payload['test_data'] = test_data
     try:
         return render_template(f"{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter, config=payload)
     except:
