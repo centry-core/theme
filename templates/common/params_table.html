@@ -2,7 +2,7 @@
 {% set caption = config.caption | default("Test Parameters1") -%}
 {% set table_data = config.default_params | default([]) -%}
 {% set description = config.description | default("You may also create additional parameters with ability to change them in subsequent test runs") -%}
-{% set disabled_names = config.disabled_names | default(["test name"]) -%}
+{% set disabled_names = config.disabled_names | default(["test_name", "env_type", "test_type"]) -%}
 
 <div class="section">
     <div class="row">
@@ -29,8 +29,8 @@
                     <tr>
                         <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>
                         <td>{{row.default}}</td>
-                        <td>{{row.type}}</td>
-                        <td>{{row.description}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.type}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.description}}</td>
                         {% if (row.name not in disabled_names) %}
                         <td></td>
                         {% endif %}
