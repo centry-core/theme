@@ -49,6 +49,10 @@ def params_table(context, slot, payload):
     return render_template(f"common/params_table.html", config=payload)
 
 
+def locations(context, slot, payload):
+    return render_template(f"common/locations.html", config=payload)
+
+
 def source_card(context, slot, payload):
     return render_template(f"common/source_card.html", config=payload)
 
