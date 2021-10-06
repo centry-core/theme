@@ -7,39 +7,56 @@
                         <h2>Create Backend Tests</h2>
                     </div>
                     <div class="col-xs">
-                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
-                        <button type="button" id="submit" class="btn btn-sm  btn-secondary" onclick="createTest()">Save</button>
-                        <button type="button" id="save" class="btn btn-sm  btn-basic" onclick="createTest()">Save and start</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Cancel
+                        </button>
+                        <button type="button" id="submit" class="btn btn-sm  btn-secondary" onclick="createTest()">
+                            Save
+                        </button>
+                        <button type="button" id="save" class="btn btn-sm  btn-basic" onclick="createTest()">Save and
+                            start
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="modal-body">
-                 <div class="row">
+                <div class="row">
                     <div class="col-6">
                         <div class="form-group">
                             <h9>Test Name</h9>
-                            <p><h13>Enter a name that describes the purpose of your test.</h13></p>
-                            <input type="text" id="test_name" class="form-control form-control-alternative" placeholder="Test Name">
+                            <p>
+                                <h13>Enter a name that describes the purpose of your test.</h13>
+                            </p>
+                            <input type="text" id="test_name" class="form-control form-control-alternative"
+                                   placeholder="Test Name">
                         </div>
                         <div class="row">
                             <div class="col pl-0">
                                 <div class="form-group">
                                     <h9>Test Type</h9>
-                                    <p><h13>Tag to group tests by type</h13></p>
-                                    <input type="text" id="test_type" class="form-control form-control-alternative" placeholder="Test Type">
+                                    <p>
+                                        <h13>Tag to group tests by type</h13>
+                                    </p>
+                                    <input type="text" id="test_type" class="form-control form-control-alternative"
+                                           placeholder="Test Type">
                                 </div>
                             </div>
                             <div class="col pr-0 pl-1">
                                 <div class="form-group">
                                     <h9>Environment</h9>
-                                    <p><h13>Tag to group tests by environment</h13></p>
-                                    <input type="text" id="test_env" class="form-control form-control-alternative" placeholder="Test Environment">
+                                    <p>
+                                        <h13>Tag to group tests by environment</h13>
+                                    </p>
+                                    <input type="text" id="test_env" class="form-control form-control-alternative"
+                                           placeholder="Test Environment">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group" id="testrunners">
                             <h9>Test runner</h9>
-                            <p><h13>Choose the runner for the test.</h13></p>
+                            <p>
+                                <h13>Choose the runner for the test.</h13>
+                            </p>
                             <select class="selectpicker" id="runner" data-style="btn-gray">
                                 <optgroup label="jMeter">
                                     <option value="v5.3">JMeter v5.3</option>
@@ -68,9 +85,11 @@
                         <div class="form-group mt-2">
                             <div class="form-group">
                                 <h9>Entrypoint</h9>
-                                <p><h13>File for jMeter and class for gatling</h13></p>
+                                <p>
+                                    <h13>File for jMeter and class for gatling</h13>
+                                </p>
                                 <input type="text" id="entrypoint" class="form-control form-control-alternative"
-                               placeholder="Entrypoint (e.g. some.jmx or some.Test)">
+                                       placeholder="Entrypoint (e.g. some.jmx or some.Test)">
                             </div>
                         </div>
                     </div>
@@ -79,7 +98,11 @@
                     <div class="row">
                         <div class="col">
                             <h7>Load configuration</h7>
-                            <p><h13>Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel runner</h13></p>
+                            <p>
+                                <h13>Specify engine region and load profile. CPU Cores and Memory are distributed for
+                                    each parallel runner
+                                </h13>
+                            </p>
                         </div>
                     </div>
                     <div class="row pt-2">
@@ -87,38 +110,45 @@
                             <label class="form-control-label" for="region">Engine location</label>
                             <select class="selectpicker show-tick form-control" id="region" data-style="btn-gray">
                                 {% for item in config.regions %}
-                                <option>{{item}}</option>
+                                    <option>{{ item }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-2">
                             <label class="form-control-label">Runners</label>
                             <div class="input-group">
-                              <div class="input-group-prepend">
-                                  <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-minus"></i></button>
-                              </div>
-                              <input type="text" id="parallel" class="form-control form-control-borderless" aria-label="Text input with radio button">
-                              <div class="input-group-append">
-                                  <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-plus"></i></button>
-                              </div>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-37 btn-outline-secondary" type="button"><i
+                                            class="fas fa-minus"></i></button>
+                                </div>
+                                <input type="text" id="parallel" class="form-control form-control-borderless"
+                                       aria-label="Text input with radio button">
+                                <div class="input-group-append">
+                                    <button class="btn btn-37 btn-outline-secondary" type="button"><i
+                                            class="fas fa-plus"></i></button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-2">
                             <label class="form-control-label">CPU Cores</label>
                             <div class="input-group">
-                                <input type="text" data-tag="cpu" class="form-control form-control-alternative" placeholder="1">
+                                <input type="text" data-tag="cpu" class="form-control form-control-alternative"
+                                       placeholder="1">
                             </div>
                         </div>
                         <div class="col-2">
                             <label class="form-control-label">Memory, Gb</label>
                             <div class="input-group">
-                                <input type="text" data-tag="memory" class="form-control form-control-alternative" placeholder="4">
+                                <input type="text" data-tag="memory" class="form-control form-control-alternative"
+                                       placeholder="4">
                             </div>
                         </div>
                     </div>
                     <div class="row pt-2">
                         <div class="col">
-                            <button type="button" class="btn btn-sm btn-secondary"><i class="fas fa-plus mr-2"></i>Add Location</button>
+                            <button type="button" class="btn btn-sm btn-secondary"><i class="fas fa-plus mr-2"></i>Add
+                                Location
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -128,11 +158,15 @@
                     <div class="row">
                         <div class="col">
                             <h7>ADVANCED PARAMETERS</h7>
-                            <p><h13>Configure parameters for test runner, test data and network setting</h13></p>
+                            <p>
+                                <h13>Configure parameters for test runner, test data and network setting</h13>
+                            </p>
                         </div>
                         <div class="col">
                             <div class="col-xs text-right">
-                                <button type="button" class="btn btn-nooutline-secondary mr-2" onclick="toggleAdvanced('advancedBackend')"><i class="fas fa-chevron-down"></i></button>
+                                <button type="button" class="btn btn-nooutline-secondary mr-2"
+                                        onclick="toggleAdvanced('advancedBackend')"><i class="fas fa-chevron-down"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -143,10 +177,14 @@
                                     <div class="d-flex flex-row">
                                         <div class="flex-fill">
                                             <h9 class="flex-grow-1">Custom plugins and extensions</h9>
-                                            <p><h13>Bucket and file for your customizations</h13></p>
+                                            <p>
+                                                <h13>Bucket and file for your customizations</h13>
+                                            </p>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addParam('extCard', 'bucket/file', 'path/to/file')"><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-32 btn-action mt-1"
+                                                    onclick="addParam('extCard', 'bucket/file', 'path/to/file')"><i
+                                                    class="fas fa-plus"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -156,10 +194,14 @@
                                     <div class="d-flex flex-row">
                                         <div class="flex-fill">
                                             <h9 class="flex-grow-1">Split CSV</h9>
-                                            <p><h13>Distribute CSV data across load generators</h13></p>
+                                            <p>
+                                                <h13>Distribute CSV data across load generators</h13>
+                                            </p>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addCSVSplit('splitCSV')"><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-32 btn-action mt-1"
+                                                    onclick="addCSVSplit('splitCSV')"><i class="fas fa-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -171,10 +213,14 @@
                                     <div class="d-flex flex-row">
                                         <div class="flex-fill">
                                             <h9 class="flex-grow-1">DNS Override</h9>
-                                            <p><h13>Specify alternative IPs for hosts used in your script</h13></p>
+                                            <p>
+                                                <h13>Specify alternative IPs for hosts used in your script</h13>
+                                            </p>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-32 btn-action mt-1" onclick="addParam('dnsCard', 'hostname.company.com', '0.0.0.0')"><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-32 btn-action mt-1"
+                                                    onclick="addParam('dnsCard', 'hostname.company.com', '0.0.0.0')"><i
+                                                    class="fas fa-plus"></i></button>
                                         </div>
                                     </div>
                                 </div>
