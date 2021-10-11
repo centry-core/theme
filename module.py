@@ -33,6 +33,7 @@ from .components.commons.page import (
     render_run_test,
     render_tests_result_page,
     params_table,
+    locations,
     source_card
 )
 from .components.security.application import application_integration_section
@@ -73,6 +74,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("run_test", render_run_test)
         self.context.slot_manager.register_callback("reporting_config", reporting_config)
         self.context.slot_manager.register_callback("params_table", params_table)
+        self.context.slot_manager.register_callback("locations", locations)
         self.context.slot_manager.register_callback("source_card", source_card)
         self.context.slot_manager.register_callback("application_integration_section", application_integration_section)
         self.context.slot_manager.register_callback("findings_processing", findings_processing)

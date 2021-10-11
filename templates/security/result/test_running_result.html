@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-4">
                 <h2><a id="back-button" href="?chapter=Security&module=App&page=list"><i class="fas fa-arrow-left"></i></a>{{
-                    config["test_name"] }}</h2>
+                    config['test_data']["test_name"] }}</h2>
             </div>
             <div class="col-8">
                 <div class="d-flex justify-content-end">
@@ -24,58 +24,60 @@
         </div>
     </div>
     <div class="card-body" id="progressbar-body">
+        {%  if config['test_data']['test_status']['status'].lower() != 'finished' %}
         <div class="space-progress p-4 ml-3 mr-3" align="center">
                 <div class="row">
                     <div class="col" align="right">
                     </div>
                     <div class="col">
-                        <span data-align="left"> <b id="test_status">{{config['test_status']}}</b></span>
+                        <span data-align="left"> <b id="test_status">{{config['test_data']['test_status']['status']}}</b></span>
                         <div class="progress" style="width: 80%">
                             <div class="progress-bar" role="progressbar" id="progressbar" aria-valuemin="0"
                                  aria-valuemax="100"></div>
                         </div>
-                        <span data-align="left" id="test_status_description">Process details description</span>
+                        <span data-align="left" id="test_status_description">{{config['test_data']['test_status']['description']}}</span>
                     </div>
                     <div class="col">
                     </div>
                 </div>
         </div>
+        {% endif %}
     </div>
     <div class="card-body" id="findings-small-cards">
         <div class="row">
             <div class="col">
                 <div class="card card-sm card-gray">
-                    <div class="card-header"> - </div>
+                    <div class="card-header">{{ config['test_data']["findings"] }}</div>
                     <div class="card-body">new</div>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-sm card-red">
-                    <div class="card-header">{{ config["critical"] }}</div>
+                    <div class="card-header">{{ config['test_data']["critical"] }}</div>
                     <div class="card-body">critical</div>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-sm card-orange">
-                    <div class="card-header">{{ config["high"] }}</div>
+                    <div class="card-header">{{ config['test_data']["high"] }}</div>
                     <div class="card-body">high</div>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-sm card-yellow">
-                    <div class="card-header">{{ config["medium"] }}</div>
+                    <div class="card-header">{{ config['test_data']["medium"] }}</div>
                     <div class="card-body">medium</div>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-sm card-green">
-                    <div class="card-header">{{ config["low"] }}</div>
+                    <div class="card-header">{{ config['test_data']["low"] }}</div>
                     <div class="card-body">low</div>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-sm card-blue">
-                    <div class="card-header">{{ config["info"] }}</div>
+                    <div class="card-header">{{ config['test_data']["info"] }}</div>
                     <div class="card-body">info</div>
                 </div>
             </div>
@@ -87,27 +89,27 @@
                         <table >
                             <tr>
                                 <td>Started</td>
-                                <td>{{ config["start_date"] }}</td>
+                                <td>{{ config['test_data']["start_date"] }}</td>
                                 <td>scan type</td>
                                 <td>DAST</td>
                                 <td>valid</td>
-                                <td>{{ config["valid"] }}</td>
+                                <td>{{ config['test_data']["valid"] }}</td>
                             </tr>
                             <tr>
                                 <td>Ended</td>
-                                <td>{{ config["ended_date"] }}</td>
+                                <td>{{ config['test_data']["scan_time"] }}</td>
                                 <td>Environment</td>
                                 <td>Demo</td>
                                 <td>false positives</td>
-                                <td>{{ config["false_positive"] }}</td>
+                                <td>{{ config['test_data']["false_positive"] }}</td>
                             </tr>
                             <tr>
                                 <td>duration</td>
-                                <td>{{ config["duration"] }} s</td>
+                                <td>{{ config['test_data']["duration"] }} s</td>
                                 <td>findings</td>
-                                <td>{{ config["findings"] }}</td>
+                                <td>{{ config['test_data']["findings"] }}</td>
                                 <td>ignored</td>
-                                <td>{{ config["ignored"] }}</td>
+                                <td>{{ config['test_data']["ignored"] }}</td>
                             </tr>
                         </table>
                     </div>
@@ -128,7 +130,7 @@
                             <tr>
                                 <td>tags</td>
                                 <td>
-                                    {% for tag in config["tags"] %}
+                                    {% for tag in config['test_data']["tags"] %}
                                     <span class="badge badge-primary">{{ tag }}</span>
                                     {% endfor %}
                                 </td>
@@ -141,8 +143,9 @@
     </div>
 </div>
 
-
-{{ template_slot("security_logs_list", payload=config)|safe }}
+{%  if config['test_data']['test_status']['status'].lower() != 'finished' %}
+    {{ template_slot("security_logs_list", payload=config)|safe }}
+{% endif %}
 {{ template_slot("security_findings_table", payload=config)|safe }}
 {{ template_slot("security_artifacts_table", payload=config)|safe }}
 <!--</div>-->
