@@ -67,7 +67,7 @@
                             <p><h13>Specify scanners to use. You may also set scanners in <a href="/?chapter=Configuration&module=Integrations&page=all">Integrations</a></h13></p>
                         </div>
                     </div>
-                    <div class="row d-flex mt-2">
+                    <div class="row d-flex mt-2" id="security_scanners_section">
                         {{ template_slot("security_reporters", payload=config) | safe }}
                         {{ template_slot("security_reporters", payload=config) | safe }}
                         {{ template_slot("security_reporters", payload=config) | safe }}
