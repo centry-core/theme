@@ -16,11 +16,11 @@
                         <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" aria-label="Close">
                             Cancel
                         </button>
-                        <button type="button" id="submit" class="btn btn-sm btn-secondary" onclick="submitAppTest()">
+                        <button type="button" id="security_test_save" class="btn btn-sm btn-secondary">
                             Save
                         </button>
-                        <button type="button" id="save" class="btn btn-sm btn-basic"
-                                onclick="submitAppTest(run_test=true)">Save and start
+                        <button type="button" id="security_test_save_and_run" class="btn btn-sm btn-basic">
+                            Save and start
                         </button>
                     </div>
                 </div>
@@ -57,23 +57,51 @@
                     "disabled_names": ("URL to scan", "Exclusions", "Scan location")
                 }) | safe }}
 
-{#                {{ template_slot("application_scanners_config", payload=config) | safe }}#}
-{#                {{ template_slot("reporting_config", payload=config) | safe }}#}
+                {#                {{ template_slot("application_scanners_config", payload=config) | safe }}#}
+                {#                {{ template_slot("reporting_config", payload=config) | safe }}#}
 
-                <div class="section">
-                    <div class="row">
-                        <div class="col">
-                            <h7>Scanners</h7>
-                            <p><h13>Specify scanners to use. You may also set scanners in <a href="/?chapter=Configuration&module=Integrations&page=all">Integrations</a></h13></p>
-                        </div>
-                    </div>
-                    <div class="row d-flex mt-2" id="security_scanners_section">
-                        {{ template_slot("security_reporters", payload=config) | safe }}
-                        {{ template_slot("security_reporters", payload=config) | safe }}
-                        {{ template_slot("security_reporters", payload=config) | safe }}
-                        {{ template_slot("security_reporters", payload=config) | safe }}
-                    </div>
-                </div>
+{#                {% for integration_section in config['integrations'] %}#}
+{#                    <div class="section" id="integration_{{ integration_section }}">#}
+{#                        <div class="row">#}
+{#                            <div class="col">#}
+{#                                <h7>Scanners</h7>#}
+{#                                <p>#}
+{#                                    <h13>Specify scanners to use. You may also set scanners in <a#}
+{#                                            href="/?chapter=Configuration&module=Integrations&page=all">Integrations</a>#}
+{#                                    </h13>#}
+{#                                </p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="row d-flex mt-2" id="security_scanners_section">#}
+{#                            {{ template_slot("security_reporters", payload=config) | safe }}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+
+                {% for integration_section in config['integrations'] %}
+{#                    {% do config['section'] =  %}#}
+                    {{ template_slot("application_integration_section", payload={
+                        'name': integration_section,
+                        'description': 'Specify scanners to use. You may also set scanners in <a href="/?chapter=Configuration&module=Integrations&page=all">Integrations</a>',
+                        'id': config['id']
+                    }) | safe }}
+                {% endfor %}
+
+{#            <div class="section integration_section">#}
+{#                <div class="row">#}
+{#                    <div class="col">#}
+{#                        <h7 class="integration_section_name">Not Scanners</h7>#}
+{#                        <p>#}
+{#                            <h13>#}
+{#                                Some description#}
+{#                            </h13>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="row d-flex mt-2" id=f"security_{{ '_'.join('Not Scanners') }}_section">#}
+{#                    {{ template_slot("security_scanners", payload=config) | safe }}#}
+{#                </div>#}
+{#            </div>#}
 
                 {{ template_slot("findings_processing", payload=config) | safe }}
 
