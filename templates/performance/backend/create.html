@@ -20,138 +20,70 @@
                 </div>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <h9>Test Name</h9>
-                            <p>
-                                <h13>Enter a name that describes the purpose of your test.</h13>
-                            </p>
-                            <input type="text" id="test_name" class="form-control form-control-alternative"
-                                   placeholder="Test Name">
-                        </div>
-                        <div class="row">
-                            <div class="col pl-0">
-                                <div class="form-group">
-                                    <h9>Test Type</h9>
-                                    <p>
-                                        <h13>Tag to group tests by type</h13>
-                                    </p>
-                                    <input type="text" id="test_type" class="form-control form-control-alternative"
-                                           placeholder="Test Type">
-                                </div>
-                            </div>
-                            <div class="col pr-0 pl-1">
-                                <div class="form-group">
-                                    <h9>Environment</h9>
-                                    <p>
-                                        <h13>Tag to group tests by environment</h13>
-                                    </p>
-                                    <input type="text" id="test_env" class="form-control form-control-alternative"
-                                           placeholder="Test Environment">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group" id="testrunners">
-                            <h9>Test runner</h9>
-                            <p>
-                                <h13>Choose the runner for the test.</h13>
-                            </p>
-                            <select class="selectpicker" id="runner" data-style="btn-gray">
-                                <optgroup label="jMeter">
-                                    <option value="v5.3">JMeter v5.3</option>
-                                    <option value="v5.2.1">JMeter v5.2.1</option>
-                                    <option value="v5.2">JMeter v5.2</option>
-                                    <option value="v5.1.1">JMeter v5.1.1</option>
-                                    <option value="v5.1">JMeter v5.1</option>
-                                    <option value="v5.0">JMeter v5.0</option>
-                                    <option value="v4.0">JMeter v4.0</option>
-                                </optgroup>
-                                <optgroup label="Gatling">
-                                    <option value="v3.1">Gatling v3.1</option>
-                                    <option value="v2.3">Gatling v2.3</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div class="form-group" id="compileTests">
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="compile" disabled>
-                                <label class="custom-control-label" for="compile">Compile tests for Gatling</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        {{ template_slot("source_card", payload={"chapters": ["git", "artifact"]}) | safe }}
-                        <div class="form-group mt-2">
-                            <div class="form-group">
-                                <h9>Entrypoint</h9>
-                                <p>
-                                    <h13>File for jMeter and class for gatling</h13>
-                                </p>
-                                <input type="text" id="entrypoint" class="form-control form-control-alternative"
-                                       placeholder="Entrypoint (e.g. some.jmx or some.Test)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="section">
-                    <div class="row">
-                        <div class="col">
-                            <h7>Load configuration</h7>
-                            <p>
-                                <h13>Specify engine region and load profile. CPU Cores and Memory are distributed for
-                                    each parallel runner
-                                </h13>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row pt-2">
+                     <div class="row">
                         <div class="col-6">
-                            <label class="form-control-label" for="region">Engine location</label>
-                            <select class="selectpicker show-tick form-control" id="region" data-style="btn-gray">
-                                {% for item in config.regions %}
-                                    <option>{{ item }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class="form-control-label">Runners</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-37 btn-outline-secondary" type="button"><i
-                                            class="fas fa-minus"></i></button>
+                            <div class="form-group">
+                                <h9>Test Name</h9>
+                                <p><h13>Enter a name that describes the purpose of your test.</h13></p>
+                                <input type="text" id="test_name" class="form-control form-control-alternative" placeholder="Test Name">
+                            </div>
+                            <div class="row">
+                                <div class="col pl-0">
+                                    <div class="form-group">
+                                        <h9>Test Type</h9>
+                                        <p><h13>Tag to group tests by type</h13></p>
+                                        <input type="text" id="test_type" class="form-control form-control-alternative" placeholder="Test Type">
+                                    </div>
                                 </div>
-                                <input type="text" id="parallel" class="form-control form-control-borderless"
-                                       aria-label="Text input with radio button">
-                                <div class="input-group-append">
-                                    <button class="btn btn-37 btn-outline-secondary" type="button"><i
-                                            class="fas fa-plus"></i></button>
+                                <div class="col pr-0 pl-1">
+                                    <div class="form-group">
+                                        <h9>Environment</h9>
+                                        <p><h13>Tag to group tests by environment</h13></p>
+                                        <input type="text" id="test_env" class="form-control form-control-alternative" placeholder="Test Environment">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="testrunners">
+                                <h9>Test runner</h9>
+                                <p><h13>Choose the runner for the test.</h13></p>
+                                <select class="selectpicker" id="runner" data-style="btn-gray">
+                                    <optgroup label="jMeter">
+                                        <option value="v5.3">JMeter v5.3</option>
+                                        <option value="v5.2.1">JMeter v5.2.1</option>
+                                        <option value="v5.2">JMeter v5.2</option>
+                                        <option value="v5.1.1">JMeter v5.1.1</option>
+                                        <option value="v5.1">JMeter v5.1</option>
+                                        <option value="v5.0">JMeter v5.0</option>
+                                        <option value="v4.0">JMeter v4.0</option>
+                                    </optgroup>
+                                    <optgroup label="Gatling">
+                                        <option value="v3.1">Gatling v3.1</option>
+                                        <option value="v2.3">Gatling v2.3</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group" id="compileTests">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="custom-control-input" id="compile" disabled>
+                                    <label class="custom-control-label" for="compile">Compile tests for Gatling</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2">
-                            <label class="form-control-label">CPU Cores</label>
-                            <div class="input-group">
-                                <input type="text" data-tag="cpu" class="form-control form-control-alternative"
-                                       placeholder="1">
+                        <div class="col-6">
+                            {{ template_slot("source_card", payload={"chapters": ["git", "artifact"]}) | safe }}
+                            <div class="form-group mt-2">
+                                <div class="form-group">
+                                    <h9>Entrypoint</h9>
+                                    <p><h13>File for jMeter and class for gatling</h13></p>
+                                    <input type="text" id="entrypoint" class="form-control form-control-alternative"
+                                   placeholder="Entrypoint (e.g. some.jmx or some.Test)">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-2">
-                            <label class="form-control-label">Memory, Gb</label>
-                            <div class="input-group">
-                                <input type="text" data-tag="memory" class="form-control form-control-alternative"
-                                       placeholder="4">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row pt-2">
-                        <div class="col">
-                            <button type="button" class="btn btn-sm btn-secondary"><i class="fas fa-plus mr-2"></i>Add
-                                Location
-                            </button>
                         </div>
                     </div>
                 </div>
+                {{ template_slot("locations", payload={"regions": config.regions}) | safe }}
                 {{ template_slot("params_table", payload={"caption": "Test Parameters"}) | safe }}
                 {{ template_slot("reporting_config", payload={"name": "createTestModal", "cogs": True}) | safe }}
                 <div class="section">
