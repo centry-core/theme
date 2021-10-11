@@ -1,11 +1,20 @@
-<div class="container">
-    <div class="card card-1 shadow-sm">
-        {{ template_slot("scanners_dast_config", payload=config) | safe }}
-    </div>
-    <div class="card card-1 shadow-sm">
-        {{ template_slot("processing_dast", payload=config) | safe }}
-    </div>
-    <div class="card card-1 shadow-sm">
-        {{ template_slot("reporting_config", payload=config) | safe }}
+<div>
+    <div class="card card-12">
+        <div class="card-body">
+            <div class="row border-bottom">
+                <div class="card card-x shadow-none">
+                    <div class="card-header">
+                        <h1>Integrations</h1>
+                        <h9>Some description</h9>
+                    </div>
+                    <div class="card-body">
+                        <h13>
+
+                        </h13>
+                    </div>
+                </div>
+            </div>
+            {{ template_slot("integrations", payload=config) | safe }}
+        </div>
     </div>
 </div>
