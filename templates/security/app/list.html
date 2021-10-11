@@ -8,9 +8,9 @@
                 </div>
                 <div class="col-7">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-24 btn-secondary" id="create-test" data-toggle="modal" data-target="#createApplicationTest"><i class="fas fa-plus"></i></button>
-                        <button type="button" class="btn btn-24 btn-secondary" id="filter-test" onclick="filters()"><i class="fas fa-filter"></i></button>
-                        <button type="button" class="btn btn-24 btn-secondary" id="delete-test" onclick="deleteTasks()"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary" id="create_test" data-toggle="modal" data-target="#createApplicationTest"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary" id="filter_test"><i class="fas fa-filter"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary" id="delete_test"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -151,6 +151,6 @@
 
 {{ template_slot("create_test", payload=config)|safe }}
 
-<script src="{{ url_for('static', filename='js/components/security.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/components/security/security.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app_list.css') }}"/>
