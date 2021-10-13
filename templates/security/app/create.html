@@ -79,7 +79,6 @@
 {#                {% endfor %}#}
 
                 {% for integration_section in config['integrations'] %}
-{#                    {% do config['section'] =  %}#}
                     {{ template_slot("application_integration_section", payload={
                         'name': integration_section,
                         'description': 'Specify scanners to use. You may also set scanners in <a href="/?chapter=Configuration&module=Integrations&page=all">Integrations</a>',
