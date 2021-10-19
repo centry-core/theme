@@ -1,5 +1,5 @@
 {% set regions = config.regions | default(["default"]) -%}
-
+{% set modal_id = config.modal_id | default("") -%}
 
 <div class="section">
     <div class="row">
@@ -14,8 +14,8 @@
     </div>
     <div class="row pt-2">
         <div class="col-6">
-            <label class="form-control-label" for="region">Engine location</label>
-            <select class="selectpicker show-tick form-control" id="region" data-style="btn-gray">
+            <label class="form-control-label" for="{{modal_id}}_region">Engine location</label>
+            <select class="selectpicker show-tick form-control" id="{{modal_id}}_region" data-style="btn-gray">
                 {% for item in regions %}
                 <option>{{item}}</option>
                 {% endfor %}
@@ -27,7 +27,7 @@
                 <div class="input-group-prepend">
                     <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-minus"></i></button>
                 </div>
-                <input type="text" id="parallel" class="form-control form-control-borderless"
+                <input type="text" id="{{modal_id}}_parallel" class="form-control form-control-borderless"
                        aria-label="Text input with radio button">
                 <div class="input-group-append">
                     <button class="btn btn-37 btn-outline-secondary" type="button"><i class="fas fa-plus"></i></button>
