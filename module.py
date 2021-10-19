@@ -36,7 +36,6 @@ from .components.commons.page import (
     locations,
     source_card
 )
-from .components.security.application import application_integration_section
 from .components.security.common import findings_processing
 from .components.security.result import result_findings, result_artifacts, tests_logs
 
@@ -76,7 +75,6 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("params_table", params_table)
         self.context.slot_manager.register_callback("locations", locations)
         self.context.slot_manager.register_callback("source_card", source_card)
-        self.context.slot_manager.register_callback("application_integration_section", application_integration_section)
         self.context.slot_manager.register_callback("findings_processing", findings_processing)
         self.context.slot_manager.register_callback("test_result_page", render_tests_result_page)
         self.context.slot_manager.register_callback("security_findings_table", result_findings)
