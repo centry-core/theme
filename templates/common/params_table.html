@@ -45,7 +45,19 @@
             <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('params_list')"><i class="fas fa-plus mr-2"></i>Add Parameter</button>
         </div>
     </div>
+
 </div>
+<style>
+    .invalid-tooltip-custom {
+        top: initial;
+        left: inherit;
+        visibility: hidden;
+    }
+    .is-invalid:hover ~ .invalid-tooltip-custom {
+        visibility: visible;
+    }
+</style>
+
 <!--<script>-->
 <!--    $('.params-table').on('toggle.bs.table', function(ev) {-->
 <!--        var table_data = {{table_data}};-->
