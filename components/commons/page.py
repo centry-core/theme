@@ -19,8 +19,6 @@ def render_test(context, slot, payload):  # pylint: disable=R0201,W0613
     """ Base template slot """
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
-    payload['integrations'] = context.rpc_manager.timeout(5).integrations_get_project_integrations(payload['id'])
-    # print("payload['integrations']", payload['integrations'])
     try:
         if module:
             return render_template(f"{chapter.lower()}/{module.lower()}/create.html", active_chapter=chapter,
