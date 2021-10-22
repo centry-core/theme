@@ -29,17 +29,17 @@
                     </tr>
                 </thead>
                 <tbody>
-<!--                {% for row in table_data %}-->
-<!--                    <tr>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>-->
-<!--                        <td>{{row.default}}</td>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.type}}</td>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.description}}</td>-->
-<!--                        {% if (row.name not in disabled_names) %}-->
-<!--                        <td></td>-->
-<!--                        {% endif %}-->
-<!--                    </tr>-->
-<!--                {% endfor %}-->
+                {% for row in table_data %}
+                    <tr>
+                       <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>
+                        <td>{{row.default}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.type}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.description}}</td>
+                        {% if (row.name not in disabled_names) %}
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
