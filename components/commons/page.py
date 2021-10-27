@@ -66,3 +66,7 @@ def render_tests_result_page(context, slot, payload):
         return render_template(f"{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter, config=payload)
     except:
         return render_template(f"common/empty.html", active_chapter=chapter, config=payload)
+
+
+def render_alert_bar(context, slot, payload):
+    return render_template('common/alert_bar.html', config=payload)

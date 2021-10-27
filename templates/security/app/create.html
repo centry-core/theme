@@ -25,6 +25,7 @@
                     </div>
                 </div>
             </div>
+            {{ template_slot("alert_bar", payload={"alert_container_id": "alertCreateTest", "max_alerts": 1}) | safe }}
 
 
             <div class="modal-body">
