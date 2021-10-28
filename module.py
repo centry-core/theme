@@ -34,7 +34,7 @@ from .components.commons.page import (
     render_tests_result_page,
     params_table,
     locations,
-    source_card
+    source_card, render_alert_bar
 )
 from .components.security.common import findings_processing
 from .components.security.result import result_findings, result_artifacts, tests_logs
@@ -80,6 +80,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("security_findings_table", result_findings)
         self.context.slot_manager.register_callback("security_artifacts_table", result_artifacts)
         self.context.slot_manager.register_callback("security_logs_list", tests_logs)
+        self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
 
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
