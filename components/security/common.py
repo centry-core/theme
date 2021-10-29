@@ -1,8 +1,8 @@
 from flask import request, render_template
 
 
-def findings_processing(context, slot, payload):
+def create_test_processing(context, slot, payload):
     return render_template(
-        f"security/app/findings-processing.html",
+        f"security/app/create_test_processing.html",
         config=payload
     )
