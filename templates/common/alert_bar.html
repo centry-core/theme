@@ -1,6 +1,8 @@
-{% set max_alerts = config.max_alerts | default(3) -%}
+{% set max_alerts = config.max_alerts | default(1) -%}
 {% set alert_container_id = config.alert_container_id | default('alert_custom') -%}
+{% set overlay_max_width = config.overlay_max_width | default('unset') -%}
 <div id="{{ alert_container_id }}" data-max-alerts="{{ max_alerts }}">
+    <div class="overlaying" style="max-width: {{ overlay_max_width }}"></div>
 </div>
 <script>
     $(document).ready(() => {
