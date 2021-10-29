@@ -25,7 +25,11 @@
                     </div>
                 </div>
             </div>
-            {{ template_slot("alert_bar", payload={"alert_container_id": "alertCreateTest", "max_alerts": 1}) | safe }}
+            {{ template_slot("alert_bar", payload={
+                "alert_container_id": "alertCreateTest",
+                "max_alerts": 1,
+                "overlay_max_width": "1010px"
+            }) | safe }}
 
 
             <div class="modal-body">
