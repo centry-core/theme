@@ -60,9 +60,19 @@ def source_card(context, slot, payload):
 def render_tests_result_page(context, slot, payload):
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
-    test_data = context.rpc_manager.timeout(5).security_results_or_404(request.args.get('result_test_id'))
-    payload['test_data'] = test_data
+    if chapter.lower() == "security":
+        test_data = context.rpc_manager.timeout(5).security_results_or_404(request.args.get('result_test_id'))
+    if chapter.lower() == "performance":
+        test_data = context.rpc_manager.timeout(5).backend_results_or_404(request.args.get('result_test_id')).to_json()
+        try:
+            test_data["failure_rate"] = round((test_data["failures"] / test_data["total"]) * 100, 2)
+        except:
+            test_data["failure_rate"] = 0
+        # TODO set tags in model
+        test_data["tags"] = []
     try:
-        return render_template(f"{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter, config=payload)
+        payload['test_data'] = test_data
+        return render_template(f"{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter,
+                               config=payload)
     except:
         return render_template(f"common/empty.html", active_chapter=chapter, config=payload)
