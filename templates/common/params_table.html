@@ -29,17 +29,17 @@
                     </tr>
                 </thead>
                 <tbody>
-<!--                {% for row in table_data %}-->
-<!--                    <tr>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>-->
-<!--                        <td>{{row.default}}</td>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.type}}</td>-->
-<!--                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.description}}</td>-->
-<!--                        {% if (row.name not in disabled_names) %}-->
-<!--                        <td></td>-->
-<!--                        {% endif %}-->
-<!--                    </tr>-->
-<!--                {% endfor %}-->
+                {% for row in table_data %}
+                    <tr>
+                       <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.name}}</td>
+                        <td>{{row.default}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.type}}</td>
+                        <td {% if (row.name in disabled_names) %} class="disabled" {%endif%}>{{row.description}}</td>
+                        {% if (row.name not in disabled_names) %}
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -49,7 +49,19 @@
             <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('{{modal_id}}_test_params')"><i class="fas fa-plus mr-2"></i>Add Parameter</button>
         </div>
     </div>
+
 </div>
+<style>
+    .invalid-tooltip-custom {
+        top: initial;
+        left: inherit;
+        visibility: hidden;
+    }
+    .is-invalid:hover ~ .invalid-tooltip-custom {
+        visibility: visible;
+    }
+</style>
+
 <!--<script>-->
 <!--    $('.params-table').on('toggle.bs.table', function(ev) {-->
 <!--        var table_data = {{table_data}};-->

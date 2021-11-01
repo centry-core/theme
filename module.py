@@ -31,13 +31,14 @@ from .components.commons.page import (
     render_test,
     reporting_config,
     render_run_test,
-    render_tests_result_page,
+    test_result_page,
     params_table,
     locations,
-    source_card
+    source_card, render_alert_bar
 )
-from .components.security.common import findings_processing
+from .components.security.common import create_test_processing
 from .components.security.result import result_findings, result_artifacts, tests_logs
+from .filters import tag_format
 
 from ..shared.connectors.auth import SessionProject
 
@@ -75,14 +76,19 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("params_table", params_table)
         self.context.slot_manager.register_callback("locations", locations)
         self.context.slot_manager.register_callback("source_card", source_card)
-        self.context.slot_manager.register_callback("findings_processing", findings_processing)
-        self.context.slot_manager.register_callback("test_result_page", render_tests_result_page)
+        self.context.slot_manager.register_callback("create_test_processing", create_test_processing)
+        self.context.slot_manager.register_callback("test_result_page", test_result_page)
         self.context.slot_manager.register_callback("security_findings_table", result_findings)
         self.context.slot_manager.register_callback("security_artifacts_table", result_artifacts)
         self.context.slot_manager.register_callback("security_logs_list", tests_logs)
+        self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
 
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
+
+        # Register custom Jinja filters
+        self.context.app.template_filter()(tag_format)
+
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """

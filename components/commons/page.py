@@ -57,7 +57,7 @@ def source_card(context, slot, payload):
     return render_template(f"common/source_card.html", config=payload)
 
 
-def render_tests_result_page(context, slot, payload):
+def test_result_page(context, slot, payload):
     chapter = request.args.get('chapter', '')
     module = request.args.get('module', '')
     if chapter.lower() == "security":
@@ -76,3 +76,7 @@ def render_tests_result_page(context, slot, payload):
                                config=payload)
     except:
         return render_template(f"common/empty.html", active_chapter=chapter, config=payload)
+
+
+def render_alert_bar(context, slot, payload):
+    return render_template('common/alert_bar.html', config=payload)
