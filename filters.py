@@ -16,6 +16,6 @@ def tag_format(tags):
         chosen_class = tag_badge_mapping.get(tag, sorted(badge_classes, key=badge_classes.get)[0])
         badge_classes[chosen_class] += 1
         tag_badge_mapping[tag] = chosen_class
-        result.append(f'<span class="badge {chosen_class}">{tag}</span>')
+        result.append(f'<span class="badge mr-1 {chosen_class}">{tag}</span>')
 
     return ''.join(result)

@@ -1,11 +1,11 @@
 <div class="card card-12" id="findings">
     <div class="card-header">
         <div class="row">
-            <div class="col-2"><h2>Findings</h2></div>
+            <div class="col-2"><h3>Findings</h3></div>
             <div class="col-10">
                 <div class="btn-toolbar justify-content-end" role="toolbar"
                      aria-label="Toolbar with button groups">
-                    <div class="btn-group" style="margin-right: 10px" role="group" aria-label="filters">
+                    <div class="btn-group mr-1" role="group" aria-label="filters">
                         {% for item in ['All', 'Valid', 'False positive', 'Ignored'] %}
                             <button type="button" class="btn btn-secondary"
                                     onclick="statusFilter(this.innerText)">{{ item }}</button>
