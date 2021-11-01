@@ -11,13 +11,13 @@
             </div>
             <div class="col-8">
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-sm btn-secondary" id="rerun-test">
+                    <button class="btn btn-sm btn-secondary">
                         <span class="fa fa-play"></span>
                     </button>
-                    <button class="btn btn-sm btn-secondary" id="config-test">
+                    <button class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#showConfigModal" id="show_config_btn">
                         Show config
                     </button>
-                    <button class="btn btn-sm btn-danger" id="stop-test">
+                    <button class="btn btn-sm btn-danger">
                         Stop test
                     </button>
                 </div>
@@ -104,13 +104,13 @@
                                 <tr>
                                     <td>Scanners</td>
                                     <td>
-                                        Qualys, Masscan
+                                        {{ config['test_data']['test_config']['integrations']['scanners'] | join(', ') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>URL</td>
                                     <td>
-                                        http://address.com, http://address.com, http://address.com, http://address.com
+                                        {{ config['test_data']['test_config']['urls_to_scan'] | join(', ') }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -162,9 +162,10 @@
 
 {% if config['test_data']['test_status']['percentage'] == 100 %}
     <script src="{{ url_for('static', filename='js/components/security/results/summary.js') }}" type="text/javascript"></script>
-    {{ template_slot("security_findings_table", payload=config)|safe }}
-    {{ template_slot("security_artifacts_table", payload=config)|safe }}
+    {{ template_slot("security_results_show_config", payload=config['test_data']['test_config']) | safe }}
+    {{ template_slot("security_findings_table", payload=config) | safe }}
+    {{ template_slot("security_artifacts_table", payload=config) | safe }}
 {% else %}
     <script src="{{ url_for('static', filename='js/components/security/results/in_progress.js') }}" type="text/javascript"></script>
-    {{ template_slot("security_logs_list", payload=config)|safe }}
+    {{ template_slot("security_logs_list", payload=config) | safe }}
 {% endif %}
