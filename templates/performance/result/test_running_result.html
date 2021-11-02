@@ -1,0 +1,319 @@
+<meta property="build_id" content="{{ config['test_data']['build_id'] }}"/>
+<meta property="lg_type" content="{{ config['test_data']['lg_type'] }}"/>
+<meta property="test_name" content="{{ config['test_data']['name'] }}"/>
+<meta property="environment" content="{{ config['test_data']['environment'] }}"/>
+
+<!--<div class="container" id="test_results">-->
+<div class="card card-12">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-4">
+                <h2><a id="back-button" href="?chapter=Performance&module=Backend&page=list"><i
+                        class="fas fa-arrow-left"></i></a>{{
+                    config['test_data']["name"] }} (back)</h2>
+            </div>
+            <div class="col-8">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-secondary" id="rerun-test" onclick="rerunTest()">
+                        Re-run test
+                    </button>
+                    <button class="btn btn-sm btn-secondary" id="config-test" onclick="showConfig()">
+                        Show config
+                    </button>
+                    <button class="btn btn-sm btn-danger" id="stop-test" onclick="stopTest()">
+                        Stop test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body" id="progressbar-body">
+        {% if config['test_data']['status'].lower() != 'finished' %}
+        <div class="space-progress p-4 ml-3 mr-3" align="center">
+            <div class="row">
+                <div class="col" align="right">
+                </div>
+                <div class="col">
+                    <span data-align="left"> <b id="test_status">{{config['test_data']['status']}}</b></span>
+                    <div class="progress" style="width: 80%">
+                        <div class="progress-bar" role="progressbar" id="progressbar" aria-valuemin="0"
+                             aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-body" id="backend-small-cards">
+        <div class="row">
+            <div class="col">
+                <div class="card card-sm card-green">
+                    <div class="card-header">{{ config['test_data']["vusers"] }} VU</div>
+                    <div class="card-body">MAX VUSERS</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card card-sm card-blue">
+                    <div class="card-header">{{ config['test_data']["throughput"] }} req/sec</div>
+                    <div class="card-body">AVG.THROUGHPUT</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card card-sm card-red">
+                    <div class="card-header">{{ config['test_data']["failure_rate"] }} %</div>
+                    <div class="card-body">ERROR RATE</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card card-sm card-azure">
+                    <div class="card-header">{{ config['test_data']["pct95"] }} ms</div>
+                    <div class="card-body">95 PCT. RESP. TIME</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card card-sm card-magento">
+                    <div class="card-header">{{ config['test_data']["pct50"] }} ms</div>
+                    <div class="card-body">MEDIAN RESP. TIME</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="processing-table">
+            <div class="col">
+                <div class="card card-sm-table">
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <td>Status</td>
+                                <td>{{ config['test_data']["status"] }}</td>
+                                <td>STARTED</td>
+                                <td id="start_time">{{ config['test_data']["start_time"] }}</td>
+                                <td>TEST TYPE</td>
+                                <td>{{ config['test_data']["type"] }}</td>
+                                <td>RESPONSE CODES</td>
+                                <td>1xx: {{ config['test_data']["onexx"] }} 2xx: {{ config['test_data']["twoxx"] }} 3xx:
+                                    {{ config['test_data']["threexx"] }} 4xx: {{ config['test_data']["fourxx"] }} 5xx:
+                                    {{ config['test_data']["fivexx"] }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DURATION</td>
+                                <td>{{ config['test_data']["duration"] }}</td>
+                                <td>ENDED</td>
+                                <td id="end_time">{{ config['test_data']["end_time"] }}</td>
+                                <td>Environment</td>
+                                <td>{{ config['test_data']["environment"] }}</td>
+                                <td>tags</td>
+                                <td>
+                                    {% for tag in config['test_data']["tags"] %}
+                                    <span class="badge badge-primary">{{ tag }}</span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-12">
+    <div class="row header-body">
+<div class="col-xl-12 mb-6 mb-xl-0">
+  <div class="card bg-gradient-white shadow">
+    <div class="card-header bg-transparent">
+      <div class="row align-items-center">
+        <div class="col-xl-4">
+          <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+          <h2 class="text-gray mb-0">Requests summary</h2>
+        </div>
+        <div class="col-xl-8">
+            <ul id="chart-control" class="nav nav-pills justify-content-end">
+                <li class="nav-item mr-2 mr-md-0">
+                    <select class="selectpicker show-tick form-control form-control-md " id="aggregator" onchange="switchAggregator()">
+                        <option>auto</option>
+                        <option>1s</option>
+                        <option>5s</option>
+                        <option>30s</option>
+                        <option>1m</option>
+                        <option>5m</option>
+                        <option>10m</option>
+                    </select>
+                </li>
+                <li class="nav-item mr-2 mr-md-0">
+                    <select class="selectpicker show-tick form-control form-control-md " id="status" onchange="switchStatus()">
+                        <option>all</option>
+                        <option>ok</option>
+                        <option>ko</option>
+                    </select>
+                </li>
+                <li class="nav-item mr-2 mr-md-0">
+                    <select class="selectpicker show-tick form-control form-control-md " id="sampler" onchange="switchSampler()">
+                        {% for sampler in samplers %}
+                          <option>{{ sampler }}</option>
+                        {% endfor %}
+                    </select>
+                </li>
+                <li class="nav-item mr-2 mr-md-0">
+                  <a id="RT" onclick="loadRequestData('/api/v1/chart/requests/summary', 'Response time, ms')" class="nav-link py-2 px-3" data-toggle="tab">
+                    <span class="d-none d-md-block">Responses</span>
+                    <span class="d-md-none">M</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a id="AR" onclick="loadRequestData('/api/v1/chart/requests/average', 'Response time, ms')" class="nav-link py-2 px-3" data-toggle="tab">
+                    <span class="d-none d-md-block">Average Reponse</span>
+                    <span class="d-md-none">A</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a id="HT" onclick="loadRequestData('/api/v1/chart/requests/hits', 'Hits/Requests per second')" class="nav-link py-2 px-3" data-toggle="tab">
+                    <span class="d-none d-md-block">TPS</span>
+                    <span class="d-md-none">H</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a id="AN" onclick="displayAnalytics()" class="nav-link py-2 px-3" data-toggle="tab">
+                    <span class="d-none d-md-block">Analytics</span>
+                    <span class="d-md-none">N</span>
+                  </a>
+                </li>
+                <li class="nav-item mr-2 mr-md-0">
+                  <a id="DW" onclick="downloadPic()" class="nav-link py-2 px-3" download="download">
+                      <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                  </a>
+                </li>
+              </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="preset">
+      <!-- Chart -->
+        <div class="float-left" style="width:100%;">
+            <div class="chart float-left" style="width:75%;">
+          <div class="chartjs-size-monitor">
+              <div class="chartjs-size-monitor-expand">
+                  <div class="">
+                  </div>
+              </div>
+              <div class="chartjs-size-monitor-shrink">
+                  <div class=""></div>
+              </div>
+          </div>
+        <canvas id="chart-requests" class="chart-canvas chartjs-render-monitor" style="display: block; height: 450px; width: 100%;"></canvas>
+      </div>
+        <div class="float-left" style="width:25%;">
+            <div id="chartjs-custom-legend" class="custom-chart-legend"></div>
+        </div>
+        </div>
+
+    </div>
+    <div class="card-body" id="analytics">
+      <!-- Chart -->
+        <div class="row">
+            <div class="col-md-9">
+              <div class="chart">
+                  <div class="chartjs-size-monitor">
+                      <div class="chartjs-size-monitor-expand">
+                          <div class="">
+                          </div>
+                      </div>
+                      <div class="chartjs-size-monitor-shrink">
+                          <div class=""></div>
+                      </div>
+                  </div>
+                <canvas id="chart-analytics" class="chart-canvas chartjs-render-monitor" style="display: block; height: 450px; width: 100%;"></canvas>
+              </div>
+            </div>
+          <div class="col-md-3">
+              <h4> Metrics </h4>
+              <div class="pre-scrollable pr-3">
+              {% for chapter in analytics_control %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ chapter }}</h5>
+                        <div class="row">
+                        {% for item in analytics_control[chapter] %}
+                            <div class="col-md-6">
+                                <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                  <input class="custom-control-input" id="{{chapter}}_{{item}}" type="checkbox" onchange="{{ analytics_control[chapter][item] }}">
+                                  <label class="custom-control-label" for="{{chapter}}_{{item}}">{{item}}</label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+              {% endfor %}
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<div class="card card-12">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-4">
+                <div class="col">
+                    <h2 class="text-gray mb-0">Test results</h2>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card-body card-table">
+            <table class="table table-borderless"
+                   id="summary_table"
+                   data-toggle="table"
+                   data-page-size=10
+                   data-pagination="true"
+                   data-pagination-parts='["pageInfoShort", "pageList"]'>
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" data-sortable="true" data-field="request_name">Name</th>
+                    <th scope="col" data-sortable="true" data-field="total">Ttl req, count</th>
+                    <th scope="col" data-sortable="true" data-field="throughput">Thrghpt, req/sec</th>
+                    <th scope="col" data-sortable="true" data-field="ko">Errors, count</th>
+                    <th scope="col" data-sortable="true" data-field="min">Min, ms</th>
+                    <th scope="col" data-sortable="true" data-field="mean">Median, ms</th>
+                    <th scope="col" data-sortable="true" data-field="pct95">Pct95, ms</th>
+                    <th scope="col" data-sortable="true" data-field="max">Max, ms</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--</div>-->
+<script src="{{ url_for('static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
+<script>
+$(document).ready(function() {
+    console.log("Document ready")
+    setParams();
+    loadRequestData('/api/v1/chart/requests/summary', "Response time, ms");
+    fillSummaryTable();
+    $('#RT').trigger( "click" )
+    $("#analytics").hide();
+    $(document).on("click", "#chartjs-custom-legend > ul > li", function (e) {
+            var index = $(this).index();
+            $(this).toggleClass("strike")
+            var ci = e.view.presetLine;
+            var curr = ci.data.datasets[index]._meta;
+            curr = Object.values(curr)[0]
+            console.log(curr)
+            curr.hidden = !curr.hidden
+            ci.update();
+    });
+});
+
+</script>
