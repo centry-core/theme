@@ -70,3 +70,7 @@ def test_result_page(context, slot, payload):
 
 def render_alert_bar(context, slot, payload):
     return render_template('common/alert_bar.html', config=payload)
+
+
+def security_results_show_config(context, slot, payload):
+    return render_template('security/result/show_config.html', config=payload)
