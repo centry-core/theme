@@ -1,30 +1,18 @@
 <div class="modal fixed-left fade shadow-sm" tabindex="-1" role="dialog" id="showConfigModal">
     <div class="modal-dialog modal-dialog-aside" role="document">
         <div class="modal-content">
-{#            <div class="modal-header">#}
-{#                <div class="row w-100">#}
-{#                    <div class="col">#}
-{#                        <h2 id="modal_title">Add Application Test</h2>#}
-{#                    </div>#}
-{#                    <div class="col-xs">#}
-{#                        <button type="button" class="btn btn-sm btn-projects" data-dismiss="modal"><i#}
-{#                                class="fas fa-file-alt"></i> Use template#}
-{#                        </button>#}
-{#                        <button type="button" class="btn btn-sm btn-projects" data-dismiss="modal"><i#}
-{#                                class="fas fa-file"></i> Save as template#}
-{#                        </button>#}
-{#                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" aria-label="Close">#}
-{#                            Cancel#}
-{#                        </button>#}
-{#                        <button type="button" id="security_test_save" class="btn btn-sm btn-secondary">#}
-{#                            Save#}
-{#                        </button>#}
-{#                        <button type="button" id="security_test_save_and_run" class="btn btn-sm btn-basic">#}
-{#                            Save and start#}
-{#                        </button>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col">
+                        <h3 id="modal_title">Test Configuration</h3>
+                    </div>
+                    <div class="col-xs">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
             {{ template_slot("alert_bar", payload={
                 "alert_container_id": "alertShowConfig",
                 "max_alerts": 1,
@@ -83,7 +71,6 @@
 </div>
 <script>
     const setIntegrations = values => {
-        console.log('SET integrations', values)
         Object.keys(values).forEach(section => {
             Object.keys(values[section]).forEach(integrationItem => {
                 const dataCallbackName = `${section}_${integrationItem}`
@@ -91,6 +78,8 @@
             })
         })
     }
-    setIntegrations({{ config['integrations'] | tojson }})
-    processing_all.set_data({{ config['processing'] | tojson }})
+    $( document ).ready(() => {
+        setIntegrations({{ config['integrations'] | tojson }})
+        processing_all.set_data({{ config['processing'] | tojson }})
+    })
 </script>
