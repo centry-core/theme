@@ -8,7 +8,7 @@
     <div class="card-body card-table">
       <div id="logs-body" class="card-body overflow-auto pt-0 pl-3">
           <ul class="list-group">
-              <li v-for="line in logs" class="list-group-item">
+              <li v-for="line in reversedLogs" class="list-group-item">
                   <div style="word-break: break-all; white-space: pre-wrap;">{% raw %}{{ line }}{% endraw %}</div>
               </li>
           </ul>
