@@ -38,6 +38,7 @@ from .components.commons.page import (
     security_results_show_config
 )
 from .components.security.common import create_test_processing
+from .components.security.overview import render_overview
 from .components.security.result import result_findings, result_artifacts, tests_logs
 from .filters import tag_format
 
@@ -84,6 +85,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("security_logs_list", tests_logs)
         self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
         self.context.slot_manager.register_callback("security_results_show_config", security_results_show_config)
+        self.context.slot_manager.register_callback("security_overview", render_overview)
 
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
