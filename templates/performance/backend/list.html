@@ -120,7 +120,7 @@
 {{ template_slot("create_test", payload=config)|safe }}
 {{ template_slot("run_test", payload=config)|safe }}
 
-<script src="{{ url_for('static', filename='vendor/design-system/assets/vendor/nouislider/nouislider.js') }}"
+<script src="{{ url_for('design-system.static', filename='assets/vendor/nouislider/nouislider.js') }}"
         type="text/javascript"></script>
-<script src="{{ url_for('static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('theme.static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('theme.static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
