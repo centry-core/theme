@@ -1,4 +1,4 @@
-{% include 'common/head.html' %}
+{% include 'theme:common/head.html' %}
 <!-- Too add page specific imports -->
 </head>
 <body>
@@ -7,7 +7,7 @@
 
 {{ template_slot("page_content", payload=config)|safe }}
 
-{% include 'common/foot.html' %}
+{% include 'theme:common/foot.html' %}
 <!-- Too add page specific scripts -->
 <script>
 $(document).ready(function() {
