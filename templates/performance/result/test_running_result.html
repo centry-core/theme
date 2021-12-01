@@ -49,19 +49,31 @@
         </div>
     </div>
     <div class="card-body" id="progressbar-body">
-        {% if config['test_data']['status'].lower() != 'finished' %}
-        <div class="space-progress p-4 ml-3 mr-3" align="center">
-            <div class="row">
-                <div class="col" align="right">
+        {% if config['test_data']['test_status']['status'].lower() != 'finished' %}
+        <div class="card-body p-4 m-4 space-progress">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center">
+                    <h4 id="test_status_status">
+                        {{ config['test_data']['test_status']['status'] }}
+                    </h4>
                 </div>
-                <div class="col">
-                    <span data-align="left"> <b id="test_status">{{config['test_data']['status']}}</b></span>
-                    <div class="progress" style="width: 80%">
-                        <div class="progress-bar" role="progressbar" id="progressbar" aria-valuemin="0"
-                             aria-valuemax="100"></div>
+                <div class="col-6">
+                    <div class="progress">
+                        <div
+                                class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                                role="progressbar"
+                                aria-valuenow="{{ config['test_data']['test_status']['percentage'] }}"
+                                style="width: {{ config['test_data']['test_status']['percentage'] }}%"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                        >
+                        </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-12 text-center m-2 p-2">
+                    <h12 class="test_status_description">
+                        {{ config['test_data']['test_status']['description'] }}
+                    </h12>
                 </div>
             </div>
         </div>
@@ -392,6 +404,7 @@ $(document).ready(function() {
             ci.update();
     });
 });
+
 
 
 
