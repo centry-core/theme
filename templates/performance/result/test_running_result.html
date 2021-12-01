@@ -39,7 +39,7 @@
                             data-toggle="tooltip" data-placement="top" title="Show config for current test run">
                         Show config
                     </button>
-                    {% if config['test_data']['status'].lower() != 'finished' %}
+                    {% if config['test_data']['test_status']['status'].lower() != 'finished' %}
                     <button class="btn btn-sm btn-danger" id="stop-test" onclick="stopTest()">
                         Stop test
                     </button>
