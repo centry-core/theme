@@ -9,11 +9,10 @@
         <div class="logo"><img src="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"></div>
         <select id="chapterSelect" class="selectpicker" data-style="btn-chapters">
             {% for item in config.chapters %}
-                {% if item.title == active_chapter %}
-                    <option selected>{{ item.title }}</option>
-                {% else %}}
-                    <option>{{ item.title }}</option>
-                {% endif %}
+                <option
+                        {% if item.title == active_chapter %} selected {% endif %}
+                        data-href="{{ item.link }}"
+                >{{ item.title }}</option>
             {% endfor %}
 
         </select>
