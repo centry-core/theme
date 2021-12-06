@@ -358,9 +358,18 @@ function loadRequestData(url, y_label) {
      );
 }
 
+function switchSampler() {
+    samplerType = $("#sampler").val().toUpperCase();
+    resizeChart();
+}
+
+function switchStatus() {
+    statusType = $("#status").val().toLowerCase();
+    resizeChart();
+}
+
 function switchAggregator() {
     aggregator = $("#aggregator").val();
-    console.log(aggregator)
     resizeChart();
 }
 
