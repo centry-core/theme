@@ -1,4 +1,4 @@
-<div class="modal fixed-left fade shadow-sm" tabindex="-1" role="dialog" id="runTestModal">
+<div class="modal modal-base fixed-left fade shadow-sm" tabindex="-1" role="dialog" id="runTestModal">
     <div class="modal-dialog modal-dialog-aside" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,8 +7,10 @@
                         <h3 class="ml-4 mt-3 mb-3" id="runTestName">Run Backend Test</h3>
                     </div>
                     <div class="col-xs">
-                        <button type="button" id="run_test" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="runTest()"><i class="fas fa-play"></i></button>
-                        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-nooutline-secondary mt-2 mr-4"><i class="fas fa-times"></i></button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Cancel
+                        </button>
+                        <button type="button" id="run_test" class="btn btn-basic" onclick="runTest()">Run test</button>
                     </div>
                 </div>
             </div>

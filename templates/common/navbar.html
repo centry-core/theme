@@ -6,14 +6,13 @@
 
 <nav class="navbar navbar-expand-xl main-nav">
     <div class="d-flex chapters">
-        <div class="logo"><img src="{{ url_for('static', filename='vendor/design-system/assets/ico/logo.svg') }}"></div>
+        <div class="logo"><img src="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"></div>
         <select id="chapterSelect" class="selectpicker" data-style="btn-chapters">
             {% for item in config.chapters %}
-                {% if item.title == active_chapter %}
-                    <option selected>{{ item.title }}</option>
-                {% else %}}
-                    <option>{{ item.title }}</option>
-                {% endif %}
+                <option
+                        {% if item.title == active_chapter %} selected {% endif %}
+                        data-href="{{ item.link }}"
+                >{{ item.title }}</option>
             {% endfor %}
 
         </select>
@@ -58,6 +57,6 @@
 
 {{ template_slot("alert_bar", payload={"alert_container_id": "alertMain", "max_alerts": 3}) | safe }}
 
-<link type="text/css" href="{{ url_for('static', filename='vendor/design-system/assets/css/navbar.css') }}"
+<link type="text/css" href="{{ url_for('design-system.static', filename='assets/css/navbar.css') }}"
       rel="stylesheet">
-<script src="{{ url_for('static', filename='js/navbar.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('theme.static', filename='js/navbar.js') }}" type="text/javascript"></script>

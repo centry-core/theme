@@ -80,6 +80,5 @@
     }
     $( document ).ready(() => {
         setIntegrations({{ config['integrations'] | tojson }})
-        processing_all.set_data({{ config['processing'] | tojson }})
     })
 </script>

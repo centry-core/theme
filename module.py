@@ -38,6 +38,7 @@ from .components.commons.page import (
     security_results_show_config
 )
 from .components.security.common import create_test_processing
+from .components.security.overview import render_overview
 from .components.security.result import result_findings, result_artifacts, tests_logs
 from .filters import tag_format
 
@@ -45,24 +46,19 @@ from ..shared.connectors.auth import SessionProject
 
 
 class Module(module.ModuleModel):
-    """ Galloper module """
+    """ Pylon module """
 
-    def __init__(self, settings, root_path, context):
-        self.settings = settings
-        self.root_path = root_path
+    def __init__(self, context, descriptor):
         self.context = context
+        self.descriptor = descriptor
 
     def init(self):
         """ Init module """
         log.info("Initializing module Theme")
-        bp = flask.Blueprint(  # pylint: disable=C0103
-            "theme", "plugins.theme.plugin",
-            root_path=self.root_path,
-            url_prefix=f"{self.context.url_prefix}/"
+        bp = self.descriptor.make_blueprint(
+            url_prefix="/",
+            static_url_prefix="/",
         )
-        bp.jinja_loader = jinja2.ChoiceLoader([
-            jinja2.loaders.PackageLoader("plugins.theme", "templates"),
-        ])
         bp.add_url_rule("/", "index", self.index)
         bp.add_url_rule("/new", "create_project", self.project_wizard)
         # Register in app
@@ -84,6 +80,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("security_logs_list", tests_logs)
         self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
         self.context.slot_manager.register_callback("security_results_show_config", security_results_show_config)
+        self.context.slot_manager.register_callback("security_overview", render_overview)
 
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
@@ -103,7 +100,7 @@ class Module(module.ModuleModel):
         if not session_project:
             return redirect(url_for('theme.create_project'))
         project_config = self.context.rpc_manager.call.project_get_or_404(project_id=session_project).to_json()
-        return render_template("base.html", active_chapter=chapter, config=project_config)
+        return self.descriptor.render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
         import random
@@ -111,7 +108,7 @@ class Module(module.ModuleModel):
             groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
         except Empty:
             groups = []
-        return render_template(
+        return self.descriptor.render_template(
             "wizard/project_wizard.html",
             group_options=groups,
             cache_prevent=random.random()
