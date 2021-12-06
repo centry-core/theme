@@ -50,7 +50,7 @@
             </table>
         </div>
     </div>
-    <div class="card card-x">
+    <div class="card card-x card-table-sm">
         <div class="card-header">
             <div class="row">
                 <div class="col-4">
@@ -58,16 +58,34 @@
                 </div>
                 <div class="col-8">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary" data-toggle="modal"
+                                data-target="#createThresholdModal"><i class="fas fa-plus"></i></button>
                         <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <h9>Card card-x in d-flex container uses all available width, if there are few of those, they will share
-                a row
-            </h9>
+        <div class="card-body card-table">
+            <table class="table table-borderless"
+                   id="threshold-list"
+                   data-toggle="table"
+                   data-side-pagination="server"
+                   data-virtual-scroll="true"
+                   data-pagination-parts='["pageInfoShort", "pageList"]'
+            >
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" data-checkbox="true"></th>
+                    <th data-visible="false" data-field="id">index</th>
+                    <th scope="col" data-sortable="true" data-field="test">Test</th>
+                    <th scope="col" data-sortable="true" data-field="env">Env</th>
+                    <th scope="col" data-sortable="true" data-field="scope">Scope</th>
+                    <th scope="col" data-sortable="true" data-field="rule">Rule</th>
+                    <th scope="col" data-sortable="true" data-field="value">Value</th>
+                    <th scope="col" data-field="lg_type" data-formatter=thresholdsActionFormatter>Actions</th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
