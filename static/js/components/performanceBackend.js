@@ -149,9 +149,9 @@ function addDNSOverride(id, key="", value="") {
 
 function backendLgFormatter(value, row, index) {
     if (row.job_type === "perfmeter") {
-        return '<img src="/static/vendor/design-system/assets/ico/jmeter.png" width="20">'
+        return '<img src="/design-system/static/assets/ico/jmeter.png" width="20">'
     } else if (row.job_type === "perfgun") {
-        return '<img src="/static/vendor/design-system/assets/ico/gatling.png" width="20">'
+        return '<img src="/design-system/static/assets/ico/gatling.png" width="20">'
     } else {
         return value
     }
@@ -358,9 +358,18 @@ function loadRequestData(url, y_label) {
      );
 }
 
+function switchSampler() {
+    samplerType = $("#sampler").val().toUpperCase();
+    resizeChart();
+}
+
+function switchStatus() {
+    statusType = $("#status").val().toLowerCase();
+    resizeChart();
+}
+
 function switchAggregator() {
     aggregator = $("#aggregator").val();
-    console.log(aggregator)
     resizeChart();
 }
 

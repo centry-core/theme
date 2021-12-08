@@ -1,8 +1,47 @@
 const SECRET_DEFAULT_VALUE = '******'
+//
+//function addSecret(ev) {
+//    const [secretKey, secretValue] = [$("#secret_key").val(), $("#secret_value").val()]
+//    createOrUpdate(secretKey, secretValue)
+//}
 
-function addSecret(ev) {
-    const [secretKey, secretValue] = [$("#secret_key").val(), $("#secret_value").val()]
-    createOrUpdate(secretKey, secretValue)
+
+function addSecret() {
+    $('#secrets').bootstrapTable('prepend', [{name: "", secret: ""}])
+    $('#secrets').bootstrapTable('updateCell', {
+        index: 0,
+        field: 'is_edited',
+        value: true
+    }).bootstrapTable('updateCell', {
+        index: 0,
+        field: 'secret',
+        value: `
+            <form class="form-inline m-0 secret_editor">
+                <input type="text" class="form-control flex-grow-1 m-0" id='edit_secret_new' placeholder="Secret">
+                <button type="button" class="btn btn-24 btn-success ml-1" onclick="createSecret()"><i class="fas fa-check"></i></button>
+                <button type="button" class="btn btn-24 btn-danger ml-1" onclick="cancelCreate()"><i class="fas fa-times"></i></button>
+            </form>
+        `
+    }).bootstrapTable('updateCell', {
+        index: 0,
+        field: 'name',
+        value: `
+            <form class="form-inline m-0 secret_editor">
+                <input type="text" class="form-control flex-grow-1 m-0" id='edit_name_new' placeholder="Name">
+            </form>
+        `
+    })
+}
+
+function cancelCreate() {
+    $("#secrets").bootstrapTable('remove', {field: '$index', values: [0]})
+    $('#secrets').bootstrapTable("refresh")
+}
+
+function createSecret() {
+    createOrUpdate($('#edit_name_new').val(), $('#edit_secret_new').val()).then(response => {
+        $("secrets").bootstrapTable('refresh')
+    })
 }
 
 function editSecret(key, value, index) {
@@ -16,8 +55,8 @@ function editSecret(key, value, index) {
         value: `
             <form class="form-inline m-0 secret_editor">
                 <input type="text" class="form-control flex-grow-1 m-0" id='edit_secret_${key}' placeholder="Secret">
-                <button type="button" class="btn btn-37 btn-action mL-1" onclick="updateSecret('${key}')"><i class="fas fa-check"></i></button>
-                <button type="button" class="btn btn-37 btn-action mL-1" onclick="cancelUpdate('${value}', '${index}')"><i class="fas fa-times"></i></button>
+                <button type="button" class="btn btn-24 btn-success ml-1" onclick="updateSecret('${key}')"><i class="fas fa-check"></i></button>
+                <button type="button" class="btn btn-24 btn-danger ml-1" onclick="cancelUpdate('${value}', '${index}')"><i class="fas fa-times"></i></button>
             </form>
         `
     })
