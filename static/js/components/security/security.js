@@ -54,6 +54,10 @@ function testActions(value, row, index) {
         `
 }
 
+function testTools(value, row, index) {
+    return Object.keys(value.scanners || {})
+}
+
 function cellStyle(value, row, index) {
     return {css: {"min-width": "165px"}}
 }
@@ -329,12 +333,6 @@ const modalDataModel = {
         ),
         default: {}
     },
-
-    processing: {
-        get: processing_all.get_data,
-        set: processing_all.set_data,
-        clear: processing_all.clear_data
-    }
 }
 
 
@@ -349,11 +347,10 @@ const collectModalData = () => {
 const setModalData = data => {
     console.log('setModalData', data)
     const {
-        name, processing, integrations, description,
+        name, integrations, description,
         urls_to_scan, urls_exclusions, scan_location, test_parameters,
     } = data
     modalDataModel.name.set(name)
-    modalDataModel.processing.set(processing)
     modalDataModel.integrations.set(integrations)
     modalDataModel.description.set(description)
     modalDataModel.parameters.set(urls_to_scan, urls_exclusions, scan_location, test_parameters)
