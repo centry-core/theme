@@ -1,4 +1,5 @@
 from flask import request, render_template
+from ....backend_performance.connectors.influx import get_sampler_types
 
 
 def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
@@ -8,7 +9,8 @@ def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
     page = request.args.get('page', '')
     try:
         if page:
-            return render_template(f"theme:{chapter.lower()}/{module.lower()}/{page.lower()}.html", active_chapter=chapter,
+            return render_template(f"theme:{chapter.lower()}/{module.lower()}/{page.lower()}.html",
+                                   active_chapter=chapter,
                                    config=payload)
         return render_template(f"theme:{chapter.lower()}/{module.lower()}.html", active_chapter=chapter, config=payload)
     except:
@@ -70,9 +72,12 @@ def test_result_page(context, slot, payload):
             test_data["failure_rate"] = 0
         # TODO set tags in model
         test_data["tags"] = []
+        test_data["samplers"] = get_sampler_types(test_data["project_id"], test_data["build_id"], test_data["name"],
+                                                  test_data["lg_type"])
     try:
         payload['test_data'] = test_data
-        return render_template(f"theme:{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter,
+        return render_template(f"theme:{chapter.lower()}/{module.lower()}/test_running_result.html",
+                               active_chapter=chapter,
                                config=payload)
     except:
         return render_template(f"theme:common/empty.html", active_chapter=chapter, config=payload)
