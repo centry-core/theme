@@ -33,6 +33,7 @@
 
 
             <div class="modal-body">
+
                 <div class="row">
                     <div class="form-group col-6">
                         <h9>Test Name</h9>
@@ -66,6 +67,8 @@
                 }) | safe }}
 
                 {{ template_slot("integrations_security_create", payload=config) | safe }}
+
+                {{ template_slot("security_scheduling_test_create", payload=config) | safe }}
 
             </div>
         </div>
