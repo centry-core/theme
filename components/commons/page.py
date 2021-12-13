@@ -1,5 +1,7 @@
 from flask import request, render_template
 from ....backend_performance.connectors.influx import get_sampler_types
+from ....backend_performance.models.api_reports import APIReport
+from ....shared.connectors.auth import SessionProject
 
 
 def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
@@ -41,6 +43,16 @@ def render_run_test(context, slot, payload):  # pylint: disable=R0201,W0613
         return render_template(f"theme:{chapter.lower()}/runtest.html", active_chapter=chapter, config=payload)
     except:
         return render_template(f"theme:common/empty.html", active_chapter=chapter, config=payload)
+
+
+def thresholds(context, slot, payload):
+    chapter = request.args.get('chapter', '')
+    module = request.args.get('module', '')
+    tests = APIReport.query.filter(APIReport.project_id == SessionProject.get()).with_entities(APIReport.name).distinct()
+    tests = [each[0] for each in tests]
+    payload['tests'] = tests
+    return render_template(f"theme:{chapter.lower()}/{module.lower()}/thresholds.html", active_chapter=chapter,
+                           config=payload)
 
 
 def reporting_config(context, slot, payload):

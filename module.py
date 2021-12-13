@@ -31,6 +31,7 @@ from .components.commons.page import (
     render_test,
     reporting_config,
     render_run_test,
+    thresholds,
     test_result_page,
     params_table,
     locations,
@@ -69,6 +70,7 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("create_test", render_test)
         self.context.slot_manager.register_callback("edit_test", render_test)
         self.context.slot_manager.register_callback("run_test", render_run_test)
+        self.context.slot_manager.register_callback("create_threshold", thresholds)
         self.context.slot_manager.register_callback("reporting_config", reporting_config)
         self.context.slot_manager.register_callback("params_table", params_table)
         self.context.slot_manager.register_callback("locations", locations)

@@ -157,6 +157,28 @@ function backendLgFormatter(value, row, index) {
     }
 }
 
+function thresholdsActionFormatter(value, row, index) {
+    var id = row['id'];
+    return `
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-24 btn-action" onclick="showEditThreshold('${id}')"><i class="fas fa-cog"></i></button>
+        <button type="button" class="btn btn-24 btn-action" onclick="deleteThreshold('`+id+`')"><i class="fas fa-trash-alt"></i></button>
+    </div>
+    `
+}
+
+function ruleFormatter(value, row, index) {
+    let comparisonMap = new Map([
+        ["gte", ">="],
+        ["lte", "<="],
+        ["lt", "<"],
+        ["gt", ">"],
+        ["eq", "=="]
+    ]);
+    comparison = comparisonMap.get(row.comparison)
+    return row.aggregation + "(" + row.target + ") " + comparison
+}
+
 function createLinkToTest(value, row, index) {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('module', 'Result');
@@ -224,10 +246,8 @@ function nameStyle(value, row, index) {
 function runTestModal(test_id) {
     $("#runTestModal").modal('show');
     var test_data = $('#tests-list').bootstrapTable('getRowByUniqueId', test_id);
-    console.log(test_data);
     $('#runner_test_params').bootstrapTable('removeAll')
     test_data.params.forEach((param) => {
-        console.log(param)
         $('#runner_test_params').bootstrapTable('append', param)
     })
     $('#run_test').removeAttr('onclick');
@@ -237,7 +257,6 @@ function runTestModal(test_id) {
 }
 
 function runTest(test_id) {
-        console.log(`going to run test ${test_id}`)
         var params = []
         $("#runner_test_params").bootstrapTable('getData').forEach((param) => {
           params.push(param)
@@ -294,7 +313,6 @@ function setParams(){
 
 
 function fillSummaryTable(){
-    console.log("fillSummaryTable")
     $.get(
     '/api/v1/chart/requests/table',
     {
@@ -312,9 +330,7 @@ function fillSummaryTable(){
         high_value: 100
     },
     function( data ) {
-        console.log(data)
         data.forEach((item) => {
-            console.log(item)
             $('#summary_table').bootstrapTable('append', item)
         })
     });
@@ -423,7 +439,6 @@ function drawCanvas(y_label) {
 }
 
 function fillErrorTable() {
-    console.log("fillErrorTable")
     var start_time = $("#start_time").html()
     var end_time = $("#end_time").html()
     //var low_value = $("#input-slider-range-value-low").html()
