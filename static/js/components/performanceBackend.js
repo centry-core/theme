@@ -204,6 +204,10 @@ function reportsStatusFormatter(value, row, index) {
     switch (value.toLowerCase()) {
         case 'error':
             return `<div style="color: var(--red)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+        case 'failed':
+            return `<div style="color: var(--red)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+        case 'success':
+            return `<div style="color: var(--green)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
         case 'canceled':
             return `<div style="color: var(--gray)">${value} <i class="fas fa-times-circle"></i></div>`
         case 'finished':

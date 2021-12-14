@@ -116,7 +116,7 @@
 </div>
 
 <script>
-        function updateEnvPicker() {
+        function updateEnvPicker(_callback) {
             let selectedProjectId = getSelectedProjectId();
             $.get(`/api/v1/environment/${selectedProjectId}`,
             { name: $("#testName").val() },
@@ -126,6 +126,9 @@
                     $("#envName").append(`<option value="${item}">${item}</option>`);
                 });
                 $("#envName").selectpicker('refresh').trigger('change');
+                if (_callback !== undefined) {
+                    _callback();
+                }
             });
         }
 
@@ -175,14 +178,15 @@
             $("#createThresholdModal").modal('toggle');
             $("#modal_title").html("Edit Threshold");
             $("#add_threshold").html("Edit");
-            var data = $("#threshold-list").bootstrapTable('getRowByUniqueId', index);
-            $("#testName").selectpicker('val', data['test']);
-            updateEnvPicker();
-            setTimeout(updateModalData, 500, data);
+            setTimeout(updateModalData, 500, index);
         }
 
-        function updateModalData(data) {
-            $("#envName").selectpicker('val', data['environment']);
+        function updateModalData(index) {
+            var data = $("#threshold-list").bootstrapTable('getRowByUniqueId', index);
+            $("#testName").selectpicker('val', data['test']);
+            updateEnvPicker(()=>{
+               $("#envName").selectpicker('val', data['environment']);
+            });
             $("#scope").selectpicker('val', data['scope']);
             $("#target").selectpicker('val', data['target']);
             $("#aggregation").selectpicker('val', data['aggregation']);
@@ -191,11 +195,12 @@
             $("#add_threshold").attr('onclick', `editThreshold("${index}")`);
         }
 
-        function deleteThreshold(data, callback) {
+        function deleteThreshold(index, callback) {
             let selectedProjectId = getSelectedProjectId();
+            var data = $("#threshold-list").bootstrapTable('getRowByUniqueId', index);
             var request_params = $.param({
-                test: $("#testName").val(),
-                env: $("#envName").val(),
+                test: data['test'],
+                env: data['environment'],
                 scope: data['scope'],
                 target: data['target'],
                 aggregation: data['aggregation'],
@@ -208,17 +213,20 @@
                     $("#threshold-list").bootstrapTable('refresh');
                     if (callback !== undefined) {
                         callback()
-                        $("#modal_title").html("Create Threshold");
-                        $("#add_threshold").html("Save");
-                        $("#add_threshold").attr('onclick', `insertThreshold()`);
                     }
                 }
             })
         }
 
-        function editThreshold(data) {
-            deleteThreshold(data, insertThreshold);
+        function editThreshold(index) {
+            deleteThreshold(index, insertThreshold);
         }
+
+        $('#createThresholdModal').on('hide.bs.modal', function(e) {
+            $("#modal_title").html("Create Threshold");
+            $("#add_threshold").html("Save");
+            $("#add_threshold").attr('onclick', `insertThreshold()`);
+        });
 
         $(document).ready(function() {
             updateEnvPicker();
