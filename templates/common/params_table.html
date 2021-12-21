@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('theme.static', filename='css/params_table.css') }}"/>
 
 {% set caption = config.caption | default("Test Parameters1") -%}
 {% set modal_id = config.modal_id | default("") -%}
@@ -15,8 +16,10 @@
     </div>
     <div class="row">
         <div class="col">
-            <table class="table table-borderless params-table"  id="{{modal_id}}_test_params"
-                   data-toggle="table">
+            <table class="table table-borderless params-table"
+                   {% if modal_id %} id="{{modal_id}}_test_params" {% endif %}
+                   data-toggle="table"
+            >
                 <thead class="thead-light">
                     <tr>
                         <th scope="col" data-sortable="true" data-field="name" data-formatter=inputFormatter>Name</th>
@@ -46,27 +49,7 @@
     </div>
     <div class="row pt-2">
         <div class="col">
-            <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow('{{modal_id}}_test_params')"><i class="fas fa-plus mr-2"></i>Add Parameter</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="addEmptyParamsRow(this)"><i class="fas fa-plus mr-2"></i>Add Parameter</button>
         </div>
     </div>
-
 </div>
-<style>
-    .invalid-tooltip-custom {
-        top: initial;
-        left: inherit;
-        visibility: hidden;
-    }
-    .is-invalid:hover ~ .invalid-tooltip-custom {
-        visibility: visible;
-    }
-</style>
-
-<!--<script>-->
-<!--    $('.params-table').on('toggle.bs.table', function(ev) {-->
-<!--        var table_data = {{table_data}};-->
-<!--        table_data.forEach(function(index){-->
-<!--            $(ev.target).bootstrapTable('append', this)-->
-<!--        })-->
-<!--    });-->
-<!--</script>-->

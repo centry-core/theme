@@ -182,15 +182,6 @@ $('#createApplicationTest').on('hide.bs.modal', function (e) {
 });
 
 
-var deleteParams = index => {
-    console.log('deleting index', index)
-    $('.params-table').bootstrapTable('remove', {
-        field: '$index',
-        values: [index]
-      })
-}
-
-
 const modalDataModel = {
     name: {
         get: () => $('#test_name').val(),
