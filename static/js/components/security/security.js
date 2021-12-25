@@ -1,11 +1,13 @@
 class SectionDataProvider {
     static allowed_methods = ['get', 'set', 'clear', 'setError']
+
     constructor(name, actions) {
         this.name = name
         SectionDataProvider.allowed_methods.forEach(
             item => this[item] = actions[item] || SectionDataProvider.not_defined(name, item)
         )
     }
+
     static not_defined = (provider, method_name) => () => {
         console.warn(`Method ${method_name} is not defined for ${provider}`)
     }
@@ -30,11 +32,11 @@ class SecurityModal {
         this.container.on('hide.bs.modal', this.clear)
         SecurityModal._instance = this
         this.registerDataProvider(new SectionDataProvider('name', {
-    get: () => $('#test_name').val(),
-    set: value => $('#test_name').val(value),
-    clear: () => $('#test_name').val(''),
-    setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data)
-}))
+            get: () => $('#test_name').val(),
+            set: value => $('#test_name').val(value),
+            clear: () => $('#test_name').val(''),
+            setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data.msg)
+        }))
         this.registerDataProvider(new SectionDataProvider('description', {
             get: () => $('#test_description').val(),
             set: value => $('#test_description').val(value),
@@ -110,13 +112,18 @@ class SecurityModal {
                 $('#security_test_params').bootstrapTable('load', table_data)
             },
             setError: data => {
-                Object.keys(data).forEach(item => {
-                    $(`#security_test_params tr[data-index=${item}] td:nth-child(2) input`)
-                        .addClass('is-invalid')
-                        .next('div.invalid-tooltip-custom')
-                        .text(data[item])
-                })
+                const get_col_by_name = name => $(`#security_test_params thead th[data-field=${name}]`).index()
+                const [row, col_name, ..._] = data.loc
+                $(`#security_test_params tr[data-index=${row}] td:nth-child(${get_col_by_name(col_name) + 1}) input`)
+                    .addClass('is-invalid')
+                    .next('div.invalid-tooltip-custom')
+                    .text(data.msg)
+
             }
+        }))
+        this.registerDataProvider(new SectionDataProvider('alert_bar', {
+            clear: () => alertCreateTest?.clear(),
+            setError: data => alertCreateTest?.add(data.msg, 'warning-overlay', true)
         }))
     }
 
@@ -143,7 +150,6 @@ class SecurityModal {
         $('#security_test_save_and_run').text('Save And Start')
         this.test_uid = null
         this.clearErrors()
-        alertCreateTest?.clear()
     }
     collectData = () => {
         let data = {}
@@ -153,9 +159,14 @@ class SecurityModal {
         return data
     }
 
-    setValidationErrors = errorData => errorData.data?.forEach(item =>
-        this.dataModel[item.field]?.setError(item.feedback)
-    )
+    setValidationErrors = errorData => {
+        errorData?.forEach(item => {
+            const [errLoc, ...rest] = item.loc
+            item.loc = rest
+            this.dataModel[errLoc]?.setError(item)
+        })
+        alertCreateTest?.add('Please fix errors below', 'danger', true, 5000)
+    }
 
     clearErrors = () => {
         this.container.find('input.is-invalid').removeClass('is-invalid')
