@@ -51,13 +51,13 @@ class SecurityModal {
                         default: urls_to_scan.join(','),
                         description: "Data",
                         name: "URL to scan",
-                        type: "String",
+                        type: "List",
                         _description_class: "disabled",
                         _name_class: "disabled",
                         _type_class: "disabled",
                     },
                     {
-                        default: urls_exclusions.join(','),
+                        default: urls_exclusions?.join(','),
                         description: "Data",
                         name: "Exclusions",
                         type: "List",
@@ -74,7 +74,7 @@ class SecurityModal {
                         _name_class: "disabled",
                         _type_class: "disabled",
                     },
-                    ...test_parameters
+                    ...test_parameters.filter(item => !['url to scan', 'exclusions', 'scan location'].includes(item.name))
                 ]
                 $('#security_test_params').bootstrapTable('load', table_data)
             },
@@ -123,7 +123,7 @@ class SecurityModal {
         }))
         this.registerDataProvider(new SectionDataProvider('alert_bar', {
             clear: () => alertCreateTest?.clear(),
-            setError: data => alertCreateTest?.add(data.msg, 'warning-overlay', true)
+            setError: data => alertCreateTest?.add(data.msg, 'dark-overlay', true)
         }))
     }
 
@@ -138,7 +138,7 @@ class SecurityModal {
         } = data
         this.test_uid = test_uid
         Object.entries(rest).forEach(([k, v]) => this.dataModel[k]?.set(v))
-        this.dataModel.parameters?.set(urls_to_scan, urls_exclusions, scan_location, test_parameters)
+        this.dataModel.test_parameters?.set(urls_to_scan, urls_exclusions, scan_location, test_parameters)
 
     }
     clear = () => {
@@ -255,7 +255,7 @@ var tableFormatters = {
     },
     tests_tools(value, row, index) {
         // todo: fix
-        return Object.keys(value.scanners || {})
+        return Object.keys(value?.scanners || {})
     },
     status_events: {
         "click .run": function (e, value, row, index) {
@@ -287,6 +287,7 @@ const apiActions = {
         }).then(response => response.ok && apiActions.afterSave())
     },
     delete: id => {
+
         const url = `/api/v1/security/${getSelectedProjectId()}/dast?` + $.param({"id[]": id})
         console.log('Delete test with id', id, url);
         fetch(url, {
@@ -332,15 +333,16 @@ const apiActions = {
         return apiActions.create(data)
     },
     beforeSave: () => {
-        $("#security_test_save").addClass("disabled updating");
-        $("#security_test_save_and_run").addClass("disabled updating");
+        $("#security_test_save").addClass("disabled updating")
+        $("#security_test_save_and_run").addClass("disabled updating")
         securityModal.clearErrors()
+        alertCreateTest?.clear()
     },
     afterSave: () => {
-        $("#tests-list").bootstrapTable('refresh');
-        $("#results-list").bootstrapTable('refresh');
-        $("#security_test_save").removeClass("disabled updating");
-        $("#security_test_save_and_run").removeClass("disabled updating");
+        $("#tests-list").bootstrapTable('refresh')
+        $("#results-list").bootstrapTable('refresh')
+        $("#security_test_save").removeClass("disabled updating")
+        $("#security_test_save_and_run").removeClass("disabled updating")
     },
 
 
@@ -349,4 +351,12 @@ const apiActions = {
 $(document).ready(() => {
     $('#security_test_save').on('click', securityModal.handleSave)
     $('#security_test_save_and_run').on('click', securityModal.handleSaveAndRun)
+    $('#delete_test').on('click', e => {
+        console.log('e', $(e.target).closest('.card').find('table.table'))
+        apiActions.delete(
+            $(e.target).closest('.card').find('table.table').bootstrapTable('getSelections').map(
+                item => item.id
+            ).join(',')
+        )
+    })
 })
