@@ -2,52 +2,10 @@ var presetsContext=document.getElementById("chart-requests").getContext("2d");
 var analyticsContext=document.getElementById("chart-analytics").getContext("2d");
 
 
-//$('#createTestModal').on('hide.bs.modal', function(e) {
-//    createTestModal()
-//});
-
-$('#runTestModal').on('hide.bs.modal', function(e) {
-   console.log("Create run backend test modal")
-});
-
-function createTestModal() {
-      console.log("Create modal")
-//    $('#repo').val($('#repo')[0].defaultValue)
-//    $('#repo_https').val($('#repo_https')[0].defaultValue)
-//    $('#repo_user').val($('#repo_user')[0].defaultValue)
-//    $('#repo_pass').val($('#repo_pass')[0].defaultValue)
-//    $('#repo_key').val($('#repo_key')[0].defaultValue)
-//    $('#repo_branch').val($('#repo_branch')[0].defaultValue)
-//    $('#repo_branch_https').val($('#repo_branch_https')[0].defaultValue)
-//    $('#test_name').val($('#test_name')[0].defaultValue)
-//    $('#parallel').val($('#parallel')[0].defaultValue)
-//    $('#entrypoint').val($('#entrypoint')[0].defaultValue)
-//    $('#runner').val($('#runner option')[0].value)
-//    $('#runner').selectpicker('refresh');
-//    $('#region').val($('#region option')[0].value)
-//    $('#region').selectpicker('refresh');
-//    $("#extCard .row").slice(1,).each(function(_, item){
-//      item.remove();
-//    })
-//    $("#scriptCard .row").slice(1,).each(function(_, item){
-//      item.remove();
-//    })
-//    $("#splitCSV .row").slice(1,).each(function(_, item){
-//      item.remove();
-//    })
-}
-
 function createTest() {
-      $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
-      $("#save").html(`<span class="spinner-border spinner-border-sm"></span>`);
       $("#submit").addClass("disabled");
       $("#save").addClass("disabled");
-//      var checked = []
       var params = [[], {}, {}, {}]
-//      $("#scriptCard .row").slice(1,).each(function(_,item){
-//        var inp = $(item).find('input[type=text]')
-//        params[0][inp[0].value] = inp[1].value
-//      })
       params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
       params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
       params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
@@ -59,11 +17,6 @@ function createTest() {
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
       })
-//      $("input:checkbox:checked").each(function() {
-//        if ($(this).attr("id") != "compile") {
-//            checked.push($(this).attr("id"));
-//        }
-//      });
       var compile = $('#compile').is(":checked")
       event.preventDefault();
 
@@ -71,6 +24,7 @@ function createTest() {
       git_settings = {}
       if ($('#repo').val() != '' || $('#repo_https').val() != '') {
         git_settings["repo"] = $('#repo').val() != '' ? $('#repo').val() : $('#repo_https').val()
+        git_settings["protocol"] = $('#repo').val() != '' ? 'ssh' : 'https'
         git_settings["repo_user"] = $('#repo_user').val()
         git_settings["repo_pass"] = $('#repo_pass').val()
         git_settings["repo_key"] = $('#repo_key').val()
@@ -104,16 +58,11 @@ function createTest() {
           processData: false,
           method: 'POST',
           success: function(data){
-              $("#submit").html(`<i class="fas fa-play"></i>`);
-              $("#save").html(`<i class="fas fa-save"></i>`);
-              $("#submit").removeClass("disabled");
-              $("#save").addClass("disabled");
               $("#createTestModal").modal('hide');
-              $("#tests-list").bootstrapTable('refresh');
           }
         }
       );
-    }
+}
 
 function addCSVSplit(id, key="", is_header="") {
     $(`#${id}`).append(`<div class="d-flex flex-row">
@@ -193,9 +142,9 @@ function backendTestActionFormatter(value, row, index) {
     return `
     <div class="d-flex justify-content-end">
         <button type="button" class="btn btn-24 btn-action" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
-        <button type="button" class="btn btn-24 btn-action"><i class="fas fa-cog"></i></button>
+        <button type="button" class="btn btn-24 btn-action" onclick="editTest('${row.id}')"><i class="fas fa-cog"></i></button>
         <button type="button" class="btn btn-24 btn-action"><i class="fas fa-share-alt"></i></button>
-        <button type="button" class="btn btn-24 btn-action"><i class="fas fa-trash-alt"></i></button>
+        <button type="button" class="btn btn-24 btn-action" onclick="deleteTests('${row.id}')"><i class="fas fa-trash-alt"></i></button>
     </div>
     `
 }
@@ -258,6 +207,140 @@ function runTestModal(test_id) {
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
     $('#runner_region').val(test_data.region)
     $('#runner_parallel').val(test_data.parallel)
+}
+
+function editTest(test_id) {
+    $("#createTestModal").modal('show');
+    var test_data = $('#tests-list').bootstrapTable('getRowByUniqueId', test_id);
+    $('#backend_test_params').bootstrapTable('removeAll')
+    test_data.params.forEach((param) => {
+        if (param['name'] == 'test_name') {
+            $('#test_name').val(param['default']);
+            $("#test_name").prop("disabled", true);
+        } else if (param['name'] == 'test_type') {
+            $('#test_type').val(param['default']);
+        } else if (param['name'] == 'env_type') {
+            $('#test_env').val(param['default']);
+        } else {
+            $('#backend_test_params').bootstrapTable('append', param)
+        }
+    })
+    $('#submit').removeAttr('onclick');
+    $('#submit').attr('onClick', `updateTest("${test_data.test_uid}")`);
+    $('#save').removeAttr('onclick');
+    $('#save').attr('onClick', `updateTest("${test_data.test_uid}")`);
+    $("#testrunners").hide();
+    $("#compileTests").hide();
+    $("#fileUpload").hide();
+    $("#entrypoint").val(test_data.entrypoint);
+    $("#entrypoint").prop("disabled", true);
+    $('#backend_region').val(test_data.region);
+    $('#backend_parallel').val(test_data.parallel);
+    if (test_data.git != null && test_data.git.hasOwnProperty("repo")) {
+        $("#nav-file-tab").prop("disabled", true);
+        if (test_data.git.protocol == "https") {
+           $("#nav-git-tab").prop("disabled", true);
+           $('a[href="#nav-git-https"]').click();
+           $("#repo_https").val(test_data.git.repo);
+           $("#repo_branch_https").val(test_data.git.repo_branch);
+           $("#repo_user").val(test_data.git.repo_user);
+           $("#repo_pass").val(test_data.git.repo_pass);
+        } else {
+           $("#nav-git-https-tab").prop("disabled", true);
+           $('a[href="#nav-git"]').click();
+           $("#repo").val(test_data.git.repo);
+           $("#repo_branch").val(test_data.git.repo_branch);
+           $("#repo_key").val(test_data.git.repo_key);
+        }
+    } else {
+        $("#nav-git-tab").prop("disabled", true);
+        $("#nav-git-https-tab").prop("disabled", true);
+        $('a[href="#nav-file"]').click();
+    }
+}
+
+function updateTest(test_id) {
+      $("#submit").addClass("disabled");
+      $("#save").addClass("disabled");
+      var params = [[], {}, {}, {}]
+      params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
+      params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
+      params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
+      $("#backend_test_params").bootstrapTable('getData').forEach((param) => {
+          params[0].push(param)
+      })
+
+      $("#extCard .row").slice(1,).each(function(_,item){
+        var inp = $(item).find('input[type=text]')
+        params[3][inp[0].value] = inp[1].value
+      })
+
+      var data = {}
+      git_settings = {}
+      if ($('#repo').val() != '' || $('#repo_https').val() != '') {
+        git_settings["repo"] = $('#repo').val() != '' ? $('#repo').val() : $('#repo_https').val()
+        git_settings["protocol"] = $('#repo').val() != '' ? 'ssh' : 'https'
+        git_settings["repo_user"] = $('#repo_user').val()
+        git_settings["repo_pass"] = $('#repo_pass').val()
+        git_settings["repo_key"] = $('#repo_key').val()
+        git_settings["repo_branch"] = $('#repo_branch').val() ? $('#repo_branch').val() : $('#repo_branch_https').val()
+        data['git'] = JSON.stringify(git_settings);
+      }
+
+      data['name'] = $('#test_name').val();
+      data['parallel'] = $('#backend_parallel').val();
+      data['region'] = $('#backend_region option:selected').text();
+      data['entrypoint'] = $('#entrypoint').val();
+      data['reporting'] = JSON.stringify({});
+      data['emails'] = $('#emails').val();
+      data['params'] = JSON.stringify(params[0]);
+      data['env_vars'] = JSON.stringify(params[1]);
+      data['customization'] = JSON.stringify(params[2]);
+      data['cc_env_vars'] = JSON.stringify(params[3]);
+
+      $.ajax({
+          url: `/api/v1/tests/${getSelectedProjectId()}/backend/${test_id}`,
+          data: JSON.stringify(data),
+          cache: false,
+          contentType: 'application/json',
+          method: 'PUT',
+          success: function(data){
+              $("#createTestModal").modal('hide');
+          }
+        }
+      );
+}
+
+function deleteTests(id) {
+        var tests = `/api/v1/backend/${getSelectedProjectId()}?`;
+        if (id == undefined){
+            $("#tests-list").bootstrapTable('getSelections').forEach(item => {
+                tests += "id[]=" + item["id"] + "&"
+            });
+        } else {
+            tests += `id[]=${id}&`
+        }
+        $.ajax({
+            url: tests.substring(0, tests.length - 1),
+            type: 'DELETE',
+            success: function (result) {
+                $("#tests-list").bootstrapTable('refresh');
+            }
+        });
+}
+
+function deleteReports() {
+        var reports = `/api/v1/reports/${getSelectedProjectId()}?`;
+        $("#results-list").bootstrapTable('getSelections').forEach(item => {
+            reports += "id[]=" + item["id"] + "&"
+        });
+        $.ajax({
+            url: reports.substring(0, reports.length - 1),
+            type: 'DELETE',
+            success: function (result) {
+                $("#results-list").bootstrapTable('refresh');
+            }
+        });
 }
 
 function runTest(test_id) {

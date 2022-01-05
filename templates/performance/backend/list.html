@@ -103,7 +103,8 @@
                     <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
                     <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-filter"></i></button>
                     <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
-                    <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-24 btn-secondary" onclick="deleteReports()"><i
+                            class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
@@ -131,7 +132,9 @@
                 <th scope="col" data-sortable="true" data-field="throughput">TPS</th>
                 <th scope="col" data-sortable="true" data-field="failure_rate">Fail Rate</th>
                 <th scope="col" data-sortable="true" data-field="tags">Tags</th>
-                <th scope="col" data-sortable="true" data-field="test_status.status" data-formatter="reportsStatusFormatter">Status</th>
+                <th scope="col" data-sortable="true" data-field="test_status.status"
+                    data-formatter="reportsStatusFormatter">Status
+                </th>
             </tr>
             </thead>
         </table>
@@ -144,5 +147,6 @@
 
 <script src="{{ url_for('design-system.static', filename='assets/vendor/nouislider/nouislider.js') }}"
         type="text/javascript"></script>
-<script src="{{ url_for('theme.static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('theme.static', filename='js/components/performanceBackend.js') }}"
+        type="text/javascript"></script>
 <script src="{{ url_for('theme.static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
