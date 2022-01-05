@@ -9,7 +9,8 @@
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-24 btn-secondary" data-toggle="modal"
                                 data-target="#createTestModal"><i class="fas fa-plus"></i></button>
-                        <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
+                        <button type="button" class="btn btn-24 btn-secondary" onclick="refreshTable('tests-list')"><i
+                                class="fas fa-sync"></i></button>
                         <button type="button" class="btn btn-24 btn-secondary"><i
                                 class="fas fa-filter"></i></button>
                         <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
@@ -100,7 +101,8 @@
             </div>
             <div class="col-8">
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-sync"></i></button>
+                    <button type="button" class="btn btn-24 btn-secondary" onclick="refreshTable('results-list')"><i
+                            class="fas fa-sync"></i></button>
                     <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-filter"></i></button>
                     <button type="button" class="btn btn-24 btn-secondary"><i class="fas fa-tag"></i></button>
                     <button type="button" class="btn btn-24 btn-secondary" onclick="deleteReports()"><i

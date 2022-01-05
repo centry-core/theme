@@ -343,6 +343,10 @@ function deleteReports() {
         });
 }
 
+function refreshTable(tableID) {
+    $(`#${tableID}`).bootstrapTable('refresh');
+}
+
 function runTest(test_id) {
         var params = []
         $("#runner_test_params").bootstrapTable('getData').forEach((param) => {
