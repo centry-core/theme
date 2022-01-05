@@ -152,23 +152,23 @@ function backendTestActionFormatter(value, row, index) {
 function reportsStatusFormatter(value, row, index) {
     switch (value.toLowerCase()) {
         case 'error':
-            return `<div style="color: var(--red)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+            return `<div style="color: var(--red)"><i class="fas fa-exclamation-circle error"></i> ${value}</div>`
         case 'failed':
-            return `<div style="color: var(--red)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+            return `<div style="color: var(--red)"><i class="fas fa-exclamation-circle error"></i> ${value}</div>`
         case 'success':
-            return `<div style="color: var(--green)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+            return `<div style="color: var(--green)"><i class="fas fa-exclamation-circle error"></i> ${value}</div>`
         case 'canceled':
-            return `<div style="color: var(--gray)">${value} <i class="fas fa-times-circle"></i></div>`
+            return `<div style="color: var(--gray)"><i class="fas fa-times-circle"></i> ${value}</div>`
         case 'finished':
-            return `<div style="color: var(--info)">${value} <i class="fas fa-check-circle"></i></div>`
+            return `<div style="color: var(--info)"><i class="fas fa-check-circle"></i> ${value}</div>`
         case 'in progress':
-            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+            return `<div style="color: var(--basic)"><i class="fas fa-spinner fa-spin fa-secondary"></i> ${value}</div>`
         case 'post processing':
-            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+            return `<div style="color: var(--basic)"><i class="fas fa-spinner fa-spin fa-secondary"></i> ${value}</div>`
         case 'pending...':
-            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+            return `<div style="color: var(--basic)"><i class="fas fa-spinner fa-spin fa-secondary"></i> ${value}</div>`
         case 'preparing...':
-            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+            return `<div style="color: var(--basic)"><i class="fas fa-spinner fa-spin fa-secondary"></i> ${value}</div>`
         default:
             return value
     }
@@ -391,6 +391,7 @@ function runTest(test_id) {
 
 function setParams(){
     build_id = document.querySelector("[property~=build_id][content]").content;
+    testId = document.querySelector("[property~=test_id][content]").content;
     lg_type = document.querySelector("[property~=lg_type][content]").content;
     test_name = document.querySelector("[property~=test_name][content]").content;
     environment = document.querySelector("[property~=environment][content]").content;
@@ -602,4 +603,17 @@ function downloadReport() {
 function shareTestReport() {
     //TODO
     console.log("share test report")
+}
+
+function stopTest() {
+    data = {"test_status": {"status": "Canceled", "percentage": 100, "description": "Test was canceled"}}
+    $.ajax({
+       url: `/api/v1/reports/${getSelectedProjectId()}/${testId}/status`,
+       data: JSON.stringify(data),
+       contentType: 'application/json',
+       type: 'PUT',
+       success: function (result) {
+           document.location.reload();
+       }
+    });
 }
