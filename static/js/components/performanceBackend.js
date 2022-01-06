@@ -580,14 +580,51 @@ function rerunTest() {
     console.log("rerun test with the same config")
 }
 
-function compareWithBaseline() {
-    //TODO
-    console.log("compare current report with baseline")
+function setBaseline() {
+    var data = {
+        test_name: test_name,
+        env: environment,
+        build_id: build_id
+    };
+
+    $.ajax({
+            url: `/api/v1/baseline/${getSelectedProjectId()}`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+        });
 }
 
-function setBaseline() {
-    //TODO
-    console.log("set current report as baseline")
+function compareWithBaseline() {
+    console.log("here")
+    $.get(
+      `/api/v1/baseline/${getSelectedProjectId()}`,
+      {
+        test_name: test_name,
+        env: environment
+      }, function( data ) {
+        if (data['baseline'].length != 0) {
+            var baseline_id = data['report_id']
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            var report_id = urlParams.get('result_test_id');
+            if (report_id == baseline_id) {
+                console.log("Current test is Baseline")
+                $("#compare_with_baseline").html('Current test is Baseline');
+            } else {
+                // TODO add comparison page
+                //var url = window.location.origin + "/report/compare?id[]=" + baseline_id + "&id[]=" + report_id;
+                //window.location.href = url;
+                console.log("Compare two reports")
+                $("#compare_with_baseline").html('Compare two reports');
+            }
+
+        } else {
+            console.log("Baseline is not set yet")
+            $("#compare_with_baseline").html('Baseline is not set yet');
+        }
+      }
+     );
 }
 
 function setThresholds() {
