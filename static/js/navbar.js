@@ -6,7 +6,7 @@ async function setSelectedProjectOnBackend(projectId) {
     const resp = await fetch(`${backendUrl}/${projectId}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: "{}"
+        body: {}
     });
     if (resp.ok) {
         return await resp.json()
@@ -51,9 +51,7 @@ async function setProject(projectId) {
 $(document).ready(() => {
     // Chapter dropdown init
     $('#chapterSelect').on('change', event => {
-        const searchParams = new URLSearchParams(location.search);
-        searchParams.set('chapter', event.target.value);
-        location.search = searchParams.toString();
+        location.search = $(event.target).find('option:selected').attr('data-href')
     })
 
     // Project dropdown init

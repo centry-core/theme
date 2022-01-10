@@ -288,7 +288,7 @@ const modalDataModel = {
                 const sectionName = sectionElement.find('.integration_section_name').text().toLowerCase().replace(' ', '_')
 
                 const sectionData = sectionElement.find('.security_integration_item').toArray().reduce((acc, i) => {
-                    const integrationName = $(i).attr('data-name')
+                    const integrationName = i.dataset.name
                     const dataCallbackName = `${sectionName}_${integrationName}`
                     const integrationData = window[dataCallbackName]?.get_data()
                     if (integrationData) {
@@ -376,7 +376,6 @@ const clearErrors = () => {
 
 
 $(document).ready(function () {
-
     $('#create_test').on('click', () => {
         $('#security_test_save').on('click', () => {
             const data = collectModalData()
@@ -389,7 +388,4 @@ $(document).ready(function () {
             createAndRunTest(data)
         })
     })
-
-    // clearModal()
-
 })
