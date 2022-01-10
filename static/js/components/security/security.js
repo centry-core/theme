@@ -1,5 +1,5 @@
 class SectionDataProvider {
-    static allowed_methods = ['get', 'set', 'clear', 'setError']
+    static allowed_methods = ['get', 'set', 'clear', 'setError', 'clearErrors']
 
     constructor(name, actions) {
         this.name = name
@@ -35,12 +35,13 @@ class SecurityModal {
             get: () => $('#test_name').val(),
             set: value => $('#test_name').val(value),
             clear: () => $('#test_name').val(''),
-            setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data.msg)
+            setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data.msg),
+            clearErrors: () => $('#test_name').removeClass('is-invalid')
         }))
         this.registerDataProvider(new SectionDataProvider('description', {
             get: () => $('#test_description').val(),
             set: value => $('#test_description').val(value),
-            clear: () => $('#test_description').val('')
+            clear: () => $('#test_description').val(''),
         }))
         this.registerDataProvider(new SectionDataProvider('test_parameters', {
             get: () => $('#security_test_params').bootstrapTable('getData'),
@@ -112,14 +113,16 @@ class SecurityModal {
                 $('#security_test_params').bootstrapTable('load', table_data)
             },
             setError: data => {
+                console.log('tp set error', data)
                 const get_col_by_name = name => $(`#security_test_params thead th[data-field=${name}]`).index()
-                const [row, col_name, ..._] = data.loc
+                const [_, row, col_name] = data.loc
                 $(`#security_test_params tr[data-index=${row}] td:nth-child(${get_col_by_name(col_name) + 1}) input`)
                     .addClass('is-invalid')
                     .next('div.invalid-tooltip-custom')
                     .text(data.msg)
 
-            }
+            },
+            clearErrors: () => $('#security_test_params').removeClass('is-invalid')
         }))
         this.registerDataProvider(new SectionDataProvider('alert_bar', {
             clear: () => alertCreateTest?.clear(),
@@ -169,9 +172,10 @@ class SecurityModal {
     }
 
     clearErrors = () => {
-        this.container.find('input.is-invalid').removeClass('is-invalid')
-        this.container.find('.invalid-feedback').text('')
-        this.container.find('.invalid-tooltip').text('')
+        // this.container.find('input.is-invalid').removeClass('is-invalid')
+        // this.container.find('.invalid-feedback').text('')
+        // this.container.find('.invalid-tooltip').text('')
+        Object.keys(this.dataModel).forEach(item => this.dataModel[item].clearErrors())
     }
 
     handleSave = () => {
@@ -353,10 +357,9 @@ $(document).ready(() => {
     $('#security_test_save_and_run').on('click', securityModal.handleSaveAndRun)
     $('#delete_test').on('click', e => {
         console.log('e', $(e.target).closest('.card').find('table.table'))
-        apiActions.delete(
-            $(e.target).closest('.card').find('table.table').bootstrapTable('getSelections').map(
-                item => item.id
-            ).join(',')
-        )
+        const ids_to_delete = $(e.target).closest('.card').find('table.table').bootstrapTable('getSelections').map(
+            item => item.id
+        ).join(',')
+        ids_to_delete && apiActions.delete(ids_to_delete)
     })
 })
