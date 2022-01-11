@@ -105,7 +105,6 @@ class Module(module.ModuleModel):
         return self.descriptor.render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
-        import random
         try:
             groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
         except Empty:
@@ -113,5 +112,4 @@ class Module(module.ModuleModel):
         return self.descriptor.render_template(
             "wizard/project_wizard.html",
             group_options=groups,
-            cache_prevent=random.random()
         )
