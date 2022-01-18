@@ -1,6 +1,6 @@
 const updateStatus = async () => {
-    const testId = new URLSearchParams(location.search).get('result_test_id')
-    const response = await fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${testId}`)
+    const result_id = new URLSearchParams(location.search).get('result_test_id')
+    const response = await fetch(`/api/v1/security/${getSelectedProjectId()}/dast/results/${result_id}`)
     const { test_status: { status, percentage, description } } = await response.json()
 
     $('#test_status_status').text(status)
