@@ -40,7 +40,8 @@
                             data-toggle="tooltip" data-placement="top" title="Show config for current test run">
                         Show config
                     </button>
-                    {% if config['test_data']['test_status']['status'].lower() not in ['finished', 'error', 'failed', 'success'] %}
+                    {% if config['test_data']['test_status']['status'].lower() not in ['finished', 'error', 'failed',
+                    'success'] %}
                     <button class="btn btn-sm btn-danger" id="stop-test" onclick="stopTest()">
                         Stop test
                     </button>
@@ -305,85 +306,78 @@
 
 </div>
 
-<div class="card card-12">
+<div class="card card-12 card-table">
     <div class="card-header">
         <div class="row">
             <div class="col-4">
-                <div class="col">
-                    <h2 class="text-gray mb-0">Test results</h2>
-                </div>
+                <h3 class="text-gray mb-0">Summary</h3>
             </div>
         </div>
-        <br>
-        <div class="card-body card-table">
-            <table class="table table-borderless"
-                   id="summary_table"
-                   data-toggle="table"
-                   data-page-size=10
-                   data-pagination="true"
-                   data-pagination-parts='["pageInfoShort", "pageList"]'>
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col" data-sortable="true" data-field="request_name">Name</th>
-                    <th scope="col" data-sortable="true" data-field="total">Ttl req, count</th>
-                    <th scope="col" data-sortable="true" data-field="throughput">Thrghpt, req/sec</th>
-                    <th scope="col" data-sortable="true" data-field="ko">Errors, count</th>
-                    <th scope="col" data-sortable="true" data-field="min">Min, ms</th>
-                    <th scope="col" data-sortable="true" data-field="mean">Median, ms</th>
-                    <th scope="col" data-sortable="true" data-field="pct95">Pct95, ms</th>
-                    <th scope="col" data-sortable="true" data-field="max">Max, ms</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
     </div>
+    <div class="card-body">
+        <table class="table table-border"
+               id="summary_table"
+               data-toggle="table"
+               data-page-size=10
+               data-pagination="true"
+               data-pagination-parts='["pageInfoShort", "pageList"]'>
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" data-sortable="true" data-field="request_name">Name</th>
+                <th scope="col" data-sortable="true" data-field="total">Ttl req, count</th>
+                <th scope="col" data-sortable="true" data-field="throughput">Thrghpt, req/sec</th>
+                <th scope="col" data-sortable="true" data-field="ko">Errors, count</th>
+                <th scope="col" data-sortable="true" data-field="min">Min, ms</th>
+                <th scope="col" data-sortable="true" data-field="mean">Median, ms</th>
+                <th scope="col" data-sortable="true" data-field="pct95">Pct95, ms</th>
+                <th scope="col" data-sortable="true" data-field="max">Max, ms</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
 </div>
 
 
-<div class="card card-12">
+<div class="card card-12 card-table">
     <div class="card-header">
-        <div class="row header-body">
-            <div class="col-xl-12 col-lg-12">
-                <div class="card-header bg-transparent">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h2 class="text-gray mb-0">Errors</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-table">
-                    <table class="table table-borderless"
-                           id="errors"
-                           data-toggle="table"
-                           data-url=""
-                           data-page-size=10
-                           data-pagination="true"
-                           data-pagination-parts='["pageInfoShort", "pageList"]'
-                           data-detail-view="true"
-                           data-detail-view-icon="false"
-                           data-detail-view-by-click="true"
-                           data-detail-formatter="detailFormatter">
-                        <thead class="thead-light">
-                        <tr>
-                            <th data-sortable="true" data-field="Request name">Request name</th>
-                            <th data-sortable="true" data-field="URL">URL</th>
-                            <th data-sortable="true" data-field="Response code">Response Code</th>
-                            <th data-sortable="true" data-field="Error message">Error Message</th>
-                            <th data-sortable="true" data-field="count">Count</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
+        <div class="row">
+            <div class="col-4">
+                <h3 class="text-gray mb-0">Errors</h3>
             </div>
         </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-border"
+               id="errors"
+               data-toggle="table"
+               data-url=""
+               data-page-size=10
+               data-pagination="true"
+               data-pagination-parts='["pageInfoShort", "pageList"]'
+               data-detail-view="true"
+               data-detail-view-icon="false"
+               data-detail-view-by-click="true"
+               data-detail-formatter="detailFormatter">
+            <thead class="thead-light">
+            <tr>
+                <th data-sortable="true" data-field="Request name">Request name</th>
+                <th data-sortable="true" data-field="URL">URL</th>
+                <th data-sortable="true" data-field="Response code">Response Code</th>
+                <th data-sortable="true" data-field="Error message">Error Message</th>
+                <th data-sortable="true" data-field="count">Count</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
 
 
 <!--</div>-->
-<script src="{{ url_for('theme.static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('theme.static', filename='js/components/performanceBackend.js') }}"
+        type="text/javascript"></script>
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -405,6 +399,8 @@ $(document).ready(function() {
             ci.update();
     });
 });
+
+
 
 
 
