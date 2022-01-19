@@ -1,5 +1,5 @@
 var presetsContext=document.getElementById("chart-requests").getContext("2d");
-var analyticsContext=document.getElementById("chart-analytics").getContext("2d");
+//var analyticsContext=document.getElementById("chart-analytics").getContext("2d");
 
 
 function createTest() {
@@ -450,11 +450,9 @@ function loadRequestData(url, y_label) {
         status: statusType,
         start_time: $("#start_time").html(),
         end_time: $("#end_time").html(),
-        // TODO add time picker
-//        low_value: $("#input-slider-range-value-low").html(),
-//        high_value: $("#input-slider-range-value-high").html()
-        low_value: 0,
-        high_value: 100
+        low_value: $("#input-slider-range-value-low").html(),
+        high_value: $("#input-slider-range-value-high").html()
+
       }, function( data ) {
         lineChartData = data;
         if(window.presetLine!=null){
@@ -503,6 +501,11 @@ function drawCanvas(y_label) {
                 display: false,
             },
             scales: {
+                xAxes: [{
+                    gridLines: {
+                        display:false
+                    }
+                }],
                 yAxes: [{
                     type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                     display: true,
@@ -512,18 +515,26 @@ function drawCanvas(y_label) {
                         labelString: y_label
                     },
                     id: "response_time",
+                    gridLines: {
+                        borderDash: [2, 1],
+                        color: "#D3D3D3"
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        maxTicksLimit: 10
+                    },
                 }, {
                     type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                     display: true,
                     position: "right",
-                    scaleLabel: {
-                        display: true,
-                        labelString: "Active users"
+                    gridLines: {
+                        display:false
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        maxTicksLimit: 10
                     },
                     id: "active_users",
-                    gridLines: {
-                        drawOnChartArea: false, // only want the grid lines for one axis to show up
-                    },
                 }],
             }
         }
@@ -533,11 +544,8 @@ function drawCanvas(y_label) {
 function fillErrorTable() {
     var start_time = $("#start_time").html()
     var end_time = $("#end_time").html()
-    //var low_value = $("#input-slider-range-value-low").html()
-    //var high_value = $("#input-slider-range-value-high").html()
-    // TODO add time picker
-    var low_value = 0
-    var high_value = 100
+    var low_value = $("#input-slider-range-value-low").html()
+    var high_value = $("#input-slider-range-value-high").html()
     test_name = document.querySelector("[property~=test_name][content]").content;
     $('#errors').bootstrapTable('refreshOptions', {url: `/api/v1/chart/errors/table?test_name=${test_name}&start_time=${start_time}&end_time=${end_time}&low_value=${low_value}&high_value=${high_value}`})
 }
@@ -554,7 +562,6 @@ function resizeChart() {
             $(`#${item}`).trigger( "click" );
         }
     });
-    fillTable();
     fillErrorTable();
 }
 
