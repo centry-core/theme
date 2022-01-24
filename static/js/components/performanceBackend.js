@@ -479,7 +479,36 @@ function switchAggregator() {
     resizeChart();
 }
 
+function selectOrUnselectRequests() {
+    if ($('#all_checkbox').is(":checked")) {
+        $('.custom-checkbox_multicolor').each(function(i, ch) {
+            if (ch.id != "all_checkbox") {
+                $('#' + ch.id).prop('checked', true);
+                updateHiddenProperty(false);
+            }
+        });
+    } else {
+        $('.custom-checkbox_multicolor').each(function(i, ch) {
+            if (ch.id != "all_checkbox") {
+                $('#' + ch.id).prop('checked', false);
+                updateHiddenProperty(true);
+            }
+        });
+    }
+}
+
+function updateHiddenProperty(hidden) {
+    var ci = window.presetLine;
+    for (let index = 1; index < ci.data.datasets.length; ++index) {
+        var curr = ci.data.datasets[index]._meta;
+        curr = Object.values(curr)[0]
+        curr.hidden = hidden
+    }
+    ci.update();
+}
+
 updateChart = function(e, datasetIndex) {
+        $('#all_checkbox').prop('checked', false);
         var index = datasetIndex;
         var ci = e.view.presetLine;
         var curr = ci.data.datasets[index]._meta;

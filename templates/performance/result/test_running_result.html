@@ -238,6 +238,14 @@
 
             </div>
             <div class="float-left" style="width:25%;">
+                <div class="d-flex flex-column mx-2">
+                    <input class="mx-2 custom-checkbox custom-checkbox_multicolor" type="checkbox" checked="true" id="all_checkbox" onclick="selectOrUnselectRequests()">
+                    <label class="mb-0 w-100 d-flex align-items-center custom-chart-legend-label" style="--cbx-color: rgb(94,114,228);" for="all_checkbox">
+                        <span class="custom-chart-legend-span"></span>
+                        Select/Unselect all
+                    </label>
+                </div>
+                <br>
                 <div id="chartjs-custom-legend" class="custom-chart-legend d-flex flex-column mx-2"></div>
             </div>
         </div>
