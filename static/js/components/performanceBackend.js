@@ -479,6 +479,16 @@ function switchAggregator() {
     resizeChart();
 }
 
+updateChart = function(e, datasetIndex) {
+        var index = datasetIndex;
+        var ci = e.view.presetLine;
+        var curr = ci.data.datasets[index]._meta;
+        curr = Object.values(curr)[0]
+        curr.hidden = !curr.hidden
+        ci.update();
+};
+
+
 function drawCanvas(y_label) {
     window.presetLine = Chart.Line(presetsContext, {
         data: lineChartData,
@@ -486,15 +496,28 @@ function drawCanvas(y_label) {
             responsive: true,
             hoverMode: 'index',
             stacked: false,
+            legendCallback: function (chart) {
+                var legendHtml = [];
+                for (var i=0; i<chart.data.datasets.length; i++) {
+                    if (chart.data.datasets[i].label != "Active Users") {
+                        var cb = '<div class="d-flex my-2">';
+                        cb += '<input class="mx-2 custom-checkbox custom-checkbox_multicolor" type="checkbox" checked="true" '
+                        cb += 'id="'+chart.data.datasets[i].label+'" onclick="updateChart(event, ' + '\'' + chart.legend.legendItems[i].datasetIndex + '\'' + ')"/>';
+                        cb += '<label class="mb-0 w-100 d-flex align-items-center custom-chart-legend-label" style="--cbx-color: ' + chart.data.datasets[i].backgroundColor + ';" for="'+chart.data.datasets[i].label+'">'
+                        cb += '<span class="custom-chart-legend-span"></span>'
+                        cb += chart.data.datasets[i].label;
+                        cb += '</label></div>'
+                        legendHtml.push(cb);
+                    }
+                }
+                return legendHtml.join("");
+            },
             legend: {
                 display: false,
                 position: 'right',
                 labels: {
                     fontSize: 10,
-                    usePointStyle: false,
-                    filter: function(legendItem, data) {
-                        return legendItem.text != "Active Users";
-                    }
+                    usePointStyle: false
                 }
             },
             title:{

@@ -167,7 +167,7 @@
             <div class="col-xl-8">
                 <ul id="chart-control" class="nav justify-content-end">
                     <li class="nav-item mr-2 mr-md-0">
-                        <select class="selectpicker mr-2" data-style="btn-secondary"
+                        <select class="selectpicker" data-style="btn"
                                 id="aggregator"
                                 onchange="switchAggregator()">
                             <option>auto</option>
@@ -180,7 +180,7 @@
                         </select>
                     </li>
                     <li class="nav-item mr-2 mr-md-0">
-                        <select class="selectpicker mr-2" data-style="btn-secondary" id="status"
+                        <select class="selectpicker" data-style="btn" id="status"
                                 onchange="switchStatus()">
                             <option>all</option>
                             <option>ok</option>
@@ -188,7 +188,7 @@
                         </select>
                     </li>
                     <li class="nav-item mr-2 mr-md-0">
-                        <select class="selectpicker mr-2" data-style="btn-secondary"
+                        <select class="selectpicker" data-style="btn"
                                 id="sampler"
                                 onchange="switchSampler()">
                             {% for sampler in config['test_data']['samplers'] %}
@@ -238,7 +238,7 @@
 
             </div>
             <div class="float-left" style="width:25%;">
-                <div id="chartjs-custom-legend" class="custom-chart-legend"></div>
+                <div id="chartjs-custom-legend" class="custom-chart-legend d-flex flex-column mx-2"></div>
             </div>
         </div>
         <div class="col" style="width:75%;">
@@ -391,16 +391,6 @@ $(document).ready(function() {
     $('#RT').trigger( "click" )
     $("#analytics").hide();
     document.getElementById('input-slider-range').noUiSlider.on('set', function() { resizeChart(); });
-    $(document).on("click", "#chartjs-custom-legend > ul > li", function (e) {
-            var index = $(this).index();
-            $(this).toggleClass("strike")
-            var ci = e.view.presetLine;
-            var curr = ci.data.datasets[index]._meta;
-            curr = Object.values(curr)[0]
-            console.log(curr)
-            curr.hidden = !curr.hidden
-            ci.update();
-    });
 });
 
 
