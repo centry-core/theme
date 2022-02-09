@@ -41,7 +41,7 @@ from .components.commons.page import (
 from .components.security.common import create_test_processing
 from .components.security.overview import render_overview
 from .components.security.result import result_findings, result_artifacts, tests_logs
-from .filters import tag_format
+from .filters import tag_format, extract_tags
 
 from ..shared.connectors.auth import SessionProject
 
@@ -83,12 +83,14 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
         self.context.slot_manager.register_callback("security_results_show_config", security_results_show_config)
         self.context.slot_manager.register_callback("security_overview", render_overview)
+        # self.context.slot_manager.register_callback("page_scripts", page_scripts)
 
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 
         # Register custom Jinja filters
         self.context.app.template_filter()(tag_format)
+        self.context.app.template_filter()(extract_tags)
 
 
     def deinit(self):  # pylint: disable=R0201

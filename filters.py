@@ -1,3 +1,7 @@
+from pylon.core.tools import log
+from bs4 import BeautifulSoup
+
+
 def tag_format(tags):
     badge_classes = {
         'badge-primary': 0,
@@ -19,3 +23,9 @@ def tag_format(tags):
         result.append(f'<span class="badge mr-1 {chosen_class}">{tag}</span>')
 
     return ''.join(result)
+
+
+def extract_tags(markup, tags: list = ['script', 'style']):
+    soup = BeautifulSoup(markup, 'html.parser')
+    extracted = [s.extract() for s in soup(tags)]
+    return str(soup), ''.join(map(str, extracted))

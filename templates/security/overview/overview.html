@@ -34,9 +34,9 @@
     <div class="card-body">
         chart
 
-{#        <pre>#}
-{#                {{ config | safe }}#}
-{#        </pre>#}
+        {#        <pre>#}
+        {#                {{ config | safe }}#}
+        {#        </pre>#}
     </div>
 
 </div>
@@ -52,26 +52,34 @@
             </div>
         </div>
         <div class="card-body card-table">
-            <table class="table table-borderless"
-                   id="latest_tests"
-                   data-unique-id="id"
-                   data-toggle="table"
-                   data-url="/api/v1/security/{{ config.id }}/dast"
-                   data-pagination="true"
-                   data-page-size=5
-                   data-side-pagination="server"
-                   data-pagination-parts='["pageInfoShort", "pageList"]'
-            >
-                <thead class="thead-light">
-                <tr>
-                    <th data-visible="false" data-field="id">index</th>
-                    <th scope="col" data-sortable="true" data-field="name">Name</th>
-                    <th scope="col" data-sortable="true" data-field="created" data-width="250" data-width-unit="px">
-                        Date
-                    </th>
-                </tr>
-                </thead>
-            </table>
+            <div class="tst">
+                [[ lr_table ]]
+            </div>
+{#            <bootstrap-table :columns="lr_table.columns"#}
+{#                             :data="lr_table.data"#}
+{#                             :options="lr_table.options">#}
+{##}
+{#            </bootstrap-table>#}
+                        <table class="table table-borderless"
+                               id="latest_tests"
+                               data-unique-id="id"
+                               data-toggle="table"
+                               data-url="/api/v1/security/{{ config.id }}/dast"
+                               data-pagination="true"
+                               data-page-size=5
+                               data-side-pagination="server"
+                               data-pagination-parts='["pageInfoShort", "pageList"]'
+                        >
+                            <thead class="thead-light">
+                            <tr>
+                                <th data-visible="false" data-field="id">index</th>
+                                <th scope="col" data-sortable="true" data-field="name">Name</th>
+                                <th scope="col" data-sortable="true" data-field="created" data-width="250" data-width-unit="px">
+                                    Date
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
         </div>
     </div>
 
@@ -85,27 +93,27 @@
             </div>
         </div>
         <div class="card-body card-table">
-                <table class="table table-borderless"
-                       data-toggle="table"
-                       data-url="/api/v1/security/{{ config.id }}/dast/results"
-                       data-virtual-scroll="true"
-                       data-pagination="true"
-                       data-page-size=5
-                       data-side-pagination="server"
-                       data-pagination-parts='["pageInfoShort", "pageList"]'
-                >
-                    <thead class="thead-light">
-                    <tr>
-                        <th data-visible="false" data-field="id">index</th>
-                        <th scope="col" data-sortable="true" data-field="test_name" data-formatter="test_name_button">
-                            Name
-                        </th>
-                        <th scope="col" data-sortable="true" data-field="start_date" data-width="250" data-width-unit="px">
-                            Date
-                        </th>
-                    </tr>
-                    </thead>
-                </table>
+            <table class="table table-borderless"
+                   data-toggle="table"
+                   data-url="/api/v1/security/{{ config.id }}/dast/results"
+                   data-virtual-scroll="true"
+                   data-pagination="true"
+                   data-page-size=5
+                   data-side-pagination="server"
+                   data-pagination-parts='["pageInfoShort", "pageList"]'
+            >
+                <thead class="thead-light">
+                <tr>
+                    <th data-visible="false" data-field="id">index</th>
+                    <th scope="col" data-sortable="true" data-field="test_name" data-formatter="test_name_button">
+                        Name
+                    </th>
+                    <th scope="col" data-sortable="true" data-field="start_date" data-width="250" data-width-unit="px">
+                        Date
+                    </th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
@@ -140,5 +148,15 @@
     </div>
 </div>
 
-
-<script src="{{ url_for('theme.static', filename='js/components/security/overview.js') }}" type="text/javascript"></script>
+{#<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table-vue.min.js"></script>#}
+<script src="{{ url_for('theme.static', filename='js/components/security/overview.js') }}"
+        type="text/javascript"></script>
+<script>
+    {#$.when(vueApp).then(() => {#}
+    {#    console.log('vueApp EVENT')#}
+    {#    vueApp.component('BootstrapTable', BootstrapTable)#}
+    {#})#}
+    $.when(window.vueVm).then(() => {
+        console.log('VM EVENT')
+    })
+</script>
