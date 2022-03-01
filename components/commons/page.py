@@ -1,10 +1,15 @@
 from flask import request, render_template, render_template_string
+from pylon.core.tools import log
+
 from ....backend_performance.connectors.influx import get_sampler_types
 from ....backend_performance.models.api_reports import APIReport
 from ....shared.connectors.auth import SessionProject
 
 
 def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
+    log.warning('RENDER PAGE')
+    log.warning(context)
+    log.warning(payload)
     """ Base template slot """
     chapter = str(request.args.get('chapter', '')).lower()
     module = str(request.args.get('module', '')).lower()
@@ -14,14 +19,14 @@ def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
     #                 timeout=5,
     #                 **self.rpc_kwargs
     #             )
-    from queue import Empty
-    try:
-        payload['scripts'] = context.rpc_manager.call_function_with_timeout(
-            func='page_scripts',
-            timeout=5
-        )
-    except Empty:
-        payload['scripts'] = ''
+    # from queue import Empty
+    # try:
+    #     payload['scripts'] = context.rpc_manager.call_function_with_timeout(
+    #         func='page_scripts',
+    #         timeout=5
+    #     )
+    # except Empty:
+    #     payload['scripts'] = ''
     try:
         if page:
             return render_template(f"theme:{chapter}/{module}/{page}.html",
@@ -112,8 +117,8 @@ def render_alert_bar(context, slot, payload):
     return render_template('theme:common/alert_bar.html', config=payload)
 
 
-def security_results_show_config(context, slot, payload):
-    return render_template('theme:security/result/show_config.html', config=payload)
+# def security_results_show_config(context, slot, payload):
+#     return render_template('theme:security/result/show_config.html', config=payload)
 
 
 # def page_scripts(context, slot, payload):
