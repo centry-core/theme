@@ -62,6 +62,7 @@ window.vueApp = Vue.createApp({
 })
 
 const register_component = (name, component) => {
+    console.log('registering', name, component)
     const original_func = component.mounted
     component.mounted = function () {
         this.instance_name && this.$emit('register', this.instance_name, this)

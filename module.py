@@ -47,6 +47,7 @@ from .filters import tag_format, extract_tags
 from ..shared.connectors.auth import SessionProject
 from ..shared.utils.render import render_template_base
 
+
 class Module(module.ModuleModel):
     """ Pylon module """
 
@@ -77,6 +78,8 @@ class Module(module.ModuleModel):
         # Register custom Jinja filters
         self.context.app.template_filter()(tag_format)
         self.context.app.template_filter()(extract_tags)
+
+        self.context.app.errorhandler(404)(self.page_404)
 
     def init_slots(self):
         # Register template slot callback
@@ -109,16 +112,18 @@ class Module(module.ModuleModel):
 
     @web.route('/')
     def index(self):
+        log.info('ACCESSED INDEX')
         project_id = SessionProject.get()
         if not project_id:
             return redirect(url_for('theme.new'))
         try:
-            return self.context.rpc_manager.timeout(2).homepage(project_id=project_id)
+            return self.context.rpc_manager.timeout(2).homepage(project_id=project_id)  # define homepage
         except Empty:
-            return redirect(url_for('theme.page_404'))
+            # return redirect(url_for('theme.page_404'))
+            return self.page_404()
 
     @web.route('/404')
-    def page_404(self):
+    def page_404(self, e=None):
         return render_template_base('theme:common/empty.html')
 
     @web.route('/old')
@@ -143,3 +148,20 @@ class Module(module.ModuleModel):
             group_options=groups,
         )
 
+    @web.route('/configuration/<string:section>')
+    def configuration(self, section=None):
+        log.info(f'configuration section is  {section}')
+        if not section:
+            log.warning('No section provided')
+            return self.page_404()
+
+        try:
+            return render_template(
+                'theme:base.html',
+                page_content=self.context.rpc_manager.call_function_with_timeout(
+                    func=f'configuration_{section}',
+                    timeout=2,
+                )
+            )
+        except Empty:
+            return self.page_404()
