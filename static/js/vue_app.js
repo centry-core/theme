@@ -93,6 +93,20 @@ window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7'
 //     }
 // }
 
-$(document).ready(() => {
-    window.vueVm = vueApp.mount('#vue_mountpoint')
-})
+// $(document).ready(() => {
+//     window.vueVm = vueApp.mount('#vue_mountpoint')
+// })
+
+// $(() => setTimeout(() => window.vueVm = vueApp.mount('#vue_mountpoint'), 1000))
+
+const V = setInterval(() => {
+        if (window.vueApp) {
+            console.log('INTERVAL EVENT')
+            window.vueVm = vueApp.mount('#vue_mountpoint')
+            clearInterval(V)
+        }
+    }, 1000)
+$.when(window.vueApp).then(() => console.log('WHEN EVENT'))
+$(document).ready(() => console.log('DOC READY EVENT'))
+$(() => console.log('DOC READY v2 EVENT'))
+// $.when(window.vueApp).then(() => window.vueVm = vueApp.mount('#vue_mountpoint'))

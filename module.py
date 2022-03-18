@@ -79,7 +79,7 @@ class Module(module.ModuleModel):
         self.context.app.template_filter()(tag_format)
         self.context.app.template_filter()(extract_tags)
 
-        self.context.app.errorhandler(404)(self.page_404)
+        # self.context.app.errorhandler(404)(self.page_404)
 
     def init_slots(self):
         # Register template slot callback
