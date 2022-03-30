@@ -42,7 +42,7 @@ from .components.commons.page import (
 # from .components.security.common import create_test_processing
 # from .components.security.overview import render_overview
 # from .components.security.result import result_findings, result_artifacts, tests_logs
-from .filters import tag_format, extract_tags
+from .filters import tag_format, extract_tags, list_pd_to_json
 
 from ..shared.connectors.auth import SessionProject
 from ..shared.utils.render import render_template_base
@@ -78,6 +78,7 @@ class Module(module.ModuleModel):
         # Register custom Jinja filters
         self.context.app.template_filter()(tag_format)
         self.context.app.template_filter()(extract_tags)
+        self.context.app.template_filter()(list_pd_to_json)
 
         # self.context.app.errorhandler(404)(self.page_404)
 
