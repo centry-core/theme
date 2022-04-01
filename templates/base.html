@@ -8,6 +8,7 @@
 {% set page_content, scripts = page_content | extract_tags %}
 
     <div id="vue_mountpoint">
+        <TestComponent v="it works"></TestComponent>
         {{ navbar | safe }}
         {{ page_content | safe }}
     </div>

@@ -5,21 +5,21 @@
 {% endif %}
 {#<div id="testNavBarNav">#}
 {#<input type="text" v-model="qqq">#}
-    <navbar-app
-        v-model="navbar_secondary"
-        v-slot="navProps"
-    >
+{#    <navbar-app#}
+{#        v-model="navbar_secondary"#}
+{#        v-slot="navProps"#}
+{#    >#}
 {#            <div>#}
 {#                slot data: [[ navProps ]]#}
 {#            </div>#}
 {#            <div>#}
 {#                slot some_input: [[ navProps.some_input ]]#}
 {#            </div>#}
-    </navbar-app>
-    <navbar-app
-            v-model="navbar_main"
-            v-slot="navProps"
-    >
+{#    </navbar-app>#}
+{#    <navbar-app#}
+{#            v-model="navbar_main"#}
+{#            v-slot="navProps"#}
+{#    >#}
 {#        <div>#}
 {#            slot data: [[ navProps ]]#}
 {#        </div>#}
@@ -88,7 +88,7 @@
             </div>
         </nav>
 
-    </navbar-app>
+{#    </navbar-app>#}
 {#</div>#}
 {{ template_slot("alert_bar", payload={"alert_container_id": "alertMain", "max_alerts": 3}) | safe }}
 

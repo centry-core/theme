@@ -34,3 +34,9 @@ function addParam(id, key="", value="") {
     </div>
 </div>`)
 }
+
+const wait_for = async (prop_name, root = window, poll_length = 1000) => {
+    while(!root.hasOwnProperty(prop_name)) // define the condition as you like
+        await new Promise(resolve => setTimeout(resolve, poll_length))
+    return root[prop_name]
+}

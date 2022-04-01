@@ -7,6 +7,9 @@
     {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}
 {%- endmacro -%}
 <!-- Custom JS Files -->
+<script src="{{ url_for('theme.static', filename='js/custom.js') }}"></script>
+<script src="{{ url_for('theme.static', filename='js/components/alert_bar.js') }}"></script>
+
 {#{{ script_url('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}#}
 {#{{ script_url('assets/vendor/bootstrap-table/bootstrap-table.min.js') }}#}
 {{ script_url('assets/vendor/chart.js/dist/Chart.min.js') }}
@@ -15,5 +18,3 @@
 {{ script_url('assets/js/table.js') }}
 {{ script_url('assets/js/select.js') }}
 
-<script src="{{ url_for('theme.static', filename='js/components/alert_bar.js') }}"></script>
-<script src="{{ url_for('theme.static', filename='js/custom.js') }}"></script>

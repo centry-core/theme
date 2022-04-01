@@ -1,4 +1,4 @@
-window.vueApp = Vue.createApp({
+const vueCoreApp = {
     delimiters: ['[[', ']]'],
     components: {
     },
@@ -59,7 +59,10 @@ window.vueApp = Vue.createApp({
         }
 
     }
-})
+}
+const vueAppFactory = appObject => Vue.createApp(appObject)
+
+window.vueApp = vueAppFactory(vueCoreApp)
 
 const register_component = (name, component) => {
     console.log('registering', name, component)
@@ -111,3 +114,9 @@ $(document).ready(() => console.log('DOC READY EVENT'))
 $(() => console.log('DOC READY v2 EVENT'))
 $(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
 // $.when(window.vueApp).then(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
+
+const TestComponent = {
+    delimiters: ['[[', ']]'],
+    props: ['v'],
+    template: `<div>This is my value: [[ v ]]</div>`
+}
