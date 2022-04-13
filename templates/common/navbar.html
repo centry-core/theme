@@ -31,11 +31,14 @@
 {#                   v-model="navbar_main.some_input"#}
 {#            >#}
 {#        </div>#}
-        <div>
-            table page size
-            <input type="number" v-model="page_size">
-        </div>
-        <nav class="navbar navbar-expand-xl main-nav">
+<Navbar
+    @register="register"
+    instance_name="navbar"
+
+    :project_id="project_id"
+    :chapters="{{ config.chapters | default([]) | tojson }}"
+>
+<nav class="navbar navbar-expand-xl main-nav">
             <div class="d-flex chapters">
                 <div class="logo"><img src="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}">
                 </div>
@@ -87,8 +90,9 @@
                 </div>
             </div>
         </nav>
+</Navbar>
 
-{#    </navbar-app>#}
+
 {#</div>#}
 {{ template_slot("alert_bar", payload={"alert_container_id": "alertMain", "max_alerts": 3}) | safe }}
 

@@ -3,31 +3,30 @@
 
 </head>
 <body>
-{% set navbar, navbar_scripts = template_slot("navbar", payload=config) | extract_tags %}
-{#{% set page_content, scripts = template_slot("page_content", payload=config) | extract_tags %}#}
-{% set page_content, scripts = page_content | extract_tags %}
+    {% set navbar, navbar_scripts = template_slot("navbar", payload=config) | extract_tags %}
+    {#{% set page_content, scripts = template_slot("page_content", payload=config) | extract_tags %}#}
+    {% set page_content, scripts = page_content | extract_tags %}
 
     <div id="vue_mountpoint">
-        <TestComponent v="it works"></TestComponent>
+        {#        <TestComponent v="it works"></TestComponent>#}
         {{ navbar | safe }}
         {{ page_content | safe }}
     </div>
 
     {% include 'theme:common/foot.html' %}
     <!-- Too add page specific scripts -->
-    <script>
-        $(document).ready(function () {
-            {% for item in config.projects %}
-                {% if item.selected %}
-                    selectProject({name: "{{item.name}}", id: {{item.id}}})
-                {% endif %}
-            {% endfor %}
-        });
-    </script>
 
     <script src="{{ url_for('theme.static', filename='js/vue_app.js') }}"></script>
-
     {{ navbar_scripts | safe }}
     {{ scripts | safe }}
+{#    <script>#}
+{#        $(() => {#}
+{#            {% for item in config.projects %}#}
+{#                {% if item.selected %}#}
+{#                    activeProject.set({{ item.id }})#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        })#}
+{#    </script>#}
 </body>
 </html>
