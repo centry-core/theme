@@ -18,6 +18,12 @@ const vueCoreApp = {
             registered_components: {},
         }
     },
+    watch: {
+        async project_id(newValue, oldValue) {
+            console.log('changing pid', oldValue, '->', newValue)
+            newValue !== null && await activeProject.set(newValue)
+        }
+    },
     methods: {
         // set_data_key(key) {
         //     console.log('set_data_key', key)

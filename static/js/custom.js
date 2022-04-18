@@ -42,8 +42,8 @@ window.activeProject = {
     delete: () => localStorage.removeItem(activeProject.localStorageKey)
 }
 
-// const getSelectedProjectId = () => localStorage.getItem(activeProject.localStorageKey)
-window.getSelectedProjectId = () => vueVm.project_id
+window.getSelectedProjectId = () => localStorage.getItem(activeProject.localStorageKey)
+$(document).on('vue_init', () => window.getSelectedProjectId = () => vueVm.project_id)
 
 // function toggleAdvanced(id) {
 //     $(`#${id}`).toggle();
