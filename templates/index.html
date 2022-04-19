@@ -1,0 +1,50 @@
+{% include 'theme:common/head.html' %}
+<!-- Too add page specific imports -->
+<title>{% block title %}{{ title }}{% endblock %} - Centry</title>
+</head>
+<body>
+
+{#    {% for subsection in tools.theme.get_visible_subsections(g.theme.active_section) %}#}
+{#<a class="nav-link" href="{{ url_for('theme.route_section_subsection', section=g.theme.active_section, subsection=subsection.key) }}">#}
+{#    {% for section in tools.theme.get_visible_sections() if section.location == "left" %}#}
+{#    {% for section in tools.theme.get_visible_sections() if section.location == "right" %}#}
+{#    <a class="nav-link" href="{{ url_for('theme.route_section', section=section.key) }}">#}
+{#    {{ tools.auth.current_user().name }}#}
+
+<div id="vue_mountpoint">
+    {% block all_content %}
+        {% include 'theme:common/navbar.html' %}
+        {% block content %}
+            {{ template_slot('content', tools.auth.make_request_state()) | safe }}
+            {% if prefix %}{{ template_slot('%scontent' | format(prefix), tools.auth.make_request_state()) | safe }}{% endif %}
+        {% endblock %}
+    {% endblock %}
+    {#        <TestComponent v="it works"></TestComponent>#}
+    {#    {{ navbar | safe }}#}
+    {#    {{ page_content | safe }}#}
+</div>
+
+{% block all_scripts %}
+    {% include 'theme:common/foot.html' %}
+
+    <script>
+        window.socket = io("/", {
+            path: "{{ url_for('theme.socketio') }}"
+        })
+    </script>
+    <!-- Vue Application Root -->
+    <script src="{{ url_for('theme.static', filename='js/vue_app.js') }}"></script>
+    <!-- Nav bar -->
+    <script src="{{ url_for('theme.static', filename='js/navbar.js') }}"></script>
+    <!-- Custom scripts-->
+    <script src="{{ url_for('theme.static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('theme.static', filename='js/components/alert_bar.js') }}"></script>
+
+    {% block scripts %}
+        {{ template_slot('scripts', tools.auth.make_request_state()) | safe }}
+        {% if prefix %}{{ template_slot('%sscripts' | format(prefix), tools.auth.make_request_state()) | safe }}{% endif %}
+    {% endblock %}
+{% endblock %}
+
+</body>
+</html>

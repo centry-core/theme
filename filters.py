@@ -1,3 +1,7 @@
+from pylon.core.tools import log
+from bs4 import BeautifulSoup
+
+
 def tag_format(tags):
     badge_classes = {
         'badge-primary': 0,
@@ -19,3 +23,21 @@ def tag_format(tags):
         result.append(f'<span class="badge mr-1 {chosen_class}">{tag}</span>')
 
     return ''.join(result)
+
+
+def extract_tags(markup, tags: list = ['script', 'style']):
+    # log.warning('EXTRACTING TAGS')
+    # log.warning(markup)
+    soup = BeautifulSoup(markup, 'html.parser')
+    extracted = [s.extract() for s in soup(tags)]
+    return str(soup), ''.join(map(str, extracted))
+
+
+def map_method_call(lst: list, method_name: str):
+    log.warning('Calling method %s on %s', method_name, lst)
+    return [getattr(i, method_name)() for i in lst]
+
+
+def list_pd_to_json(lst: list):
+    import json
+    return json.dumps([i.dict() for i in lst], ensure_ascii=False)

@@ -1,20 +1,38 @@
-from flask import request, render_template
+from flask import request, render_template, render_template_string
+from pylon.core.tools import log
+
 from ....backend_performance.connectors.influx import get_sampler_types
 from ....backend_performance.models.api_reports import APIReport
 from ....shared.connectors.auth import SessionProject
 
 
 def render_page(context, slot, payload):  # pylint: disable=R0201,W0613
+    log.warning('RENDER PAGE')
+    log.warning(context)
+    log.warning(payload)
     """ Base template slot """
-    chapter = request.args.get('chapter', '')
-    module = request.args.get('module', '')
-    page = request.args.get('page', '')
+    chapter = str(request.args.get('chapter', '')).lower()
+    module = str(request.args.get('module', '')).lower()
+    page = str(request.args.get('page', '')).lower()
+    # scripts = context.rpc_manager.call_function_with_timeout(
+    #                 func=self.rpc_func,
+    #                 timeout=5,
+    #                 **self.rpc_kwargs
+    #             )
+    # from queue import Empty
+    # try:
+    #     payload['scripts'] = context.rpc_manager.call_function_with_timeout(
+    #         func='page_scripts',
+    #         timeout=5
+    #     )
+    # except Empty:
+    #     payload['scripts'] = ''
     try:
         if page:
-            return render_template(f"theme:{chapter.lower()}/{module.lower()}/{page.lower()}.html",
+            return render_template(f"theme:{chapter}/{module}/{page}.html",
                                    active_chapter=chapter,
                                    config=payload)
-        return render_template(f"theme:{chapter.lower()}/{module.lower()}.html", active_chapter=chapter, config=payload)
+        return render_template(f"theme:{chapter}/{module}.html", active_chapter=chapter, config=payload)
     except:
         return render_template(f"theme:common/empty.html", active_chapter=chapter, config=payload)
 
@@ -99,5 +117,18 @@ def render_alert_bar(context, slot, payload):
     return render_template('theme:common/alert_bar.html', config=payload)
 
 
-def security_results_show_config(context, slot, payload):
-    return render_template('theme:security/result/show_config.html', config=payload)
+# def security_results_show_config(context, slot, payload):
+#     return render_template('theme:security/result/show_config.html', config=payload)
+
+
+# def page_scripts(context, slot, payload):
+#     from pylon.core.tools import log
+#     log.info('SLOT')
+#     log.info(slot)
+#     log.info('payload')
+#     log.info(payload)
+#     context.rpc_manager.register_function(
+#         lambda: payload,
+#         name='page_scripts'
+#     )
+#     return ''

@@ -530,9 +530,9 @@ function drawCanvas(y_label) {
                 for (var i=0; i<chart.data.datasets.length; i++) {
                     if (chart.data.datasets[i].label != "Active Users") {
                         var cb = '<div class="d-flex my-2">';
-                        cb += '<label class="mb-0 w-100 d-flex align-items-center custom-checkbox custom-checkbox__multicolor">'
-                        cb += '<input class="mx-2" type="checkbox" checked="true" style="--cbx-color: ' + chart.data.datasets[i].backgroundColor + ';" '
-                        cb += 'onclick="updateChart(event, ' + '\'' + chart.legend.legendItems[i].datasetIndex + '\'' + ')"/>';
+                        cb += '<input class="mx-2 custom-checkbox custom-checkbox_multicolor" type="checkbox" checked="true" '
+                        cb += 'id="'+chart.data.datasets[i].label+'" onclick="updateChart(event, ' + '\'' + chart.legend.legendItems[i].datasetIndex + '\'' + ')"/>';
+                        cb += '<label class="mb-0 w-100 d-flex align-items-center custom-chart-legend-label" style="--cbx-color: ' + chart.data.datasets[i].backgroundColor + ';" for="'+chart.data.datasets[i].label+'">'
                         cb += '<span class="custom-chart-legend-span"></span>'
                         cb += chart.data.datasets[i].label;
                         cb += '</label></div>'

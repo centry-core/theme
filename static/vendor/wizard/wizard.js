@@ -96,7 +96,7 @@ const app = Vue.createApp({
             }
         },
         mounted() {
-            this.group = this.$refs.groupSelect.options[0].value;
+            this.group = this.$refs.groupSelect?.options[0]?.value;
         },
         computed: {
             invitation() {
