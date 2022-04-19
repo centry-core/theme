@@ -16,36 +16,17 @@
 #   limitations under the License.
 
 """ Module """
+import re
 from collections import defaultdict
-from queue import Empty
 
-from flask import request, render_template, redirect, url_for
+from flask import redirect, url_for, g
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
 
 import tools  # pylint: disable=E0401
-# from tools import auth  # pylint: disable=E0401
+from tools import auth  # pylint: disable=E0401
 
-from .components.commons.navbar import render_navbar
-from .components.commons.page import (
-    render_page,
-    render_test,
-    reporting_config,
-    render_run_test,
-    thresholds,
-    test_result_page,
-    params_table,
-    locations,
-    source_card, render_alert_bar,
-    # security_results_show_config
-)
-# from .components.security.common import create_test_processing
-# from .components.security.overview import render_overview
-# from .components.security.result import result_findings, result_artifacts, tests_logs
 from .filters import tag_format, extract_tags, list_pd_to_json
-
-from ..shared.connectors.auth import SessionProject
-from ..shared.utils.render import render_template_base
 
 
 class Module(module.ModuleModel):
@@ -60,6 +41,34 @@ class Module(module.ModuleModel):
         self.sections = dict()  # section_key -> {name, kind, location, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.subsections = dict()  # section_key -> subsection_key -> {name, kind, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.pages = dict()  # section_key -> subsection_key -> page_key -> {kind, prefix|route|url}  # pylint: disable=C0301
+
+        # Public routes
+        self._public = [
+            {
+                "uri": re.escape("/access_denied"),
+            },
+            {
+                "uri": f'{re.escape("/socket.io/")}.*',
+            },
+            {
+                "uri": f'{re.escape("/css/")}.*',
+            },
+            {
+                "uri": f'{re.escape("/img/")}.*',
+            },
+            {
+                "uri": f'{re.escape("/js/")}.*',
+            },
+            {
+                "uri": f'{re.escape("/vendor/")}.*',
+            },
+            {
+                "uri": re.escape("/robots.txt"),
+            },
+            {
+                "uri": re.escape("/favicon.ico"),
+            },
+        ]
 
     def init(self):
         """ Init module """
@@ -78,83 +87,50 @@ class Module(module.ModuleModel):
         # Public routes
         for route in self._public:
             auth.add_public_rule(route)
+
         # Hooks
         self.context.app.context_processor(lambda: {"tools": tools})
         self.context.app.errorhandler(Exception)(self._error_handler)
         self.context.app.before_request(self._before_request_hook)
         self.context.app.after_request(self._after_request_hook)
+
         # Init RPCs
-        # for rpc_func, rpc_name, proxy_name in self._rpcs:
-        #     self.context.rpc_manager.register_function(rpc_func, rpc_name)
-        #     #
-        #     if hasattr(self, proxy_name):
-        #         raise RuntimeError(f"Name '{proxy_name}' is already set")
-        #     #
-        #     setattr(
-        #         self, proxy_name,
-        #         getattr(self.context.rpc_manager.call, rpc_name)
-        #     )
+        self.descriptor.init_rpcs()
 
         # Register tool
         self.descriptor.register_tool(self.descriptor.name, self)
-
-
-        # self.configuration_init()
-
-        # self.init_slots()
-
-        # Register event listener
-        # self.context.event_manager.register_listener("base.index", self.base_event)
-
 
         # Register custom Jinja filters
         self.context.app.template_filter()(tag_format)
         self.context.app.template_filter()(extract_tags)
         self.context.app.template_filter()(list_pd_to_json)
 
-        # self.context.app.errorhandler(404)(self.page_404)
+    def _error_handler(self, error):
+        log.error("Error: %s", error)
+        return self.descriptor.render_template("access_denied.html"), 400
 
-    # def init_slots(self):
-    #     # Register template slot callback
-    #     self.context.slot_manager.register_callback("navbar", render_navbar)
-    #     self.context.slot_manager.register_callback("page_content", render_page)
-    #     self.context.slot_manager.register_callback("create_test", render_test)
-    #     self.context.slot_manager.register_callback("edit_test", render_test)
-    #     self.context.slot_manager.register_callback("run_test", render_run_test)
-    #     self.context.slot_manager.register_callback("create_threshold", thresholds)
-    #     self.context.slot_manager.register_callback("reporting_config", reporting_config)
-    #     self.context.slot_manager.register_callback("params_table", params_table)
-    #     self.context.slot_manager.register_callback("locations", locations)
-    #     self.context.slot_manager.register_callback("source_card", source_card)
-    #     self.context.slot_manager.register_callback("alert_bar", render_alert_bar)
+    def _before_request_hook(self):  # pylint: disable=R0201
+        g.theme = Holder()
+        g.theme.active_section = None
+        g.theme.active_subsection = None
 
-    # def configuration_init(self):
-    #     bp = self.descriptor.make_blueprint(
-    #         url_prefix='/configuration',
-    #         static_url_prefix='/configuration',
-    #     )
-    #     bp.name = 'configuration'
-    #     bp.add_url_rule('/', 'index', self.configuration_index)
-    #     # bp.add_url_rule('/new', 'create_project', self.project_wizard)
-    #     # Register in app
-    #     self.context.app.register_blueprint(bp)
-
-
+    def _after_request_hook(self, response):
+        additional_headers = self.descriptor.config.get(
+            "additional_headers", dict()
+        )
+        for key, value in additional_headers.items():
+            response.headers[key] = value
+        return response
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """
         log.info('De-initializing module')
 
-        #
-        # Tools
-        #
-
     def get_visible_sections(self):
         """ Get sections visible for current user """
         result = list()
         #
-        # current_permissions = auth.resolve_permissions()
-        current_permissions = []
+        current_permissions = auth.resolve_permissions()
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
@@ -181,8 +157,7 @@ class Module(module.ModuleModel):
         if section not in self.subsections:
             return result
         #
-        # current_permissions = auth.resolve_permissions()
-        current_permissions = []
+        current_permissions = auth.resolve_permissions()
         #
         for subsection_key, subsection_attrs in self.subsections[section].items():
             required_permissions = subsection_attrs.get("permissions", [])
@@ -209,59 +184,163 @@ class Module(module.ModuleModel):
     def sio_disconnect(self, sid):
         """ Disconnect handler """
 
-    # @web.route('/')
-    # def index(self):
-    #     log.info('ACCESSED INDEX')
-    #     project_id = SessionProject.get()
-    #     if not project_id:
-    #         return redirect(url_for('theme.new'))
-    #     try:
-    #         return self.context.rpc_manager.timeout(2).homepage(project_id=project_id)  # define homepage
-    #     except Empty:
-    #         # return redirect(url_for('theme.page_404'))
-    #         return self.page_404()
-    #
-    # @web.route('/404')
-    # def page_404(self, e=None):
-    #     return render_template_base('theme:common/empty.html')
-    #
-    # @web.route('/old')
-    # def index_old(self):
-    #     chapter = request.args.get('chapter', '')
-    #     session_project = SessionProject.get()
-    #     # logging.info(session_project)
-    #     if not session_project:
-    #         # return redirect(url_for('theme.create_project'))
-    #         return redirect(url_for('theme.new'))
-    #     project_config = self.context.rpc_manager.call.project_get_or_404(project_id=session_project).to_json()
-    #     return self.descriptor.render_template("base_old.html", active_chapter=chapter, config=project_config)
+    # Routes
+    @web.route("/")
+    def index(self):  # pylint: disable=R0201
+        """ Index route """
+        landing_kind = self.landing.get("kind", "default")
+        #
+        if landing_kind == "holder":
+            sections = self.get_visible_sections()
+            if sections:
+                return redirect(
+                    url_for(
+                        "theme.route_section", section=sections[0]["key"]
+                    )
+                )
+        elif landing_kind == "route":
+            return redirect(
+                url_for(
+                    self.landing.get("route", "theme.access_denied")
+                )
+            )
+        elif landing_kind == "redirect":
+            return redirect(
+                self.landing.get("url", url_for("theme.access_denied"))
+            )
+        elif landing_kind == "slot":
+            return self.descriptor.render_template(
+                "index.html",
+                logout_url=self.descriptor.config.get("logout_url", "#"),
+                prefix=self.landing.get("prefix", "_"),
+                title=self.landing.get("title", "Index"),
+            )
+        #
+        return redirect(url_for("theme.access_denied"))
 
-    # @web.route('/new')
-    # def new(self):
-    #     try:
-    #         groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
-    #     except Empty:
-    #         groups = []
-    #     return self.descriptor.render_template(
-    #         "wizard/project_wizard.html",
-    #         group_options=groups,
-    #     )
+    @web.route("/-/<section>/")
+    def route_section(self, section):  # pylint: disable=R0201
+        """ Section route """
+        g.theme.active_section = section
+        #
+        if section not in self.sections:
+            return redirect(url_for("theme.access_denied"))
+        #
+        section_attrs = self.sections[section]
+        section_kind = section_attrs.get("kind", "default")
+        #
+        if section_kind == "holder":
+            subsections = self.get_visible_subsections(section)
+            if subsections:
+                return redirect(
+                    url_for(
+                        "theme.route_section_subsection",
+                        section=section, subsection=subsections[0]["key"]
+                    )
+                )
+        elif section_kind == "route":
+            return redirect(
+                url_for(
+                    section_attrs.get("route", "theme.access_denied")
+                )
+            )
+        elif section_kind == "redirect":
+            return redirect(
+                section_attrs.get("url", url_for("theme.access_denied"))
+            )
+        elif section_kind == "slot":
+            return self.descriptor.render_template(
+                "index.html",
+                logout_url=self.descriptor.config.get("logout_url", "#"),
+                prefix=section_attrs.get("prefix", f"{section}_"),
+                title=section_attrs.get("title", section.capitalize()),
+            )
+        #
+        return redirect(url_for("theme.access_denied"))
 
-    # @web.route('/configuration/<string:section>')
-    # def configuration(self, section=None):
-    #     log.info(f'configuration section is  {section}')
-    #     if not section:
-    #         log.warning('No section provided')
-    #         return self.page_404()
-    #
-    #     try:
-    #         return render_template(
-    #             'theme:base.html',
-    #             page_content=self.context.rpc_manager.call_function_with_timeout(
-    #                 func=f'configuration_{section}',
-    #                 timeout=2,
-    #             )
-    #         )
-    #     except Empty:
-    #         return self.page_404()
+    @web.route("/-/<section>/<subsection>/")
+    def route_section_subsection(self, section, subsection):  # pylint: disable=R0201
+        """ Subsection route """
+        g.theme.active_section = section
+        g.theme.active_subsection = subsection
+        #
+        if section not in self.subsections:
+            return redirect(url_for("theme.access_denied"))
+        #
+        if subsection not in self.subsections[section]:
+            return redirect(url_for("theme.access_denied"))
+        #
+        subsection_attrs = self.subsections[section][subsection]
+        subsection_kind = subsection_attrs.get("kind", "default")
+        #
+        if subsection_kind == "route":
+            return redirect(
+                url_for(
+                    subsection_attrs.get("route", "theme.access_denied")
+                )
+            )
+        elif subsection_kind == "redirect":
+            return redirect(
+                subsection_attrs.get("url", url_for("theme.access_denied"))
+            )
+        elif subsection_kind == "slot":
+            return self.descriptor.render_template(
+                "index.html",
+                logout_url=self.descriptor.config.get("logout_url", "#"),
+                prefix=subsection_attrs.get(
+                    "prefix", f"{section}_{subsection}_"
+                ),
+                title=subsection_attrs.get("title", subsection.capitalize()),
+            )
+        #
+        return redirect(url_for("theme.access_denied"))
 
+    @web.route("/-/<section>/<subsection>/<page>")
+    def route_section_subsection_page(self, section, subsection, page):  # pylint: disable=R0201
+        """ Page route """
+        g.theme.active_section = section
+        g.theme.active_subsection = subsection
+        #
+        if section not in self.pages:
+            return redirect(url_for("theme.access_denied"))
+        #
+        if subsection not in self.pages[section]:
+            return redirect(url_for("theme.access_denied"))
+        #
+        if page not in self.pages[section][subsection]:
+            return redirect(url_for("theme.access_denied"))
+        #
+        page_attrs = self.pages[section][subsection][page]
+        page_kind = page_attrs.get("kind", "default")
+        #
+        if page_kind == "route":
+            return redirect(
+                url_for(
+                    page_attrs.get("route", "theme.access_denied")
+                )
+            )
+        elif page_kind == "redirect":
+            return redirect(
+                page_attrs.get("url", url_for("theme.access_denied"))
+            )
+        elif page_kind == "slot":
+            return self.descriptor.render_template(
+                "index.html",
+                logout_url=self.descriptor.config.get("logout_url", "#"),
+                prefix=page_attrs.get(
+                    "prefix", f"{section}_{subsection}_{page}_"
+                ),
+                title=page_attrs.get("title", page.capitalize()),
+            )
+        #
+        return redirect(url_for("theme.access_denied"))
+
+    @web.route("/access_denied")
+    def access_denied(self):  # pylint: disable=R0201
+        """ Access denied page """
+        return self.descriptor.render_template("access_denied.html")
+
+    @web.route("/socket.io/")
+    def socketio(self):  # pylint: disable=R0201
+        """ SocketIO reference """
+        return redirect(url_for("theme.index"))

@@ -1,101 +1,70 @@
-{% if active_chapter %}
-    {% set chapter=active_chapter %}
-{% else %}
-    {% set chapter=config.default_chapter %}
-{% endif %}
-{#<div id="testNavBarNav">#}
-{#<input type="text" v-model="qqq">#}
-{#    <navbar-app#}
-{#        v-model="navbar_secondary"#}
-{#        v-slot="navProps"#}
-{#    >#}
-{#            <div>#}
-{#                slot data: [[ navProps ]]#}
-{#            </div>#}
-{#            <div>#}
-{#                slot some_input: [[ navProps.some_input ]]#}
-{#            </div>#}
-{#    </navbar-app>#}
-{#    <navbar-app#}
-{#            v-model="navbar_main"#}
-{#            v-slot="navProps"#}
-{#    >#}
-{#        <div>#}
-{#            slot data: [[ navProps ]]#}
-{#        </div>#}
-{#        <div>#}
-{#            slot some_input: [[ navProps.some_input ]]#}
-{#        </div>#}
-{#        <div>#}
-{#            <input type="text"#}
-{#                   v-model="navbar_main.some_input"#}
-{#            >#}
-{#        </div>#}
+{#{% if active_chapter %}#}
+{#    {% set chapter=active_chapter %}#}
+{#{% else %}#}
+{#    {% set chapter=config.default_chapter %}#}
+{#{% endif %}#}
 <Navbar
-    @register="register"
-    instance_name="navbar"
+        @register="register"
+        instance_name="navbar"
 
-    :project_id="project_id"
-    :chapters="{{ config.chapters | default([]) | tojson }}"
+        :project_id="project_id"
+        :chapters="[]"
 >
-<nav class="navbar navbar-expand-xl main-nav">
-            <div class="d-flex chapters">
-                <div class="logo"><img src="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}">
-                </div>
-                <select id="chapterSelect" class="selectpicker" data-style="btn-chapters">
-                    {% for item in config.chapters %}
-                        <option
-                                {% if item.title == active_chapter %} selected {% endif %}
-                                                                      data-href="{{ item.link }}"
-                        >{{ item.title }}</option>
-                    {% endfor %}
-
-                </select>
+    <nav class="navbar navbar-expand-xl main-nav">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}" width="30" height="30"
+                 class="d-inline-block align-top" alt="carrier">
+            Carrier
+        </a>
+{#    <div class="collapse navbar-collapse">#}
+    <div>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown link
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">chapter 1</a>
+              <a class="dropdown-item" href="#">chapter 2</a>
+              <a class="dropdown-item" href="#">chapter 3</a>
             </div>
-            <button class="navbar-toggler btn-primary" type="button" data-toggle="collapse"
-                    data-target="#chapterSelectNav"
-                    aria-controls="chapterSelectNav" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
+          </div>
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+        </ul>
+    </div>
+
+{#        <select id="projectSelect" class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true">#}
+{#            {% for item in config.projects %}#}
+{#                <option project_id="{{ item.id }}">{{ item.name }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+        <div class="vl"></div>
+        <div class="dropdown ml-1">
+            <button class="btn btn-primary dropdown-toggle" type="button"
+                    id="userDropDown" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-user-circle"></i>
             </button>
-            <div class="collapse navbar-collapse" id="chapterSelectNav">
-                <div class="navbar-nav">
-                    {% for item in config.chapters %}
-                        {% if item.title == chapter %}
-                            {% for subitem in item.nav %}
-                                <a class="nav-link {% if not module and subitem.active %}active {% elif module and subitem.title==module %}active {% endif %}"
-                                   href="{{ subitem.link }}">{{ subitem.title }}</a>
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                </div>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
+                <button class="dropdown-item" type="button">Action</button>
+                <button class="dropdown-item" type="button">Another action</button>
+                <button class="dropdown-item" type="button">Logout</button>
             </div>
-
-            <select id="projectSelect" class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true">
-                {% for item in config.projects %}
-                    <option project_id="{{ item.id }}">{{ item.name }}</option>
-                {% endfor %}
-            </select>
-            <!--        <span id="selected-project-id" hidden></span>-->
-            <div class="vl"></div>
-            <div class="dropdown ml-1">
-                <button class="btn btn-primary dropdown-toggle" type="button"
-                        id="userDropDown" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-user-circle"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
-                    <button class="dropdown-item" type="button">Action</button>
-                    <button class="dropdown-item" type="button">Another action</button>
-                    <button class="dropdown-item" type="button">Logout</button>
-                </div>
-            </div>
-        </nav>
+        </div>
+    </nav>
 </Navbar>
 
 
-{#</div>#}
 {{ template_slot("alert_bar", payload={"alert_container_id": "alertMain", "max_alerts": 3}) | safe }}
 
 {#<link type="text/css" href="{{ url_for('design-system.static', filename='assets/css/navbar.css') }}"#}
 {#      rel="stylesheet">#}
-<script src="{{ url_for('theme.static', filename='js/navbar.js') }}"></script>
+
