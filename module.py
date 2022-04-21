@@ -126,7 +126,7 @@ class Module(module.ModuleModel):
         """ De-init module """
         log.info('De-initializing module')
 
-    def get_visible_sections(self):
+    def get_visible_sections(self) -> list:
         """ Get sections visible for current user """
         result = list()
         #
@@ -140,12 +140,13 @@ class Module(module.ModuleModel):
                 #
                 item = {
                     "key": section_key,
+                    **section_attrs
                 }
-                item.update(section_attrs)
                 #
                 location_result[section_attrs["location"]].append(item)
         #
-        for i in location_result.items():
+        log.info('location_result items %s', location_result.items())
+        for i in location_result.values():
             result.extend(sorted(i, key=lambda x: (-x["weight"], x["name"])))
         #
         return result
@@ -165,14 +166,12 @@ class Module(module.ModuleModel):
             if set(required_permissions).issubset(set(current_permissions)):
                 item = {
                     "key": subsection_key,
+                    **subsection_attrs
                 }
-                item.update(subsection_attrs)
                 #
                 result.append(item)
         #
-        result.sort(
-            key=lambda x: (-x["weight"], x["name"])
-        )
+        result.sort(key=lambda x: (-x["weight"], x["name"]))
         #
         return result
 
