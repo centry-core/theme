@@ -41,8 +41,18 @@ class Slot:  # pylint: disable=E1101,R0903
 
     """
 
-    @web.slot('access_denied_part')
-    def _access_denied_part(self, context, slot, payload):
-        """ Get 'Access denied' template part """
-        with self.context.app.app_context():
-            return self.descriptor.render_template('part/access_denied.html')
+    @web.slot('alert_bar')
+    def _alert_bar(self, context, slot, payload):
+        """
+        alert bar with payload config:
+            max_alerts (1) - maximum alert rows in stack
+            alert_container_id ('alert_custom') - id of alert container on page
+            overlay_max_width ('unset') - width limit for alert container
+        """
+        from pylon.core.tools import log
+        log.info('Alert bar slot payload  %s', payload)
+        with context.app.app_context():
+            return self.descriptor.render_template(
+                'part/alert_bar.html',
+                **payload
+            )

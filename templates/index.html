@@ -14,8 +14,14 @@
 <div id="vue_mountpoint">
     {% block all_content %}
 {#        <a class="nav-link" href="{{ url_for('theme.route_section_subsection', section=g.theme.active_section, subsection=subsection.key) }}">#}
-        {{ tools.theme.get_visible_sections() }}
-        {{ tools.auth.current_user() }}
+        Prefix: {{ prefix }}
+        <br/>
+        Sections: {{ tools.theme.get_visible_sections() }}
+        <br/>
+        Subsections: {{ tools.theme.get_visible_subsections('left') }}
+        <br/>
+        User: {{ tools.auth.current_user() }}
+        <br/>
 
         {% include 'theme:part/navbar.html' %}
         {% block content %}
@@ -30,7 +36,6 @@
 
 {% block all_scripts %}
     {% include 'theme:part/foot.html' %}
-
     <script>
         window.socket = io("/", {
             path: "{{ url_for('theme.socketio') }}"
@@ -41,7 +46,6 @@
     <!-- Nav bar -->
     <script src="{{ url_for('theme.static', filename='js/navbar.js') }}"></script>
     <!-- Custom scripts-->
-    <script src="{{ url_for('theme.static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('theme.static', filename='js/alert_bar.js') }}"></script>
 
     {% block scripts %}
