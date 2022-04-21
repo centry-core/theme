@@ -1,4 +1,4 @@
-var projectSelectId = '#projectSelect';
+// var projectSelectId = '#projectSelect';
 
 
 // function getProjectNameFromId(projectId) {
@@ -24,19 +24,19 @@ var projectSelectId = '#projectSelect';
 //     await setSelectedProjectOnBackend(projectId)
 // };
 
-
-$(document).ready(() => {
-    // Chapter dropdown init
-    $('#chapterSelect').on('change', event => {
-        location.search = $(event.target).find('option:selected').attr('data-href')
-    })
-
-    // Project dropdown init
-    // loadProject();
-    $(projectSelectId).on('change', event => {
-        // setProject($(event.target).find(':selected').attr('project_id')).then(() => location.reload())
-    });
-})
+//
+// $(document).ready(() => {
+//     // Chapter dropdown init
+//     $('#chapterSelect').on('change', event => {
+//         location.search = $(event.target).find('option:selected').attr('data-href')
+//     })
+//
+//     // Project dropdown init
+//     // loadProject();
+//     $(projectSelectId).on('change', event => {
+//         // setProject($(event.target).find(':selected').attr('project_id')).then(() => location.reload())
+//     });
+// })
 
 const Navbar = {
     delimiters: ['[[', ']]'],
@@ -98,7 +98,7 @@ const Navbar = {
     watch: {
         project_id(newValue, oldValue) {
             console.log('PROJECT ID CHANGED! ', oldValue, '->', newValue)
-            this.project_name = $(projectSelectId).find(`[project_id=${newValue}]`).val() // todo: change to select from internal props data
+            // this.project_name = $(projectSelectId).find(`[project_id=${newValue}]`).val() // todo: change to select from internal props data
         },
         project_name(newValue, oldValue) {
             console.log('PROJECT NAME CHANGED! ', oldValue, '->', newValue)

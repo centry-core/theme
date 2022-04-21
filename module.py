@@ -340,6 +340,12 @@ class Module(module.ModuleModel):
         """ Access denied page """
         return self.descriptor.render_template("access_denied.html")
 
+    @property
+    def access_denied_part(self):
+        """ Get 'Access denied' template part """
+        with self.context.app.app_context():
+            return self.descriptor.render_template("part/access_denied.html")
+
     @web.route("/socket.io/")
     def socketio(self):  # pylint: disable=R0201
         """ SocketIO reference """
