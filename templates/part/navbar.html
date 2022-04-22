@@ -1,8 +1,7 @@
+{{ url_for('theme.route_section_subsection', section='{section}', subsection='{subsection}') }}
 <Navbar
         @register="register"
         instance_name="navbar"
-
-        :project_id="project_id"
 
         :sections="{{ tools.theme.get_visible_sections() }}"
         :subsections="{{ tools.theme.get_visible_subsections(g.theme.active_section) }}"
