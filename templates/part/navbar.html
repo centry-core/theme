@@ -1,0 +1,16 @@
+{{ url_for('theme.route_section_subsection', section='{section}', subsection='{subsection}') }}
+<Navbar
+        @register="register"
+        instance_name="navbar"
+
+        :sections="{{ tools.theme.get_visible_sections() }}"
+        :subsections="{{ tools.theme.get_visible_subsections(g.theme.active_section) }}"
+        :user="{{ tools.auth.current_user() }}"
+
+        logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
+        active_section="{{ g.theme.active_section }}"
+        active_subsection="{{ g.theme.active_subsection }}"
+>
+</Navbar>
+
+{{ template_slot("alert_bar", payload={ "alert_container_id": "alertMain", "max_alerts": 3 }) | safe }}

@@ -79,21 +79,4 @@ const register_component = (name, component) => {
 window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7'].includes(tag)
 
 
-// const V = setInterval(() => {
-//         if (window.vueApp) {
-//             console.log('INTERVAL EVENT')
-//             // window.vueVm = vueApp.mount('#vue_mountpoint')
-//             clearInterval(V)
-//         }
-//     }, 1000)
-// $.when(window.vueApp).then(() => console.log('WHEN EVENT'))
-// $(document).ready(() => console.log('DOC READY EVENT'))
-// $(() => console.log('DOC READY v2 EVENT'))
 $(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
-// $.when(window.vueApp).then(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
-
-// const TestComponent = {
-//     delimiters: ['[[', ']]'],
-//     props: ['v'],
-//     template: `<div>This is my value: [[ v ]]</div>`
-// }

@@ -1,7 +1,11 @@
+from pylon.core.tools import web, log
 from tools import rpc_tools
 
 
 class RPC:
+    rpc = lambda name: web.rpc(f'theme_{name}', name)
+
+    @rpc('register_landing')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _register_landing(  # pylint: disable=R0913
             self,
@@ -14,10 +18,13 @@ class RPC:
         #
         self.landing.update(kvargs)
 
+    @rpc('unregister_landing')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _unregister_landing(self):
         self.landing = {"kind": "holder"}
 
+    @rpc('register_section')
+    # @web.rpc('theme_register_section', 'register_section', )
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _register_section(  # pylint: disable=R0913
             self, key, name,
@@ -26,6 +33,7 @@ class RPC:
             weight=1,
             **kvargs,
     ):
+        permissions = permissions or []
         if key in self.sections:
             raise ValueError(f"Section is already present: {key}")
         #
@@ -40,6 +48,7 @@ class RPC:
         #
         self.sections[key].update(kvargs)
 
+    @rpc('unregister_section')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _unregister_section(self, key):
         if key not in self.sections:
@@ -47,6 +56,7 @@ class RPC:
         #
         self.sections.pop(key)
 
+    @rpc('register_subsection')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _register_subsection(  # pylint: disable=R0913
             self, section, key, name,
@@ -55,6 +65,7 @@ class RPC:
             weight=1,
             **kvargs,
     ):
+        permissions = permissions or []
         if section not in self.subsections:
             self.subsections[section] = dict()
         #
@@ -71,6 +82,7 @@ class RPC:
         #
         self.subsections[section][key].update(kvargs)
 
+    @rpc('unregister_subsection')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _unregister_subsection(self, section, key):
         if section not in self.subsections:
@@ -81,6 +93,7 @@ class RPC:
         #
         self.subsections[section].pop(key)
 
+    @rpc('register_page')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _register_page(  # pylint: disable=R0913
             self, section, subsection, key,
@@ -104,6 +117,7 @@ class RPC:
         #
         self.pages[section][subsection][key].update(kvargs)
 
+    @rpc('unregister_page')
     @rpc_tools.wrap_exceptions(RuntimeError)
     def _unregister_page(self, section, subsection, key):
         if section not in self.pages:
