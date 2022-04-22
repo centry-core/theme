@@ -40,51 +40,59 @@
 
 const Navbar = {
     delimiters: ['[[', ']]'],
-    props: ['instance_name', 'project_id', 'chapters'],
-//     template: `
-// <nav class="navbar navbar-expand-xl main-nav">
-//     <div class="d-flex chapters">
-//         <div class="logo"><img src="assets/ico/logo.svg"></div>
-//         <select class="selectpicker" data-style="btn-chapters">
-//             <option>Mustard</option>
-//             <option>Ketchup</option>
-//             <option>Relish</option>
-//         </select>
-//     </div>
-//     <button class="navbar-toggler btn-primary" type="button" data-toggle="collapse" data-target="#chapterSelectNav"
-//             aria-controls="chapterSelectNav" aria-expanded="false" aria-label="Toggle navigation">
-//         <i class="fas fa-bars"></i>
-//     </button>
-//     <div class="collapse navbar-collapse" id="chapterSelectNav">
-//         <div class="navbar-nav">
-//             <a class="nav-link" href="#">Link 1</a>
-//             <a class="nav-link" href="#">Link 2</a>
-//             <a class="nav-link" href="#">Link 3</a>
-//             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-//         </div>
-//     </div>
-//
-//     <select id="projectSelect" class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true">
-//         <option>Mustard</option>
-//         <option>Ketchup</option>
-//         <option>Relish</option>
-//         <option>Some long ass creepy name</option>
-//     </select>
-//     <div class="vl"></div>
-//     <div class="dropdown ml-1">
-//         <button class="btn btn-primary dropdown-toggle" type="button" id="userDropDown" data-toggle="dropdown"
-//                 aria-haspopup="true" aria-expanded="false">
-//             <i class="far fa-user-circle"></i>
-//         </button>
-//         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
-//             <button class="dropdown-item" type="button">Account page</button>
-//             <button class="dropdown-item" type="button">Login Form</button>
-//         </div>
-//     </div>
-// </nav>
-//     `,
+    props: [
+        'instance_name', 'project_id',
+        'sections', 'subsections',
+        'user', 'logo_url',
+        'active_section', 'active_subsection'
+    ],
     template: `
-    <slot></slot>
+    <nav class="navbar navbar-expand main-nav">
+        
+        <div class="d-flex chapters">
+            <a class="logo" href="/">
+                <img :src="logo_url" alt="centry">
+            </a>
+            <select class="selectpicker" data-style="btn-chapters" @change="handle_section_change" :value="active_section">
+                <option v-for="section in sections" :value="section.key" :key="section.key">[[ section.name ]]</option>
+            </select>
+        </div>
+
+        <ul class="navbar-nav w-100" >
+            <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
+                <a 
+                    :href="get_subsection_href(subsection.key)" 
+                    :class="{'nav-link': true, active: subsection.key === active_subsection }"
+                >
+                    [[ subsection.name ]] 
+                    <span v-if="subsection.key === active_subsection" class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+
+<!--        <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true">-->
+<!--            <option project_id="{{ item.id }}">{{ item.name }}</option>-->
+<!--        </select>-->
+        
+        <div class="vl"></div>
+        <div class="dropdown ml-1">
+            <button class="btn btn-primary dropdown-toggle" type="button"
+                    id="userDropDown" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-user-circle"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
+                <h6 class="dropdown-header">[[ user.name ]]</h6>
+                <h9 class="dropdown-header">[[ user.email ]]</h9>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" type="button" 
+                    v-for="action_name in ['Action (dummy)', 'Another action (dummy)', 'Logout (dummy)']"
+                >
+                    [[ action_name ]]
+                </button>
+            </div>
+        </div>
+    </nav>
     `,
     mounted() {
         // this.project_id = activeProject.get
@@ -104,7 +112,20 @@ const Navbar = {
             console.log('PROJECT NAME CHANGED! ', oldValue, '->', newValue)
         }
     },
-    methods: {}
+    methods: {
+        get_section_href(section_key) {
+            return `/-/${section_key}`
+        },
+        get_subsection_href(subsection_key) {
+            if (subsection_key === this.active_subsection) {
+                return '#'
+            }
+            return `${this.get_section_href(this.active_section)}/${subsection_key}`
+        },
+        handle_section_change(event) {
+            location.href = this.get_section_href(event.target.value)
+        }
+    }
 }
 
 register_component('Navbar', Navbar)
