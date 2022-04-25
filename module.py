@@ -26,8 +26,6 @@ from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
 import tools  # pylint: disable=E0401
 from tools import auth  # pylint: disable=E0401
 
-from .filters import tag_format, extract_tags, list_pd_to_json
-
 
 class Module(module.ModuleModel):
     """ Pylon module """
@@ -96,14 +94,13 @@ class Module(module.ModuleModel):
 
         # Init RPCs
         self.descriptor.init_rpcs()
+        # log.info('%s descriptor %s', self.descriptor.name, self.__dict__)
+        # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
+        # log.info('Self func %s', self.register_section)
+        # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
 
         # Register tool
         self.descriptor.register_tool(self.descriptor.name, self)
-
-        # Register custom Jinja filters
-        self.context.app.template_filter()(tag_format)
-        self.context.app.template_filter()(extract_tags)
-        self.context.app.template_filter()(list_pd_to_json)
 
     def _error_handler(self, error):
         log.error("Error: %s", error)
@@ -131,10 +128,14 @@ class Module(module.ModuleModel):
         result = list()
         #
         current_permissions = auth.resolve_permissions()
+        # log.info('get_visible_sections current_permissions %s', current_permissions)
         location_result = defaultdict(list)
         #
+        # log.info('sections items %s', self.sections.items())
         for section_key, section_attrs in self.sections.items():
             required_permissions = section_attrs.get("permissions", [])
+            # log.info('required_permissions %s %s', section_key, required_permissions)
+            # log.info('section_attrs %s %s', section_key, section_attrs)
             #
             if set(required_permissions).issubset(set(current_permissions)):
                 #
@@ -149,6 +150,7 @@ class Module(module.ModuleModel):
         for i in location_result.values():
             result.extend(sorted(i, key=lambda x: (-x["weight"], x["name"])))
         #
+        # log.info('result %s', result)
         return result
 
     def get_visible_subsections(self, section):
@@ -188,9 +190,11 @@ class Module(module.ModuleModel):
     def index(self):  # pylint: disable=R0201
         """ Index route """
         landing_kind = self.landing.get("kind", "default")
+        # log.info('Index landing kind %s', landing_kind)
         #
         if landing_kind == "holder":
             sections = self.get_visible_sections()
+            # log.info('Index holder sections %s', sections)
             if sections:
                 return redirect(
                     url_for(
