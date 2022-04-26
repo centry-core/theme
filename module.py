@@ -82,25 +82,30 @@ class Module(module.ModuleModel):
         # SocketIO events
         self.context.sio.on("connect", handler=self.sio_connect)
         self.context.sio.on("disconnect", handler=self.sio_disconnect)
+        log.info('SocketIO done')
         # Public routes
         for route in self._public:
             auth.add_public_rule(route)
+        log.info('Public routes done')
 
         # Hooks
         self.context.app.context_processor(lambda: {"tools": tools})
         self.context.app.errorhandler(Exception)(self._error_handler)
         self.context.app.before_request(self._before_request_hook)
         self.context.app.after_request(self._after_request_hook)
+        log.info('Hooks done')
 
         # Init RPCs
         self.descriptor.init_rpcs()
+        log.info('RPCs done')
         # log.info('%s descriptor %s', self.descriptor.name, self.__dict__)
         # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
         # log.info('Self func %s', self.register_section)
         # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
 
         # Register tool
-        self.descriptor.register_tool(self.descriptor.name, self)
+        self.descriptor.register_tool('theme', self)
+        log.info('Tools registration done')
 
     def _error_handler(self, error):
         log.error("Error: %s", error)
