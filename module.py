@@ -97,6 +97,7 @@ class Module(module.ModuleModel):
 
         # Init RPCs
         self.descriptor.init_rpcs()
+        self.descriptor.init_slots()
         log.info('RPCs done')
         # log.info('%s descriptor %s', self.descriptor.name, self.__dict__)
         # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
@@ -107,9 +108,6 @@ class Module(module.ModuleModel):
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
 
-        self.context.slot_manager.register_callback('before_request_hook',
-                                                lambda payload: log.info('running slot for theme'))
-
     def _error_handler(self, error):
         log.error("Error: %s", error)
         return self.descriptor.render_template("access_denied.html"), 400
@@ -119,7 +117,6 @@ class Module(module.ModuleModel):
         g.theme.active_section = None
         g.theme.active_subsection = None
         log.info('before request hook %s', self.descriptor.name)
-        # self.context.slot_manager.run_slot('before_request_hook')
 
     def _after_request_hook(self, response):
         additional_headers = self.descriptor.config.get(
