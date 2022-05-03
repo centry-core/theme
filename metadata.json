@@ -1,5 +1,5 @@
 {
   "name": "Theme of carrier ui",
   "version": "0.1",
-  "depends_on": ["shared", "design-system"]
+  "depends_on": ["shared", "design-system", "auth"]
 }
