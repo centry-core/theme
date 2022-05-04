@@ -1,4 +1,5 @@
 <link type="text/css" href="{{ url_for('design-system.static', filename='assets/style/css/main.css') }}" rel="stylesheet">
+<link type="text/css" href="{{ url_for('design-system.static', filename='assets/style/css/chart.css') }}" rel="stylesheet">
 
 <meta property="build_id" content="{{ config['test_data']['build_id'] }}"/>
 <meta property="test_id" content="{{ config['test_data']['id'] }}"/>
@@ -239,10 +240,14 @@
             </div>
             <div class="float-left" style="width:25%;">
                 <div class="d-flex flex-column mx-2">
-                    <input class="mx-2 custom-checkbox custom-checkbox_multicolor" type="checkbox" checked="true" id="all_checkbox" onclick="selectOrUnselectRequests()">
-                    <label class="mb-0 w-100 d-flex align-items-center custom-chart-legend-label" style="--cbx-color: rgb(94,114,228);" for="all_checkbox">
-                        <span class="custom-chart-legend-span"></span>
-                        Select/Unselect all
+                    <label
+                            class="mb-0 w-100 d-flex align-items-center custom-checkbox custom-checkbox__multicolor" for="all_checkbox">
+                        <input
+                                class="mx-2"
+                                checked="true" id="all_checkbox" onclick="selectOrUnselectRequests()"
+                                style="--cbx-color: var(--yellow);"
+                                type="checkbox">
+                        <span class="w-100 d-inline-block">Select/Unselect all</span>
                     </label>
                 </div>
                 <br>
