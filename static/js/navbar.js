@@ -83,11 +83,8 @@ const Navbar = {
             <h6 class="dropdown-header">[[ user.name ]]</h6>
             <h9 class="dropdown-header">[[ user.email ]]</h9>
             <div class="dropdown-divider"></div>
-            <button class="dropdown-item" type="button"
-                    v-for="action_name in ['Action (dummy)', 'Another action (dummy)', 'Logout (dummy)']"
-            >
-                [[ action_name ]]
-            </button>
+            <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
+            
         </div>
     </div>
 </nav>
@@ -123,6 +120,9 @@ const Navbar = {
         },
         handle_section_change(event) {
             location.href = this.get_section_href(event.target.value)
+        },
+        handle_logout() {
+            location.href = '/forward-auth/logout'
         }
     }
 }
