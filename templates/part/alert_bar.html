@@ -1,12 +1,5 @@
-<div id="{{ alert_container_id }}" data-max-alerts="{{ max_alerts | default(1) }}">
-    THIS IS ALERT BAR {{ alert_container_id }}
-    <div class="overlaying" style="max-width: {{ overlay_max_width | default('unset') }}"></div>
-</div>
-{% block scripts %}
-    {#<script>#}
-    $(() => {
-    window['{{ alert_container_id }}'] = new AlertBar('{{ alert_container_id }}')
-    setTimeout(() => window['{{ alert_container_id }}'].add('Hello from {{ alert_container_id }}'), 3000)
-    })
-    {#</script>#}
-{% endblock %}
+<alert-bar-vue
+    alert_container_id="{{ alert_container_id }}"
+    max_alerts="{{ max_alerts | default(1) }}"
+    overlay_max_width="{{ overlay_max_width | default('unset') }}"
+></alert-bar-vue>

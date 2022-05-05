@@ -99,4 +99,19 @@ if (Boolean(AlertBar.alertVariants.find(item => item.includes('-')))) {
     `);
 }
 
-var init_alert_bar
+const AlertBarVue = {
+    delimiters: ['[[', ']]'],
+    props: ['alert_container_id', 'max_alerts', 'overlay_max_width'],
+    template: `
+    <div :id="alert_container_id" :data-max-alerts="max_alerts">
+        <div class="overlaying" :style="{'max-width': overlay_max_width}"></div>
+    </div>
+    `,
+    mounted() {
+        window[this.alert_container_id] = new AlertBar(this.alert_container_id)
+    }
+}
+
+wait_for('vueApp').then(vueApp => {
+    vueApp.component('AlertBarVue', AlertBarVue)
+})
