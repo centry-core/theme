@@ -2,9 +2,9 @@
         @register="register"
         instance_name="navbar"
 
-        :sections="{{ tools.theme.get_visible_sections() }}"
-        :subsections="{{ tools.theme.get_visible_subsections(g.theme.active_section) }}"
-        :user="{{ tools.auth.current_user() }}"
+        :sections='{{ tools.theme.get_visible_sections() | tojson }}'
+        :subsections='{{ tools.theme.get_visible_subsections(g.theme.active_section) | tojson }}'
+        :user='{{ tools.auth.current_user() | tojson }}'
 
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
         active_section="{{ g.theme.active_section }}"

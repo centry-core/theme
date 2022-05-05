@@ -108,6 +108,22 @@ class Module(module.ModuleModel):
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
 
+        self.register_section(
+            "theme_demo1", "Theme Demo",
+            kind="holder",
+            location="left",
+            icon_class="fas fa-info-circle fa-fw",
+        )
+        self.register_subsection(
+            "theme_demo1",
+            "theme_subdemo1", "Theme Subsection",
+            title="Subsection Demo",
+            kind="slot",
+            prefix="demo_slot_",
+            icon_class="fas fa-server fa-fw",
+            weight=2,
+        )
+
     def _error_handler(self, error):
         log.error("Error: %s", error)
         return self.descriptor.render_template("access_denied.html"), 400
@@ -116,7 +132,7 @@ class Module(module.ModuleModel):
         g.theme = Holder()
         g.theme.active_section = None
         g.theme.active_subsection = None
-        log.info('before request hook %s', self.descriptor.name)
+        # log.info('before request hook %s', self.descriptor.name)
 
     def _after_request_hook(self, response):
         additional_headers = self.descriptor.config.get(

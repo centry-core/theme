@@ -98,3 +98,5 @@ if (Boolean(AlertBar.alertVariants.find(item => item.includes('-')))) {
         Consider renaming or removing: ${AlertBar.alertVariants.filter(item => item.includes('-'))}
     `);
 }
+
+var init_alert_bar

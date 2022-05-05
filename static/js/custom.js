@@ -1,5 +1,5 @@
 window.activeProject = {
-    backendUrl: '/api/v1/project-session',
+    backendUrl: '/api/v1/projects/session',
     localStorageKey: 'selectedProject',
     fetch: async () => {
         const resp = await fetch(activeProject.backendUrl)
@@ -11,15 +11,15 @@ window.activeProject = {
     },
     get: async () => {
         let projectId = localStorage.getItem(activeProject.localStorageKey)
-        if (projectId === null) {
-            projectId = await activeProject.fetch().then(id => {
-                id === null ?
-                    activeProject.delete()
-                    :
-                    activeProject.set(id)
-                return id
-            })
-        }
+        // if (projectId === null) {
+        //     projectId = await activeProject.fetch().then(id => {
+        //         id === null ?
+        //             activeProject.delete()
+        //             :
+        //             activeProject.set(id)
+        //         return id
+        //     })
+        // }
         return projectId
     },
     set: async id => {
