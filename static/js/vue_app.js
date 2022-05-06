@@ -6,7 +6,7 @@ const vueCoreApp = {
         this.patchActiveProject()
         activeProject.get().then(id => {
             this.project_id = id
-            console.log('project_id set to', id)
+            // console.log('project_id set to', id)
         })
         console.info('Vue App mounted')
         const event = new Event('vue_init')
@@ -14,14 +14,16 @@ const vueCoreApp = {
     },
     data() {
         return {
-            project_id: null,
+            project_id: undefined,
             registered_components: {},
         }
     },
     watch: {
         async project_id(newValue, oldValue) {
             console.log('changing pid', oldValue, '->', newValue)
-            newValue !== null && await activeProject.set(newValue)
+            if (oldValue !== undefined) {
+                newValue !== null && await activeProject.set(newValue)
+            }
         }
     },
     methods: {

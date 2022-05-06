@@ -1,5 +1,5 @@
 window.activeProject = {
-    backendUrl: '/api/v1/project-session',
+    backendUrl: '/api/v1/projects/session',
     localStorageKey: 'selectedProject',
     fetch: async () => {
         const resp = await fetch(activeProject.backendUrl)
@@ -16,7 +16,7 @@ window.activeProject = {
                 id === null ?
                     activeProject.delete()
                     :
-                    activeProject.set(id)
+                    activeProject.set_local(id)
                 return id
             })
         }
@@ -31,7 +31,7 @@ window.activeProject = {
         })
         if (resp.ok) {
             const resp_msg = await resp.json()
-            localStorage.setItem(activeProject.localStorageKey, id)
+            activeProject.set_local(id)
             console.log(resp_msg)
             return id
         } else {
@@ -39,13 +39,14 @@ window.activeProject = {
             return null
         }
     },
+    set_local: id => localStorage.setItem(activeProject.localStorageKey, id),
     delete: () => localStorage.removeItem(activeProject.localStorageKey)
 }
 
 window.getSelectedProjectId = () => localStorage.getItem(activeProject.localStorageKey)
 $(document).on('vue_init', () => window.getSelectedProjectId = () => vueVm.project_id)
 
-window.wait_for = async (prop_name, root = window, poll_length = 1000) => {
+window.wait_for = async (prop_name, root = window, poll_length = 500) => {
     while (!root.hasOwnProperty(prop_name))
         await new Promise(resolve => setTimeout(resolve, poll_length))
     return root[prop_name]

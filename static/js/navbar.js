@@ -44,7 +44,8 @@ const Navbar = {
         'instance_name',
         'sections', 'subsections',
         'user', 'logo_url',
-        'active_section', 'active_subsection'
+        'active_section', 'active_subsection',
+        'active_project'
     ],
     template: `
 <nav class="navbar navbar-expand main-nav">
@@ -52,7 +53,11 @@ const Navbar = {
         <a class="logo" href="/">
             <img :src="logo_url" alt="centry">
         </a>
-        <select class="selectpicker" data-style="btn-chapters" @change="handle_section_change" :value="active_section">
+        <select class="selectpicker" data-style="btn-chapters" 
+            name="section_select"
+            @change="handle_section_change" 
+            :value="active_section"
+            >
             <option v-for="section in sections" :value="section.key" :key="section.key">[[ section.name ]]</option>
         </select>
     </div>
@@ -68,10 +73,20 @@ const Navbar = {
         </li>
     </ul>
 
-    <!--        <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true">-->
-    <!--            <option project_id="{{ item.id }}">{{ item.name }}</option>-->
-    <!--        </select>-->
-
+    <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true"
+        name="project_select"
+        id="project_select"
+        v-if="projects.length > 0"
+        :value="active_project"
+        @change="handle_project_change"
+    >
+        <option v-for="project in projects" 
+            :value="project.id" 
+            :key="project.id"
+        >
+            [[ project.name ]]
+        </option>
+    </select>
     <div class="vl"></div>
     <div class="dropdown ml-1">
         <button class="btn btn-primary dropdown-toggle" type="button"
@@ -83,34 +98,34 @@ const Navbar = {
             <h6 class="dropdown-header">[[ user.name ]]</h6>
             <h9 class="dropdown-header">[[ user.email ]]</h9>
             <div class="dropdown-divider"></div>
-            <button class="dropdown-item" type="button"
-                    v-for="action_name in ['Action (dummy)', 'Another action (dummy)', 'Logout (dummy)']"
-            >
-                [[ action_name ]]
-            </button>
+            <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
+            
         </div>
     </div>
 </nav>
     `,
-
-    mounted() {
-        // this.project_id = activeProject.get
-        console.log('navbar props', this.$props)
+    data() {
+        return {
+            projects: [],
+        }
     },
-    // data() {
-    //     return {
-    //         project_name: '',
-    //     }
-    // },
-    // watch: {
-    //     project_id(newValue, oldValue) {
-    //         console.log('PROJECT ID CHANGED! ', oldValue, '->', newValue)
-    //         // this.project_name = $(projectSelectId).find(`[project_id=${newValue}]`).val() // todo: change to select from internal props data
-    //     },
-    //     project_name(newValue, oldValue) {
-    //         console.log('PROJECT NAME CHANGED! ', oldValue, '->', newValue)
-    //     }
-    // },
+    async mounted() {
+        // console.log('navbar props', this.$props)
+        await this.fetch_projects()
+        // this.projects = [...this.projects, {name: 'p123', id: 123}, {name: 'qwe', id: 777}]
+    },
+    watch: {
+        // project_id(newValue, oldValue) {
+        //     console.log('PROJECT ID CHANGED! ', oldValue, '->', newValue)
+        //     // this.project_name = $(projectSelectId).find(`[project_id=${newValue}]`).val() // todo: change to select from internal props data
+        // },
+        // project_name(newValue, oldValue) {
+        //     console.log('PROJECT NAME CHANGED! ', oldValue, '->', newValue)
+        // }
+        projects(newValue, oldValue) {
+            this.$nextTick(() => $('#project_select').selectpicker('refresh'))
+        }
+    },
     methods: {
         get_section_href(section_key) {
             return `/-/${section_key}`
@@ -123,6 +138,21 @@ const Navbar = {
         },
         handle_section_change(event) {
             location.href = this.get_section_href(event.target.value)
+        },
+        handle_logout() {
+            location.href = '/forward-auth/logout'
+        },
+        async fetch_projects() {
+            const resp = await fetch('/api/v1/projects/project/')
+            if (resp.ok) {
+                const data = await resp.json()
+                this.projects = data
+                // $('#project_select').selectpicker('refresh')
+            }
+        },
+        async handle_project_change(event) {
+            const new_id = await activeProject.set(event.target.value)
+            new_id !== null && location.reload()
         }
     }
 }

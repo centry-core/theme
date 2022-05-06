@@ -41,7 +41,7 @@ class Slot:  # pylint: disable=E1101,R0903
     """
 
     @web.slot('alert_bar')
-    def _alert_bar(self, context, slot, payload):
+    def alert_bar(self, context, slot, payload):
         """
         alert bar with payload config:
             max_alerts (1) - maximum alert rows in stack
@@ -49,7 +49,7 @@ class Slot:  # pylint: disable=E1101,R0903
             overlay_max_width ('unset') - width limit for alert container
         """
         from pylon.core.tools import log
-        log.info('Alert bar slot payload  %s', payload)
+        log.info('slot [%s] payload  %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/alert_bar.html',

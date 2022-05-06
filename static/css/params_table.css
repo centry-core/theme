@@ -1,0 +1,8 @@
+.invalid-tooltip-custom {
+    top: initial;
+    left: inherit;
+    visibility: hidden;
+}
+.is-invalid:hover ~ .invalid-tooltip-custom {
+    visibility: visible;
+}
