@@ -9,6 +9,9 @@
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
         active_section="{{ g.theme.active_section }}"
         active_subsection="{{ g.theme.active_subsection }}"
+
+{#        :active_project='{{ g.project.id | default(None | tojson) }}'#}
+        :active_project="project_id"
 >
 </Navbar>
 
