@@ -108,22 +108,6 @@ class Module(module.ModuleModel):
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
 
-        self.register_section(
-            "theme_demo1", "Theme Demo",
-            kind="holder",
-            location="left",
-            icon_class="fas fa-info-circle fa-fw",
-        )
-        self.register_subsection(
-            "theme_demo1",
-            "theme_subdemo1", "Theme Subsection",
-            title="Subsection Demo",
-            kind="slot",
-            prefix="demo_slot_",
-            icon_class="fas fa-server fa-fw",
-            weight=2,
-        )
-
     def _error_handler(self, error):
         log.error("Error: %s", error)
         return self.descriptor.render_template("access_denied.html"), 400
@@ -371,6 +355,11 @@ class Module(module.ModuleModel):
         """ Get 'Access denied' template part """
         with self.context.app.app_context():
             return self.descriptor.render_template("part/access_denied.html")
+
+    @property
+    def empty_content(self):
+        with self.context.app.app_context():
+            return self.descriptor.render_template("part/empty.html")
 
     @web.route("/socket.io/")
     def socketio(self):  # pylint: disable=R0201
