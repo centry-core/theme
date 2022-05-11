@@ -104,6 +104,21 @@ class Module(module.ModuleModel):
         # log.info('Self func %s', self.register_section)
         # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
 
+        self.register_section(
+            "configuration",
+            "Configuration",
+            kind="holder",
+            location="left",
+        )
+        self.register_subsection(
+            "configuration", "test",
+            "TEST",
+            title="Test config",
+            kind="slot",
+            prefix="configuration_test_",
+            weight=5,
+        )
+
         # Register tool
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
@@ -135,14 +150,10 @@ class Module(module.ModuleModel):
         result = list()
         #
         current_permissions = auth.resolve_permissions()
-        # log.info('get_visible_sections current_permissions %s', current_permissions)
         location_result = defaultdict(list)
         #
-        # log.info('sections items %s', self.sections.items())
         for section_key, section_attrs in self.sections.items():
             required_permissions = section_attrs.get("permissions", [])
-            # log.info('required_permissions %s %s', section_key, required_permissions)
-            # log.info('section_attrs %s %s', section_key, section_attrs)
             #
             if set(required_permissions).issubset(set(current_permissions)):
                 #

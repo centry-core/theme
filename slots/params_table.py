@@ -7,7 +7,12 @@ class Slot:  # pylint: disable=E1101,R0903
     def params_table_content(self, context, slot, payload):
         """
         params_table with payload config:
-
+        caption::
+        description::
+        modal_id::
+        default_params::
+        disabled_names::
+        hidden_columns::
         """
         from pylon.core.tools import log
         log.info('slot: [%s], payload: %s', slot, payload)
