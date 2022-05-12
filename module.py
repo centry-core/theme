@@ -110,14 +110,6 @@ class Module(module.ModuleModel):
             kind="holder",
             location="left",
         )
-        self.register_subsection(
-            "configuration", "test",
-            "TEST",
-            title="Test config",
-            kind="slot",
-            prefix="configuration_test_",
-            weight=5,
-        )
 
         # Register tool
         self.descriptor.register_tool('theme', self)
