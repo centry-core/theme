@@ -21,19 +21,24 @@
             >
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" data-sortable="true" data-field="name" data-formatter=ParamsTable.inputFormatter>Name</th>
-                    <th scope="col" data-sortable="true" data-field="default" data-formatter=ParamsTable.inputFormatter>Default
-                        value
+                    <th scope="col" data-sortable="true" data-field="name"
+                        data-formatter=ParamsTable.inputFormatter>Name</th>
+                    <th scope="col" data-sortable="true" data-field="default"
+                        data-formatter=ParamsTable.inputFormatter>
+                        Default value
                     </th>
                     {% if ("type" not in hidden_columns) %}
-                        <th scope="col" data-sortable="true" data-field="type" data-formatter=ParamsTable.dataTypeFormatter>Data
-                            Type
+                        <th scope="col" data-sortable="true" data-field="type"
+                            data-formatter=ParamsTable.dataTypeFormatter>
+                            Data Type
                         </th>
                     {% endif %}
-                    <th scope="col" data-sortable="true" data-field="description" data-formatter=ParamsTable.inputFormatter>
+                    <th scope="col" data-sortable="true" data-field="description"
+                        data-formatter=ParamsTable.inputFormatter>
                         Description
                     </th>
-                    <th scope="col" data-field="action" data-formatter=ParamsTable.parametersDeleteFormatter>&nbsp;</th>
+                    <th scope="col" data-field="action"
+                        data-formatter=ParamsTable.parametersDeleteFormatter>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,8 +62,9 @@
     </div>
     <div class="row pt-2">
         <div class="col">
-            <button type="button" class="btn btn-sm btn-secondary" onclick="ParamsTable.addEmptyParamsRow(this)"><i
-                    class="fas fa-plus mr-2"></i>Add Parameter
+            <button type="button" class="btn btn-sm btn-secondary"
+                    onclick="ParamsTable.addEmptyParamsRow(this)">
+                <i class="fas fa-plus mr-2"></i>Add Parameter
             </button>
         </div>
     </div>

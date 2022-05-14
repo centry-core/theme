@@ -104,25 +104,16 @@ class Module(module.ModuleModel):
         # log.info('Self func %s', self.register_section)
         # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
 
+        self.register_section(
+            "configuration",
+            "Configuration",
+            kind="holder",
+            location="left",
+        )
+
         # Register tool
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
-
-        self.register_section(
-            "theme_demo1", "Theme Demo",
-            kind="holder",
-            location="left",
-            icon_class="fas fa-info-circle fa-fw",
-        )
-        self.register_subsection(
-            "theme_demo1",
-            "theme_subdemo1", "Theme Subsection",
-            title="Subsection Demo",
-            kind="slot",
-            prefix="demo_slot_",
-            icon_class="fas fa-server fa-fw",
-            weight=2,
-        )
 
     def _error_handler(self, error):
         log.error("Error: %s", error)
@@ -151,14 +142,10 @@ class Module(module.ModuleModel):
         result = list()
         #
         current_permissions = auth.resolve_permissions()
-        # log.info('get_visible_sections current_permissions %s', current_permissions)
         location_result = defaultdict(list)
         #
-        # log.info('sections items %s', self.sections.items())
         for section_key, section_attrs in self.sections.items():
             required_permissions = section_attrs.get("permissions", [])
-            # log.info('required_permissions %s %s', section_key, required_permissions)
-            # log.info('section_attrs %s %s', section_key, section_attrs)
             #
             if set(required_permissions).issubset(set(current_permissions)):
                 #
@@ -371,6 +358,11 @@ class Module(module.ModuleModel):
         """ Get 'Access denied' template part """
         with self.context.app.app_context():
             return self.descriptor.render_template("part/access_denied.html")
+
+    @property
+    def empty_content(self):
+        with self.context.app.app_context():
+            return self.descriptor.render_template("part/empty.html")
 
     @web.route("/socket.io/")
     def socketio(self):  # pylint: disable=R0201

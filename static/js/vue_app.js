@@ -78,7 +78,7 @@ const register_component = (name, component) => {
         component.emits = ['register']
     window.vueApp.component(name, component)
 }
-window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7'].includes(tag)
+window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7', 'h12'].includes(tag)
 
 
 $(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
