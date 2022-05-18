@@ -26,10 +26,14 @@
     </script>
     <!-- Vue Application Root -->
     <script src="{{ url_for('theme.static', filename='js/vue_app.js') }}"></script>
+
     <!-- Nav bar -->
     <script src="{{ url_for('theme.static', filename='js/navbar.js') }}"></script>
     <!-- Custom scripts-->
     <script src="{{ url_for('theme.static', filename='js/alert_bar.js') }}"></script>
+
+
+    <script src="{{ url_for('design-system.static', filename='assets/js/TableCard.js') }}"></script>
 
     {% block scripts %}
         {{ template_slot('scripts', tools.auth.make_request_state()) | safe }}
