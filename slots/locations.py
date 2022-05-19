@@ -4,7 +4,7 @@ from tools import auth  # pylint: disable=E0401
 
 class Slot:  # pylint: disable=E1101,R0903
     @web.slot('locations_content')
-    def params_table_content(self, context, slot, payload):
+    def content(self, context, slot, payload):
         """
         locations with payload config:
 
@@ -18,7 +18,7 @@ class Slot:  # pylint: disable=E1101,R0903
             )
 
     @web.slot('locations_scripts')
-    def params_table_scripts(self, context, slot, payload):
+    def scripts(self, context, slot, payload):
         from pylon.core.tools import log
         log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
@@ -27,7 +27,7 @@ class Slot:  # pylint: disable=E1101,R0903
             )
 
     @web.slot('locations_styles')
-    def params_table_styles(self, context, slot, payload):
+    def styles(self, context, slot, payload):
         from pylon.core.tools import log
         log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
