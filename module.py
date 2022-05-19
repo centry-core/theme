@@ -84,6 +84,7 @@ class Module(module.ModuleModel):
         self.context.sio.on("disconnect", handler=self.sio_disconnect)
         log.info('SocketIO done')
         # Public routes
+        auth.ping()
         for route in self._public:
             auth.add_public_rule(route)
         log.info('Public routes done')

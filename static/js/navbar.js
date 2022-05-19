@@ -131,9 +131,9 @@ const Navbar = {
             return `/-/${section_key}`
         },
         get_subsection_href(subsection_key) {
-            if (subsection_key === this.active_subsection) {
-                return '#'
-            }
+            // if (subsection_key === this.active_subsection) {
+            //     return '#'
+            // }
             return `${this.get_section_href(this.active_section)}/${subsection_key}`
         },
         handle_section_change(event) {
