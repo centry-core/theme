@@ -7,7 +7,7 @@
 <div class="section">
     <div class="row">
         <div class="col">
-            <h7>{{ caption | default("Default Caption") }}</h7>
+            <h5>{{ caption | default("Default Caption") }}</h5>
             <p>
                 <h13>{{ description | default("You may also create additional parameters with ability to change them in subsequent test runs") }}</h13>
             </p>
@@ -22,35 +22,56 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col" data-sortable="true" data-field="name"
-                        data-formatter=ParamsTable.inputFormatter>Name</th>
+                        data-formatter=ParamsTable.inputFormatter
+                        data-width="144" data-width-unit="px"
+                    >
+                        Name
+                    </th>
                     <th scope="col" data-sortable="true" data-field="default"
-                        data-formatter=ParamsTable.inputFormatter>
+                        data-formatter=ParamsTable.inputFormatter
+                    >
                         Default value
                     </th>
                     {% if ("type" not in hidden_columns) %}
                         <th scope="col" data-sortable="true" data-field="type"
-                            data-formatter=ParamsTable.dataTypeFormatter>
+                            data-formatter=ParamsTable.dataTypeFormatter
+                            data-width="144" data-width-unit="px"
+                        >
                             Data Type
                         </th>
                     {% endif %}
                     <th scope="col" data-sortable="true" data-field="description"
-                        data-formatter=ParamsTable.inputFormatter>
+                        data-formatter=ParamsTable.inputFormatter
+                    >
                         Description
                     </th>
                     <th scope="col" data-field="action"
-                        data-formatter=ParamsTable.parametersDeleteFormatter>&nbsp;</th>
+                        data-formatter=ParamsTable.parametersDeleteFormatter
+                        data-width="56" data-width-unit="px"
+                    >&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for row in default_params | default([]) %}
                     <tr>
-                        <td {% if (row.name in disabled_names) %} class="disabled" {% endif %}>{{ row.name }}</td>
+                        <td
+                                {% if (row.name in disabled_names) %} class="disabled" {% endif %}
+                        >
+                            {{ row.name }}
+                        </td>
                         <td>{{ row.default }}</td>
                         {% if ("type" not in hidden_columns) %}
-                            <td {% if (row.name in disabled_names) %} class="disabled" {% endif %}>{{ row.type }}</td>
+                            <td
+                                    {% if (row.name in disabled_names) %} class="disabled" {% endif %}
+                            >
+                                {{ row.type }}
+                            </td>
                         {% endif %}
-                        <td {% if (row.name in disabled_names) %}
-                            class="disabled" {% endif %}>{{ row.description }}</td>
+                        <td
+                                {% if (row.name in disabled_names) %} class="disabled" {% endif %}
+                        >
+                            {{ row.description }}
+                        </td>
                         {% if (row.name not in disabled_names) %}
                             <td></td>
                         {% endif %}
