@@ -10,6 +10,7 @@ var ParamsTable = {
             `
         )
         return `
+<!--            <select class="selectpicker mr-2 bootstrap-select__b" data-style="btn-gray" onchange="updateCell(this, '${index}', '${field}')">-->
             <select class="selectpicker mr-2" data-style="btn-gray" onchange="updateCell(this, '${index}', '${field}')">
                 ${options.join('')}
             </select>
@@ -24,11 +25,11 @@ var ParamsTable = {
 
     parametersDeleteFormatter(value, row, index) {
         return `
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-16 btn-action" onclick="ParamsTable.deleteParams(${index}, this)">
+<!--        <div class="d-flex justify-content-end">-->
+            <button type="button" class="btn btn-24 btn-action" onclick="ParamsTable.deleteParams(${index}, this)">
                 <i class="fas fa-trash-alt"></i>
             </button>
-        </div>
+<!--        </div>-->
         `
     },
     inputFormatter(value, row, index, field) {
@@ -45,3 +46,9 @@ var ParamsTable = {
         })
     }
 }
+
+$(document).on('vue_init', () => {
+    $('.params-table').on('all.bs.table', () => {
+        $('.selectpicker').selectpicker('render')
+    })
+})

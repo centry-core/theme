@@ -33,7 +33,7 @@
         {{ link_url('assets/vendor/bootstrap-table/bootstrap-table.min.css') }}
         {{ link_url('assets/vendor/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css') }}
         {{ link_url('assets/vendor/bootstrap-select/css/bootstrap-select.min.css') }}
-        {{ link_url('assets/style/css/main.css') }}
+
         <link type="text/css" href="{{ url_for('theme.static', filename='css/alert_bar.css') }}" rel="stylesheet">
 
 
@@ -44,5 +44,8 @@
             {{ template_slot('styles', tools.auth.make_request_state()) | safe }}
             {% if prefix %}{{ template_slot(prefix + 'styles', tools.auth.make_request_state()) | safe }}{% endif %}
         {% endblock %}
+
+
+        {{ link_url('assets/style/css/main.css') }}
 
     {% endblock %}
