@@ -6,7 +6,7 @@
     {%- set base_url = '<link type="text/css" href="%s" rel="stylesheet"/>' -%}
     {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}
 {%- endmacro -%}
-<!doctype html>
+{#<!doctype html>  {# - THIS is the source of all problems!!! #}
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -33,19 +33,13 @@
         {{ link_url('assets/vendor/bootstrap-table/bootstrap-table.min.css') }}
         {{ link_url('assets/vendor/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css') }}
         {{ link_url('assets/vendor/bootstrap-select/css/bootstrap-select.min.css') }}
-
+        {{ link_url('assets/style/css/main.css') }}
         <link type="text/css" href="{{ url_for('theme.static', filename='css/alert_bar.css') }}" rel="stylesheet">
 
-
-
         <!-- Plugin styles -->
-
         {% block styles %}
             {{ template_slot('styles', tools.auth.make_request_state()) | safe }}
             {% if prefix %}{{ template_slot(prefix + 'styles', tools.auth.make_request_state()) | safe }}{% endif %}
         {% endblock %}
-
-
-        {{ link_url('assets/style/css/main.css') }}
 
     {% endblock %}
