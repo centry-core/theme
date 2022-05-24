@@ -17,6 +17,7 @@
 
 """ Module """
 import re
+import traceback
 from collections import defaultdict
 
 from flask import redirect, url_for, g
@@ -117,7 +118,11 @@ class Module(module.ModuleModel):
         log.info('Tools registration done')
 
     def _error_handler(self, error):
-        log.error("Error: %s", error)
+        log.error(
+            "Error: (%s) %s:\n%s",
+            type(error), error,
+            "".join(traceback.format_tb(error.__traceback__)),
+        )
         return self.descriptor.render_template("access_denied.html"), 400
 
     def _before_request_hook(self):  # pylint: disable=R0201
