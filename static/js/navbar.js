@@ -38,7 +38,7 @@
 //     });
 // })
 
-const Navbar = {
+const Navbar_centry = {
     delimiters: ['[[', ']]'],
     props: [
         'instance_name',
@@ -157,4 +157,4 @@ const Navbar = {
     }
 }
 
-register_component('Navbar', Navbar)
+register_component('Navbar', Navbar_centry)
