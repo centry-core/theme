@@ -112,6 +112,7 @@ const AlertBarVue = {
     }
 }
 
-wait_for('vueApp').then(vueApp => {
-    vueApp.component('AlertBarVue', AlertBarVue)
-})
+// wait_for('vueApp').then(vueApp => {
+//     vueApp.component('AlertBarVue', AlertBarVue)
+// })
+register_component('AlertBarVue', AlertBarVue)

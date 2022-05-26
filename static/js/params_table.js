@@ -10,9 +10,9 @@ var ParamsTable = {
             `
         )
         return `
-<!--            <select class="selectpicker mr-2 bootstrap-select__b" data-style="btn-gray" onchange="updateCell(this, '${index}', '${field}')">-->
-            <select class="selectpicker mr-2" data-style="select-secondary" onchange="updateCell(this, '${index}', '${field}')">
-                ${options.join('')}
+            <select class="selectpicker bootstrap-select__b mr-2" data-style="btn"
+                    onchange="updateCell(this, '${index}', '${field}')">
+                    ${options.join('')}
             </select>
         `
     },
