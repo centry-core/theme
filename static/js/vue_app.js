@@ -9,8 +9,7 @@ const vueCoreApp = {
             // console.log('project_id set to', id)
         })
         console.info('Vue App mounted')
-        const event = new Event('vue_init')
-        document.dispatchEvent(event)
+
     },
     data() {
         return {
@@ -81,4 +80,8 @@ const register_component = (name, component) => {
 window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7', 'h12'].includes(tag)
 
 
-$(() => window.vueVm = vueApp.mount('#vue_mountpoint'))
+$(() => {
+    window.vueVm = vueApp.mount('#vue_mountpoint')
+    const event = new Event('vue_init')
+    document.dispatchEvent(event)
+})
