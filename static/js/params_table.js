@@ -1,18 +1,26 @@
 var ParamsTable = {
     dataTypeFormatter(value, row, index, field) {
-        const options = ['String', 'Number', 'List'].map(item =>
-            `<option 
-                value=${item} 
+        const is_disabled = row._type_class?.toLowerCase().includes('disabled')
+        let options = is_disabled ? [value] : ['String', 'Number', 'List']
+
+        options = options.reduce((accum, item, ) =>
+            `${accum}<option
+                value='${item}'
                 ${item.toLowerCase() === value.toLowerCase() ? 'selected' : ''}
             >
                 ${item}
             </option>
-            `
+            `,
+            ''
         )
         return `
-<!--            <select class="selectpicker mr-2 bootstrap-select__b" data-style="btn-gray" onchange="updateCell(this, '${index}', '${field}')">-->
-            <select class="selectpicker mr-2" data-style="btn-gray" onchange="updateCell(this, '${index}', '${field}')">
-                ${options.join('')}
+            <select 
+                class="selectpicker bootstrap-select__b mr-2 ${row._type_class}" 
+                data-style="btn" 
+                ${is_disabled && 'disabled'}
+                onchange="updateCell(this, '${index}', '${field}')"
+                >
+                    ${options}
             </select>
         `
     },
