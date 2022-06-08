@@ -32,7 +32,6 @@ window.activeProject = {
         if (resp.ok) {
             const resp_msg = await resp.json()
             activeProject.set_local(id)
-            console.log(resp_msg)
             return id
         } else {
             activeProject.delete()

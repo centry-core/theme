@@ -110,18 +110,9 @@ const Navbar_centry = {
         }
     },
     async mounted() {
-        // console.log('navbar props', this.$props)
         await this.fetch_projects()
-        // this.projects = [...this.projects, {name: 'p123', id: 123}, {name: 'qwe', id: 777}]
     },
     watch: {
-        // project_id(newValue, oldValue) {
-        //     console.log('PROJECT ID CHANGED! ', oldValue, '->', newValue)
-        //     // this.project_name = $(projectSelectId).find(`[project_id=${newValue}]`).val() // todo: change to select from internal props data
-        // },
-        // project_name(newValue, oldValue) {
-        //     console.log('PROJECT NAME CHANGED! ', oldValue, '->', newValue)
-        // }
         projects(newValue, oldValue) {
             this.$nextTick(() => $('#project_select').selectpicker('refresh'))
         }
