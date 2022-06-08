@@ -6,7 +6,7 @@ var ParamsTable = {
         options = options.reduce((accum, item, ) =>
             `${accum}<option
                 value='${item}'
-                ${item.toLowerCase() === value.toLowerCase() ? 'selected' : ''}
+                ${item.toLowerCase() === value.toLowerCase() && 'selected'}
             >
                 ${item}
             </option>
