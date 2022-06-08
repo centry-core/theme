@@ -18,7 +18,7 @@ var ParamsTable = {
                 class="selectpicker bootstrap-select__b mr-2 ${row._type_class}" 
                 data-style="btn" 
                 ${is_disabled && 'disabled'}
-                onchange="updateCell(this, '${index}', '${field}')"
+                onchange="ParamsTable.updateCell(this, '${index}', '${field}')"
                 >
                     ${options}
             </select>
@@ -43,7 +43,7 @@ var ParamsTable = {
     inputFormatter(value, row, index, field) {
         return `
             <input type="text" class="form-control form-control-alternative" 
-                onchange="updateCell(this, ${index}, '${field}')" value="${value}">
+                onchange="ParamsTable.updateCell(this, ${index}, '${field}')" value="${value}">
             <div class="invalid-tooltip invalid-tooltip-custom"></div>
         `
     },
@@ -52,7 +52,11 @@ var ParamsTable = {
             field: '$index',
             values: [index]
         })
-    }
+    },
+    updateCell: (el, row, field) => $(el.closest('table')).bootstrapTable(
+        'updateCell',
+        {index: row, field: field, value: el.value}
+    )
 }
 
 $(document).on('vue_init', () => {
