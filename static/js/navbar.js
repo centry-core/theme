@@ -62,7 +62,7 @@ const Navbar_centry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100">
+    <ul class="navbar-nav w-100" style="overflow-x: scroll">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
