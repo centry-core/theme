@@ -130,7 +130,8 @@ const Navbar_centry = {
         handle_section_change(event) {
             location.href = this.get_section_href(event.target.value)
         },
-        handle_logout() {
+        async handle_logout() {
+            await activeProject.delete()
             location.href = '/forward-auth/logout'
         },
         async fetch_projects() {

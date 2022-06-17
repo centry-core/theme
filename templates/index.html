@@ -4,10 +4,11 @@
 {% include 'theme:part/head.html' %}
 <title>{% block title %}{{ title }}{% endblock %} - Centry</title>
 </head>
+{% with user = tools.auth.current_user() %}
+    {% include 'theme:part/google_analytics.html' %}
+{% endwith %}
 <body>
-{#    <a class="nav-link" href="{{ url_for('theme.route_section', section=section.key) }}">#}
 
-{#{{ state.__dict__ }}#}
 <div id="vue_mountpoint">
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}

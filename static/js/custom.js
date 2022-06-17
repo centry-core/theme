@@ -12,14 +12,12 @@ window.activeProject = {
     get: async () => {
         let projectId = localStorage.getItem(activeProject.localStorageKey)
         if (projectId === null) {
-            projectId = await activeProject.fetch().then(id => {
-                id === null ?
-                    activeProject.delete()
-                    :
-                    activeProject.set_local(id)
-                return id
-            })
+            projectId = await activeProject.fetch()
         }
+        projectId === null ?
+            await activeProject.delete(false)
+            :
+            activeProject.set_local(projectId)
         return projectId
     },
     set: async id => {
@@ -34,12 +32,17 @@ window.activeProject = {
             activeProject.set_local(id)
             return id
         } else {
-            activeProject.delete()
+            await activeProject.delete(false)
             return null
         }
     },
     set_local: id => localStorage.setItem(activeProject.localStorageKey, id),
-    delete: () => localStorage.removeItem(activeProject.localStorageKey)
+    delete: async (make_request = true) => {
+        localStorage.removeItem(activeProject.localStorageKey)
+        make_request && await fetch(activeProject.backendUrl, {
+            method: 'DELETE',
+        })
+    }
 }
 
 window.getSelectedProjectId = () => localStorage.getItem(activeProject.localStorageKey)

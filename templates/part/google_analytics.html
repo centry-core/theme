@@ -1,0 +1,20 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CLZPL04JT0"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-CLZPL04JT0', {
+        'debug_mode': true,
+        'user_id': '{{ user.id }}',
+    });
+    gtag('set', 'user_properties', {
+        'name': '{{ user.name }}',
+        'email': '{{ user.email }}'
+    });
+</script>
