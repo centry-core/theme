@@ -4,11 +4,19 @@
 {% include 'theme:part/head.html' %}
 <title>{% block title %}{{ title }}{% endblock %} - Centry</title>
 </head>
-{% with user = tools.auth.current_user() %}
-    {% include 'theme:part/google_analytics.html' %}
-{% endwith %}
-<body>
 
+{% set google_analytics_id = tools.theme.descriptor.config.get('google_analytics_id') %}
+{% if google_analytics_id %}
+    {% with
+        user = tools.auth.current_user(),
+        google_analytics_id = google_analytics_id,
+        debug_mode = config.DEBUG
+    %}
+        {% include 'theme:part/google_analytics.html' %}
+    {% endwith %}
+{% endif %}
+
+<body>
 <div id="vue_mountpoint">
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}
