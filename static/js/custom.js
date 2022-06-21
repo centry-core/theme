@@ -28,7 +28,7 @@ window.activeProject = {
             body: {}
         })
         if (resp.ok) {
-            const resp_msg = await resp.json()
+            // const resp_msg = await resp.json()
             activeProject.set_local(id)
             return id
         } else {
