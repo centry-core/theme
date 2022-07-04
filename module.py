@@ -18,14 +18,17 @@
 """ Module """
 import re
 import traceback
+import uuid
 from collections import defaultdict
 
-from flask import redirect, url_for, g
+from flask import redirect, url_for, g, request, Response
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
 
 import tools  # pylint: disable=E0401
 from tools import auth  # pylint: disable=E0401
+
+from .models.pd.google_analytics import GAConfiguration
 
 
 class Module(module.ModuleModel):
@@ -125,10 +128,20 @@ class Module(module.ModuleModel):
         )
         return self.descriptor.render_template("access_denied.html"), 400
 
+    @property
+    def google_analytics_config(self) -> GAConfiguration:
+        return GAConfiguration(**self.descriptor.config.get('google_analytics', {}))
+
     def _before_request_hook(self):  # pylint: disable=R0201
         g.theme = Holder()
         g.theme.active_section = None
         g.theme.active_subsection = None
+
+        g.ga_id = request.cookies.get(
+            self.google_analytics_config.cookie_name,
+            str(uuid.uuid4())
+        )
+        self.google_analytics_post(g.ga_id, [{'name': 'test', 'params': {'method': request.method, 'url': request.url}}])
         # log.info('before request hook %s', self.descriptor.name)
 
     def _after_request_hook(self, response):
@@ -137,6 +150,12 @@ class Module(module.ModuleModel):
         )
         for key, value in additional_headers.items():
             response.headers[key] = value
+
+        Response.set_cookie(
+            response,
+            self.google_analytics_config.cookie_name,
+            g.ga_id
+        )
         return response
 
     def deinit(self):  # pylint: disable=R0201

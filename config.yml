@@ -1,0 +1,5 @@
+google_analytics:
+  id: ''
+  cookie_name: 'centry_gaid'
+  post_url: 'https://www.google-analytics.com/mp/collect'
+  api_secret: ''
