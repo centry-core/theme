@@ -30,7 +30,7 @@ class RPC:
                 'user_id': ga_id,
                 'events': [i.dict(exclude_unset=True) for i in formatted_events]
             }
-            log.info('GA PUSH BODY %s', body)
+            # log.info('GA PUSH BODY %s', body)
             try:
                 resp = requests.post(
                     self.google_analytics_config.post_url,
@@ -42,7 +42,7 @@ class RPC:
                 return 500
             if not resp.ok:
                 log.warning('Google analytics request unsuccessful %s', resp.status_code)
-            log.info('GA PUSH RESP CODE %s', resp.status_code)
+            # log.info('GA PUSH RESP CODE %s', resp.status_code)
             return resp.status_code
         else:
             log.warning('Not enough configs for POST')

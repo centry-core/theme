@@ -141,8 +141,11 @@ class Module(module.ModuleModel):
             self.google_analytics_config.cookie_name,
             str(uuid.uuid4())
         )
-        self.google_analytics_post(g.ga_id, [{'name': 'test', 'params': {'method': request.method, 'url': request.url}}])
-        # log.info('before request hook %s', self.descriptor.name)
+        # Example of backend GA event post
+        # self.google_analytics_post(
+        #     g.ga_id,
+        #     [{'name': 'test', 'params': {'method': request.method, 'url': request.url}}]
+        # )
 
     def _after_request_hook(self, response):
         additional_headers = self.descriptor.config.get(
