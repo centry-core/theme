@@ -1,15 +1,28 @@
+{% set state = tools.auth.make_request_state() %}
+{% set _ = state._context.update(g.__dict__) %}
+
 {% include 'theme:part/head.html' %}
 <title>{% block title %}{{ title }}{% endblock %} - Centry</title>
 </head>
-<body>
-{#    <a class="nav-link" href="{{ url_for('theme.route_section', section=section.key) }}">#}
+{% set google_analytics_id = tools.theme.google_analytics_config.id %}
+{% if google_analytics_id %}
+    {% with
+        user = tools.auth.current_user(),
+        google_analytics_id = google_analytics_id,
+        debug_mode = config.DEBUG,
+        ga_id = g.ga_id
+    %}
+        {% include 'theme:part/google_analytics.html' %}
+    {% endwith %}
+{% endif %}
 
+<body>
 <div id="vue_mountpoint">
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}
         {% block content %}
-            {{ template_slot('content', tools.auth.make_request_state()) | safe }}
-            {% if prefix %}{{ template_slot('%scontent' | format(prefix), tools.auth.make_request_state()) | safe }}{% endif %}
+            {{ template_slot('content', state) | safe }}
+            {% if prefix %}{{ template_slot('%scontent' | format(prefix), state) | safe }}{% endif %}
         {% endblock %}
     {% endblock %}
 </div>
@@ -20,8 +33,11 @@
         window.socket = io("/", {
             path: "{{ url_for('theme.socketio') }}"
         });
-        {% if g.project %}
-        activeProject.set_local('{{ g.project.id | default(None | tojson) }}');
+
+        {% if g.project and g.project.id %}
+            activeProject.set_local('{{ g.project.id or None | tojson }}');
+        {% else %}
+            await activeProject.delete(false)
         {% endif %}
     </script>
     <!-- Vue Application Root -->
@@ -36,8 +52,8 @@
     <script src="{{ url_for('design-system.static', filename='assets/js/vue_components/TableCard.js') }}"></script>
 
     {% block scripts %}
-        {{ template_slot('scripts', tools.auth.make_request_state()) | safe }}
-        {% if prefix %}{{ template_slot('%sscripts' | format(prefix), tools.auth.make_request_state()) | safe }}{% endif %}
+        {{ template_slot('scripts', state) | safe }}
+        {% if prefix %}{{ template_slot('%sscripts' | format(prefix), state) | safe }}{% endif %}
     {% endblock %}
 {% endblock %}
 

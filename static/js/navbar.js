@@ -62,7 +62,7 @@ const Navbar_centry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100">
+    <ul class="navbar-nav w-100" style="overflow-x: scroll">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
@@ -130,7 +130,8 @@ const Navbar_centry = {
         handle_section_change(event) {
             location.href = this.get_section_href(event.target.value)
         },
-        handle_logout() {
+        async handle_logout() {
+            await activeProject.delete()
             location.href = '/forward-auth/logout'
         },
         async fetch_projects() {
