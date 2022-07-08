@@ -1,0 +1,24 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', '{{ google_analytics_id }}', {
+    {%- if debug_mode -%}'debug_mode': true,{%- endif -%}
+        'user_id': '{{ ga_id }}',
+     });
+
+    {%- if debug_mode -%}
+        gtag('set', 'user_properties', {
+            'centry_id': '{{ user.id }}',
+            'name': '{{ user.name }}',
+            'email': '{{ user.email }}',
+        });
+    {%- endif -%}
+</script>

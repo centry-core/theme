@@ -50,9 +50,9 @@ const vueCoreApp = {
                 return result
             }
             memoized.delete = activeProject.delete
-            activeProject.delete = () => {
-                memoized.delete()
+            activeProject.delete = async (make_request = true) => {
                 this.project_id = null
+                await memoized.delete(make_request)
             }
         }
     }

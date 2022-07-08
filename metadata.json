@@ -1,6 +1,6 @@
 {
   "name": "Theme of carrier ui",
-  "version": "0.2",
-  "depends_on": ["shared", "design-system", "auth"],
+  "version": "0.3",
+  "depends_on": ["shared", "auth"],
   "init_after": ["shared"]
 }
