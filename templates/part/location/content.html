@@ -15,11 +15,18 @@
     <div class="row pt-2">
         <div class="col-6 pl-0">
             <label class="form-control-label" for="{{modal_id}}_region">Engine location</label>
-            <div class="w-100">
-                <select class="selectpicker bootstrap-select__b mb-3" id="{{modal_id}}_region" data-style="btn" >
-                    {% for item in regions %}
+            <div class="w-100-imp">
+                <select class="selectpicker bootstrap-select__b" id="{{modal_id}}_region" data-style="btn" >
+                    <optgroup label="Public pool">
+                    {% for item in public_regions %}
                     <option>{{item}}</option>
                     {% endfor %}
+                    </optgroup>
+                    <optgroup label="Project pool">
+                    {% for item in project_regions %}
+                    <option>{{item}}</option>
+                    {% endfor %}
+                    </optgroup>
                 </select>
             </div>
 
