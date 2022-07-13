@@ -4,13 +4,13 @@
 {% include 'theme:part/head.html' %}
 <title>{% block title %}{{ title }}{% endblock %} - Centry</title>
 </head>
-
-{% set google_analytics_id = tools.theme.descriptor.config.get('google_analytics_id') %}
+{% set google_analytics_id = tools.theme.google_analytics_config.id %}
 {% if google_analytics_id %}
     {% with
         user = tools.auth.current_user(),
         google_analytics_id = google_analytics_id,
-        debug_mode = config.DEBUG
+        debug_mode = config.DEBUG,
+        ga_id = g.ga_id
     %}
         {% include 'theme:part/google_analytics.html' %}
     {% endwith %}
@@ -33,8 +33,11 @@
         window.socket = io("/", {
             path: "{{ url_for('theme.socketio') }}"
         });
-        {% if g.project %}
-        activeProject.set_local('{{ g.project.id | default(None | tojson) }}');
+
+        {% if g.project and g.project.id %}
+            activeProject.set_local('{{ g.project.id or None | tojson }}');
+        {% else %}
+            await activeProject.delete(false)
         {% endif %}
     </script>
     <!-- Vue Application Root -->
