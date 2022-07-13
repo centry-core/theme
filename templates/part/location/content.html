@@ -15,7 +15,7 @@
     <div class="d-flex py-4 pl-1">
         <div class="custom-input w-100-imp">
             <p class="custom-input_desc mb-1">Engine location</p>
-            <select class="selectpicker bootstrap-select__b" data-style="btn">
+            <select class="selectpicker bootstrap-select__b" id="{{modal_id}}_region" data-style="btn">
                 {% for item in regions %}
                 <option>{{item}}</option>
                 {% endfor %}
@@ -23,13 +23,14 @@
         </div>
         <div class="custom-input ml-3">
             <p class="custom-input_desc mb-1">Runners</p>
-            <input-stepper :default-value="100"
+            <input-stepper :default-value="1"
+                           uniq_id="{{ modal_id }}_parallel"
                            @register="register"
                            instance_name="input_stepper_1"></input-stepper>
         </div>
         <div class="custom-input ml-3">
             <p class="custom-input_desc mb-1">CPU Cores</p>
-            <input-stepper :default-value="15"
+            <input-stepper :default-value="1"
                            @register="register"
                            instance_name="input_stepper_2"></input-stepper>
         </div>
