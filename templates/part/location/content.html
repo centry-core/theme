@@ -31,15 +31,16 @@
         <div class="custom-input ml-3">
             <p class="custom-input_desc mb-1">CPU Cores</p>
             <input-stepper :default-value="1"
+                           uniq_id="{{ modal_id }}_cpu"
                            @register="register"
                            instance_name="input_stepper_2"></input-stepper>
         </div>
         <div class="custom-input mx-3">
             <p class="custom-input_desc mb-1">Memory, Gb</p>
             <input
-                id="fieldOne"
+                id="{{modal_id}}_memory"
                 type="text"
-                placeholder="Text">
+                value="4">
         </div>
     </div>
 </div>
