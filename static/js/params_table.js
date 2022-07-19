@@ -3,8 +3,8 @@ var ParamsTable = {
         const is_disabled = row._type_class?.toLowerCase().includes('disabled')
         let options = is_disabled ? [value] : ['String', 'Number', 'List']
 
-        options = options.reduce((accum, item, ) =>
-            `${accum}<option
+        options = options.reduce((accum, item,) =>
+                `${accum}<option
                 value='${item}'
                 ${item.toLowerCase() === value.toLowerCase() && 'selected'}
             >
@@ -56,8 +56,28 @@ var ParamsTable = {
     updateCell: (el, row, field) => $(el.closest('table')).bootstrapTable(
         'updateCell',
         {index: row, field: field, value: el.value}
-    )
+    ),
+    Manager: id => {
+        const el = $('#' + id)
+        return {
+            el,
+            get: () => el.bootstrapTable('getData'),
+            set: table_data => el.bootstrapTable('load', table_data),
+            clear: () => el.bootstrapTable('load', []),
+            setError: data => {
+                const get_col_by_name = name => el.find(`thead th[data-field=${name}]`).index()
+                const [_, row, col_name] = data.loc
+                el.find(`tr[data-index=${row}] td:nth-child(${get_col_by_name(col_name) + 1}) input`)
+                    .addClass('is-invalid')
+                    .next('div.invalid-tooltip-custom')
+                    .text(data.msg)
+
+            },
+            clearErrors: () => el.removeClass('is-invalid')
+        }
+    }
 }
+
 
 $(document).on('vue_init', () => {
     $('.params-table').on('all.bs.table', () => {
