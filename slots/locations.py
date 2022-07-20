@@ -18,7 +18,7 @@ class Slot:  # pylint: disable=E1101,R0903
 
         with context.app.app_context():
             return self.descriptor.render_template(
-                'part/location/content.html', public_regions=public_regions, project_regions=project_regions,
+                'part/locations/content.html', public_regions=public_regions, project_regions=project_regions,
                 **payload
             )
 
@@ -28,7 +28,7 @@ class Slot:  # pylint: disable=E1101,R0903
         log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
-                'part/location/scripts.html',
+                'part/locations/scripts.html',
             )
 
     @web.slot('locations_styles')
@@ -37,5 +37,5 @@ class Slot:  # pylint: disable=E1101,R0903
         log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
-                'part/location/styles.html',
+                'part/locations/styles.html',
             )
