@@ -3,92 +3,56 @@ const Locations = {
     props: ['public_regions', 'project_regions', 'location', 'parallel_runners', 'cpu', 'memory'],
     emits: ['update:location', 'update:parallel_runners', 'update:cpu', 'update:memory'],
     template: `
-<div class="section">
+    <div class="section">
     <div class="row">
         <div class="col">
             <h7>Load configuration</h7>
             <p>
-                <h13>
-                Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel runner
+                <h13>Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel
+                    runner
                 </h13>
             </p>
         </div>
     </div>
-    <div class="row pt-2">
-        <div class="col-6 pl-0">
-            <label class="form-control-label">
-                Engine location
-                <div class="w-100-imp">
-                    <select class="selectpicker bootstrap-select__b" data-style="btn" 
-                        :value="location"
-                        @change="e => {
-                            location_ = e.target.value
-                            $emit('update:location', location_)
-                        }"
-                    >
-                        <optgroup label="Public pool" v-if="public_regions_.length > 0">
-                            <option v-for="item in public_regions_">[[ item ]]</option>
-                        </optgroup>
-                        <optgroup label="Project pool" v-if="project_regions_.length > 0">
-                            <option v-for="item in project_regions_">[[ item ]]</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </label>
-
+    <div class="d-flex py-4 pl-1">
+        <div class="custom-input w-100-imp">
+            <p class="custom-input_desc mb-1">Engine location</p>
+            <select class="selectpicker bootstrap-select__b" data-style="btn" 
+                :value="location"
+                @change="location_ = $event.target.value"
+            >
+                <optgroup label="Public pool" v-if="public_regions_.length > 0">
+                    <option v-for="item in public_regions_">[[ item ]]</option>
+                </optgroup>
+                <optgroup label="Project pool" v-if="project_regions_.length > 0">
+                    <option v-for="item in project_regions_">[[ item ]]</option>
+                </optgroup>
+            </select>
         </div>
-        <div class="col-2">
-            <label class="form-control-label">Runners</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <button class="btn btn-37 btn-outline-secondary" type="button"
-                        @click="parallel_runners > 1 && parallel_runners--"
-                    ><i class="fas fa-minus"></i></button>
-                </div>
-                <input type="number" class="form-control form-control-borderless nospin"
-                    :value="parallel_runners"
-                    @change="e => {
-                        parallel_runners_ = e.target.value
-                        $emit('update:parallel_runners', parallel_runners_)
-                    }"
-                >
-                <div class="input-group-append">
-                    <button class="btn btn-37 btn-outline-secondary" type="button"
-                        @click="parallel_runners++"
-                    ><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
+        
+        <div class="custom-input ml-3">
+            <p class="custom-input_desc mb-1">Runners</p>
+            <input-stepper 
+                :default-value="parallel_runners_"
+                uniq_id="backend_parallel"
+                @change="val => (parallel_runners_ = val)"
+            ></input-stepper>
         </div>
-        <div class="col-2">
-            <label class="form-control-label">CPU Cores</label>
-            <div class="input-group">
-                <input type="number" data-tag="cpu" class="form-control form-control-alternative nospin" placeholder="1"
-                    :value="cpu"
-                    @change="e => {
-                        cpu_ = e.target.value
-                        $emit('update:cpu', cpu_)
-                    }"
-                >
-            </div>
+        <div class="custom-input ml-3">
+            <p class="custom-input_desc mb-1">CPU Cores</p>
+            <input-stepper 
+                :default-value="cpu_"
+                uniq_id="backend_cpu"
+                @change="val => (cpu_ = val)"
+            ></input-stepper>
         </div>
-        <div class="col-2">
-            <label class="form-control-label">Memory, Gb</label>
-            <div class="input-group">
-                <input type="number" data-tag="memory" class="form-control form-control-alternative nospin" placeholder="4"
-                    :value="memory"
-                    @change="e => {
-                        memory_ = e.target.value
-                        $emit('update:memory', memory_)
-                    }"
-                >
-            </div>
-        </div>
-    </div>
-    <div class="row pt-2">
-        <div class="col">
-            <button type="button" class="btn btn-sm btn-secondary">
-                <i class="fas fa-plus mr-2"></i>Add Location
-            </button>
+        <div class="custom-input mx-3">
+            <p class="custom-input_desc mb-1">Memory, Gb</p>
+            <input-stepper 
+                :default-value="memory_"
+                uniq_id="backend_memory"
+                @change="val => (memory_ = val)"
+            ></input-stepper>
         </div>
     </div>
 </div>
@@ -115,6 +79,19 @@ const Locations = {
         $('.selectpicker').selectpicker('refresh')
     },
     watch: {
+        location_(newValue) {
+            this.$emit('update:location', newValue)
+        },
+        parallel_runners_(newValue) {
+            this.$emit('update:parallel_runners', newValue)
+        },
+        cpu_(newValue) {
+            this.$emit('update:cpu', newValue)
+        },
+        memory_(newValue) {
+            this.$emit('update:memory', newValue)
+        },
+
         public_regions_(newValue) {
             console.log('refreshing selectpickers')
             this.$nextTick(() => {
@@ -129,7 +106,7 @@ const Locations = {
                 $('.selectpicker').selectpicker('refresh')
                 $('.selectpicker').selectpicker('render')
             })
-        }
+        },
     },
     methods: {
         async fetch_locations() {
