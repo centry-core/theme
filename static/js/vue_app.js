@@ -62,6 +62,10 @@ const vueAppFactory = appObject => Vue.createApp(appObject)
 window.vueApp = vueAppFactory(vueCoreApp)
 
 const register_component = (name, component) => {
+    component.props ?
+        !component.props.includes('instance_name') && component.props.push('instance_name')
+        :
+        component.props = ['instance_name']
     console.debug('register_component', name, component)
     const original_func = component.mounted
     component.mounted = function () {
@@ -72,6 +76,7 @@ const register_component = (name, component) => {
         !component.emits.includes('register') && component.emits.push('register')
         :
         component.emits = ['register']
+    // window.vueApp.component(name.toLowerCase(), component) // maybe we should move to lower-register components only
     window.vueApp.component(name, component)
 }
 window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7', 'h12'].includes(tag)

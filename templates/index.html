@@ -37,7 +37,7 @@
         {% if g.project and g.project.id %}
             activeProject.set_local('{{ g.project.id or None | tojson }}');
         {% else %}
-            await activeProject.delete(false)
+            (async () => await activeProject.delete(false))()
         {% endif %}
     </script>
     <!-- Vue Application Root -->
