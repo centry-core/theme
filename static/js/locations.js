@@ -33,7 +33,7 @@ const Locations = {
         <div class="custom-input ml-3">
             <p class="custom-input_desc mb-1">Runners</p>
             <input-stepper 
-                :default-value="parallel_runners_"
+                :default-value="parallel_runners"
                 uniq_id="backend_parallel"
                 @change="val => (parallel_runners_ = val)"
             ></input-stepper>
@@ -41,7 +41,7 @@ const Locations = {
         <div class="custom-input ml-3">
             <p class="custom-input_desc mb-1">CPU Cores</p>
             <input-stepper 
-                :default-value="cpu_"
+                :default-value="cpu"
                 uniq_id="backend_cpu"
                 @change="val => (cpu_ = val)"
             ></input-stepper>
@@ -49,7 +49,7 @@ const Locations = {
         <div class="custom-input mx-3">
             <p class="custom-input_desc mb-1">Memory, Gb</p>
             <input-stepper 
-                :default-value="memory_"
+                :default-value="memory"
                 uniq_id="backend_memory"
                 @change="val => (memory_ = val)"
             ></input-stepper>
@@ -68,14 +68,12 @@ const Locations = {
         }
     },
     mounted() {
-        console.log('locations mounted', this.$props, this.$data)
         if (this.$props.location) this.location_ = this.$props.location
         if (this.$props.parallel_runners) this.parallel_runners_ = this.$props.parallel_runners
         if (this.$props.cpu) this.cpu_ = this.$props.cpu
         if (this.$props.memory) this.memory_ = this.$props.memory
         if (this.$props.public_regions) this.public_regions_ = this.$props.public_regions
         if (this.$props.project_regions) this.project_regions_ = this.$props.project_regions
-        console.log('locations mounted end', this.$props, this.$data)
         $('.selectpicker').selectpicker('refresh')
     },
     watch: {
@@ -85,15 +83,24 @@ const Locations = {
         parallel_runners_(newValue) {
             this.$emit('update:parallel_runners', newValue)
         },
+        parallel_runners(newValue) {
+            this.parallel_runners_ = newValue
+        },
         cpu_(newValue) {
+            console.log('emitting new val', newValue)
             this.$emit('update:cpu', newValue)
+        },
+        cpu(newValue) {
+            this.cpu_ = newValue
         },
         memory_(newValue) {
             this.$emit('update:memory', newValue)
         },
+        memory(newValue) {
+            this.memory_ = newValue
+        },
 
         public_regions_(newValue) {
-            console.log('refreshing selectpickers')
             this.$nextTick(() => {
                 $('.selectpicker').selectpicker('refresh')
                 $('.selectpicker').selectpicker('render')
@@ -101,7 +108,6 @@ const Locations = {
 
         },
         project_regions_(newValue) {
-            console.log('refreshing selectpickers')
             this.$nextTick(() => {
                 $('.selectpicker').selectpicker('refresh')
                 $('.selectpicker').selectpicker('render')
