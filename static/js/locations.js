@@ -1,6 +1,6 @@
 const Locations = {
     delimiters: ['[[', ']]'],
-    props: ['public_regions', 'project_regions', 'location', 'parallel_runners', 'cpu', 'memory'],
+    props: ['public_regions', 'project_regions', 'location', 'parallel_runners', 'cpu', 'memory', 'modal_id'],
     emits: ['update:location', 'update:parallel_runners', 'update:cpu', 'update:memory'],
     template: `
     <div class="section">
@@ -34,7 +34,7 @@ const Locations = {
             <p class="custom-input_desc mb-1">Runners</p>
             <input-stepper 
                 :default-value="parallel_runners"
-                uniq_id="backend_parallel"
+                :uniq_id="modal_id + '_parallel'"
                 @change="val => (parallel_runners_ = val)"
             ></input-stepper>
         </div>
@@ -42,7 +42,7 @@ const Locations = {
             <p class="custom-input_desc mb-1">CPU Cores</p>
             <input-stepper 
                 :default-value="cpu"
-                uniq_id="backend_cpu"
+                :uniq_id="modal_id + '_cpu'"
                 @change="val => (cpu_ = val)"
             ></input-stepper>
         </div>
@@ -50,7 +50,7 @@ const Locations = {
             <p class="custom-input_desc mb-1">Memory, Gb</p>
             <input-stepper 
                 :default-value="memory"
-                uniq_id="backend_memory"
+                :uniq_id="modal_id + '_memory'"
                 @change="val => (memory_ = val)"
             ></input-stepper>
         </div>
