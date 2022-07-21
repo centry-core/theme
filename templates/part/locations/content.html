@@ -1,7 +1,10 @@
+{% set modal_id = modal_id | default('locations') %}
+
 <Locations
     @register="register"
     instance_name="location"
 
     :public_regions='{{ public_regions | tojson }}'
     :project_regions='{{ project_regions | tojson }}'
+    modal_id="{{ modal_id }}"
 ></Locations>
