@@ -20,6 +20,7 @@ const Locations = {
             <select class="selectpicker bootstrap-select__b" data-style="btn" 
                 :value="location"
                 @change="location_ = $event.target.value"
+                :id="modal_id + '_region'"
             >
                 <optgroup label="Public pool" v-if="public_regions_.length > 0">
                     <option v-for="item in public_regions_">[[ item ]]</option>
