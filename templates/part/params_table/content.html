@@ -1,8 +1,6 @@
-{#{% set modal_id = config.modal_id | default("") -%}#}
-{#{% set table_data = config.default_params | default([]) -%}#}
-{#{% set description = config.description -%}#}
 {% set disabled_names = disabled_names | default([]) -%}
 {% set hidden_columns = hidden_columns | default(['type']) -%}
+{% set custom_formatters = custom_formatters | default({}) %}
 
 <div class="section">
     <div class="row">
@@ -15,6 +13,7 @@
     </div>
     <div class="row">
         <div class="col">
+            <div class="test_parameters_error"></div>
             <table class="table table-borderless params-table"
                     {% if modal_id %} id="{{ modal_id }}_test_params" {% endif %}
                    data-toggle="table"
@@ -22,31 +21,31 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col" data-sortable="true" data-field="name"
-                        data-formatter=ParamsTable.inputFormatter
+                        data-formatter="{{ custom_formatters.get('name', 'ParamsTable.inputFormatter') }}"
                         data-width="144" data-width-unit="px"
                     >
                         Name
                     </th>
                     <th scope="col" data-sortable="true" data-field="default"
-                        data-formatter=ParamsTable.inputFormatter
+                        data-formatter="{{ custom_formatters.get('default', 'ParamsTable.inputFormatter') }}"
                     >
                         Default value
                     </th>
                     {% if ("type" not in hidden_columns) %}
                         <th scope="col" data-sortable="true" data-field="type"
-                            data-formatter=ParamsTable.dataTypeFormatter
+                            data-formatter="{{ custom_formatters.get('type', 'ParamsTable.dataTypeFormatter') }}"
                             data-width="144" data-width-unit="px"
                         >
                             Data Type
                         </th>
                     {% endif %}
                     <th scope="col" data-sortable="true" data-field="description"
-                        data-formatter=ParamsTable.inputFormatter
+                        data-formatter="{{ custom_formatters.get('description', 'ParamsTable.inputFormatter') }}"
                     >
                         Description
                     </th>
                     <th scope="col" data-field="action"
-                        data-formatter=ParamsTable.parametersDeleteFormatter
+                        data-formatter="{{ custom_formatters.get('action', 'ParamsTable.parametersDeleteFormatter') }}"
                         data-width="56" data-width-unit="px"
                     >&nbsp;</th>
                 </tr>

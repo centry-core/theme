@@ -6,3 +6,13 @@
 .is-invalid:hover ~ .invalid-tooltip-custom {
     visibility: visible;
 }
+
+.test_parameters_error {
+    color: var(--error);
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+}
+test_parameters_error:empty {
+    display: none;
+}
