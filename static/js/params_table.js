@@ -59,21 +59,43 @@ var ParamsTable = {
     ),
     Manager: id => {
         const el = $('#' + id)
+        const error_div = el.closest('div.col').find('.test_parameters_error')
+        const get_col_by_name = name => el.bootstrapTable('getVisibleColumns').find(i => i.field.toLowerCase().trim() === name.toLowerCase())?.fieldIndex
+        const get_col_by_title = name => el.bootstrapTable('getVisibleColumns').find(i => i.title.toLowerCase().trim() === name.toLowerCase())?.fieldIndex
         return {
             el,
+            error_div,
+            get_col_by_name,
+            get_col_by_title,
             get: () => el.bootstrapTable('getData'),
             set: table_data => el.bootstrapTable('load', table_data),
             clear: () => el.bootstrapTable('load', []),
             setError: data => {
-                const get_col_by_name = name => el.find(`thead th[data-field=${name}]`).index()
-                const [_, row, col_name] = data.loc
-                el.find(`tr[data-index=${row}] td:nth-child(${get_col_by_name(col_name) + 1}) input`)
-                    .addClass('is-invalid')
-                    .next('div.invalid-tooltip-custom')
-                    .text(data.msg)
-
+                const _set_error = data_obj => {
+                    const [root_error, row, col_name] = data_obj.loc
+                    if(row !== undefined && col_name !== undefined) {
+                        el.find(
+                            `tr[data-index=${row}] td:nth-child(${get_col_by_name(col_name) + 1}) input`
+                        )
+                            .addClass('is-invalid')
+                            .next('div.invalid-tooltip-custom')
+                            .text(data_obj.msg)
+                    } else {
+                        root_error === 'test_parameters' && error_div.append(`<span>${data_obj.msg}</span><br/>`)
+                    }
+                }
+                if (Array.isArray(data)) {
+                    data.forEach(item =>{
+                        _set_error(item)
+                    })
+                } else {
+                    _set_error(data)
+                }
             },
-            clearErrors: () => el.removeClass('is-invalid')
+            clearErrors: () => {
+                el.removeClass('is-invalid')
+                error_div.empty()
+            }
         }
     }
 }
