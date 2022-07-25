@@ -1,6 +1,7 @@
 {% set disabled_names = disabled_names | default([]) -%}
 {% set hidden_columns = hidden_columns | default(['type']) -%}
 {% set custom_formatters = custom_formatters | default({}) %}
+{% set disable_add_params = disable_add_params | default(False) %}
 
 <div class="section">
     <div class="row">
@@ -53,22 +54,16 @@
                 <tbody>
                 {% for row in default_params | default([]) %}
                     <tr>
-                        <td
-                                {% if (row.name in disabled_names) %} class="disabled" {% endif %}
-                        >
+                        <td {% if (row.name in disabled_names) %} class="disabled" {% endif %} >
                             {{ row.name }}
                         </td>
                         <td>{{ row.default }}</td>
                         {% if ("type" not in hidden_columns) %}
-                            <td
-                                    {% if (row.name in disabled_names) %} class="disabled" {% endif %}
-                            >
+                            <td {% if (row.name in disabled_names) %} class="disabled" {% endif %} >
                                 {{ row.type }}
                             </td>
                         {% endif %}
-                        <td
-                                {% if (row.name in disabled_names) %} class="disabled" {% endif %}
-                        >
+                        <td {% if (row.name in disabled_names) %} class="disabled" {% endif %} >
                             {{ row.description }}
                         </td>
                         {% if (row.name not in disabled_names) %}
@@ -80,6 +75,7 @@
             </table>
         </div>
     </div>
+{% if not disable_add_params %}
     <div class="row pt-2">
         <div class="col">
             <button type="button" class="btn btn-sm btn-secondary"
@@ -88,4 +84,5 @@
             </button>
         </div>
     </div>
+{% endif %}
 </div>

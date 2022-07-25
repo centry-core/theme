@@ -64,7 +64,7 @@ const Locations = {
             parallel_runners_: 1,
             cpu_: 1,
             memory_: 4,
-            public_regions_: [],
+            public_regions_: ['default'],
             project_regions_: [],
         }
     },
