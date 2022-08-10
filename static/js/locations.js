@@ -6,12 +6,10 @@ const Locations = {
     <div class="section">
     <div class="row">
         <div class="col">
-            <h7>Load configuration</h7>
-            <p>
-                <h13>Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel
-                    runner
-                </h13>
-            </p>
+            <p class="font-h5 font-bold font-uppercase">Load configuration</p>
+            <h13>Specify engine region and load profile. CPU Cores and Memory are distributed for each parallel
+                runner
+            </h13>
         </div>
     </div>
     <div class="d-flex py-4 pl-1">
