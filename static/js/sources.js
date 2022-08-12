@@ -3,7 +3,7 @@ const SourceCard = {
         const el = $('#' + id)
         const tab_mapping = {
             git_ssh: {
-                tab_id: 'nav-git-tab',
+                tab_id: 'git-ssh-tab',
                 input_mapping: {
                     repo: '#repo',
                     private_key: '#repo_key',
@@ -11,9 +11,9 @@ const SourceCard = {
                 },
             },
             git_https: {
-                tab_id: 'nav-git-https-tab',
+                tab_id: 'git-https-tab',
                 input_mapping: {
-                    repo: '#repo_https',
+                    repo: '#repo',
                     branch: '#repo_branch_https',
                     username: '#repo_user',
                     password: '#repo_pass',
@@ -35,7 +35,11 @@ const SourceCard = {
         const get_active_tab = (active_tab_id = undefined) => {
             if (!active_tab_id) {
                 active_tab_id = el.find('#nav-tab a.nav-item.active').attr('id')
+                if (active_tab_id === 'nav-git-tab') {
+                    active_tab_id = el.find('#git-type-tab .nav-item a.active').attr('id')
+                }
             }
+            console.log(active_tab_id)
             return Object.entries(tab_mapping).find(item => item[1].tab_id === active_tab_id)[0]
         }
         return {
@@ -64,7 +68,6 @@ const SourceCard = {
                 el.find('input#repo').val('')
                 el.find('input#repo_key').val('')
                 el.find('input#repo_branch').val('')
-                el.find('input#repo_https').val('')
                 el.find('input#repo_branch_https').val('')
                 el.find('input#repo_user').val('')
                 el.find('input#repo_pass').val('')
