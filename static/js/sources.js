@@ -7,7 +7,8 @@ const SourceCard = {
                 input_mapping: {
                     repo: '#repo',
                     private_key: '#repo_key',
-                    branch: '#repo_branch'
+                    branch: '#repo_branch',
+                    password: '#repo_ssh_pass',
                 },
             },
             git_https: {
@@ -71,6 +72,7 @@ const SourceCard = {
                 el.find('input#repo_branch_https').val('')
                 el.find('input#repo_user').val('')
                 el.find('input#repo_pass').val('')
+                el.find('input#repo_ssh_pass').val('')
                 el.find('input#file').val('')
                 el.find('input#local_file').val('')
                 el.find('a#' + tab_mapping['git_ssh']?.tab_id).tab('show')
