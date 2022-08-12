@@ -40,15 +40,23 @@
                         <div class="tab-pane fade show active" id="git_ssh" role="tabpanel">
                             <div class="row">
                                 <div class="col">
+                                    <p class="font-h5 font-semibold">Git Branch</p>
+                                    <input type="text" id="repo_branch" class="form-control form-control-alternative"
+                                           placeholder="(optional, default - main)">
+                                    <div class="invalid-feedback" id="repo_branch_error"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
                                     <p class="font-h5 font-semibold">Git SSH private key</p>
                                     <input type="text" id="repo_key" class="form-control form-control-alternative">
                                     <div class="invalid-feedback" id="repo_key_error"></div>
                                 </div>
                                 <div class="col">
-                                    <p class="font-h5 font-semibold">Git Branch</p>
-                                    <input type="text" id="repo_branch" class="form-control form-control-alternative"
-                                           placeholder="(optional, default - main)">
-                                    <div class="invalid-feedback" id="repo_branch_error"></div>
+                                    <p class="font-h5 font-semibold">Git Password</p>
+                                    <input type="text" id="repo_ssh_pass" class="form-control form-control-alternative"
+                                           placeholder="(optional)">
+                                    <div class="invalid-feedback" id="repo_ssh_pass_error"></div>
                                 </div>
                             </div>
                         </div>
