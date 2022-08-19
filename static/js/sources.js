@@ -40,7 +40,6 @@ const SourceCard = {
                     active_tab_id = el.find('#git-type-tab .nav-item a.active').attr('id')
                 }
             }
-            console.log(active_tab_id)
             return Object.entries(tab_mapping).find(item => item[1].tab_id === active_tab_id)[0]
         }
         return {
