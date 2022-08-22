@@ -53,3 +53,13 @@ window.wait_for = async (prop_name, root = window, poll_length = 500) => {
         await new Promise(resolve => setTimeout(resolve, poll_length))
     return root[prop_name]
 }
+
+const format_numbers = () => {
+    const number_formatter = Intl.NumberFormat('en', { notation: 'compact' })
+    $('.compact-format').each((_, i) => {
+        if (!isNaN(i.innerText)) {
+            i.innerText = number_formatter.format(i.innerText)
+        }
+    })
+}
+$(document).on('vue_init', format_numbers)
