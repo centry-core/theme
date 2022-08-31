@@ -62,7 +62,7 @@ const Navbar_centry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100" style="overflow-x: scroll">
+    <ul class="navbar-nav w-100 mt-2" style="overflow-x: scroll">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
@@ -73,7 +73,7 @@ const Navbar_centry = {
         </li>
     </ul>
 
-    <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true"
+    <select class="selectpicker" data-style="btn" data-dropdown-align-right="true"
         name="project_select"
         id="project_select"
         v-if="projects.length > 0"
@@ -87,19 +87,20 @@ const Navbar_centry = {
             [[ project.name ]]
         </option>
     </select>
-    <div class="vl"></div>
-    <div class="dropdown ml-1">
-        <button class="btn btn-primary dropdown-toggle" type="button"
-                id="userDropDown" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            <i class="far fa-user-circle"></i>
+    <div class="dropdown dropdown_action ml-1 mr-3">
+        <button class="btn btn-default btn-icon"
+                role="button"
+                id="userDropDown"
+                data-toggle="dropdown"
+                aria-expanded="false">
+            <i class="icon-user__18 icon__18x18 mt-1 ml-1"></i>
         </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
+    
+        <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="userDropDown">
             <h6 class="dropdown-header">[[ user.name ]]</h6>
             <h9 class="dropdown-header">[[ user.email ]]</h9>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
-            
         </div>
     </div>
 </nav>
