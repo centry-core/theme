@@ -24,6 +24,7 @@ from collections import defaultdict
 from flask import redirect, url_for, g, request, Response
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
+from werkzeug.exceptions import NotFound
 
 import tools  # pylint: disable=E0401
 from tools import auth  # pylint: disable=E0401
@@ -121,12 +122,16 @@ class Module(module.ModuleModel):
         log.info('Tools registration done')
 
     def _error_handler(self, error):
+
+        resp_code = 400
+        if isinstance(error, NotFound):
+            resp_code = 404
         log.error(
             "Error: (%s) %s:\n%s",
             type(error), error,
             "".join(traceback.format_tb(error.__traceback__)),
         )
-        return self.descriptor.render_template("access_denied.html"), 400
+        return self.descriptor.render_template("access_denied.html"), resp_code
 
     @property
     def google_analytics_config(self) -> GAConfiguration:
