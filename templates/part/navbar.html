@@ -2,7 +2,7 @@
         @register="register"
         instance_name="navbar"
 
-        :sections='{{ tools.theme.get_visible_sections() | tojson }}'
+        :sections='{{ tools.theme.get_visible_plugins() | tojson }}'
         :subsections='{{ tools.theme.get_visible_subsections(g.theme.active_section) | tojson }}'
         :user='{{ tools.auth.current_user() | tojson }}'
 

@@ -30,7 +30,6 @@ from tools import auth  # pylint: disable=E0401
 
 from .models.pd.google_analytics import GAConfiguration
 
-
 class Module(module.ModuleModel):
     """ Pylon module """
 
@@ -165,6 +164,24 @@ class Module(module.ModuleModel):
         """ De-init module """
         log.info('De-initializing module')
 
+
+    def get_visible_plugins(self) -> list:
+        from tools import session_plugins
+        sections = self.get_visible_sections()
+        if not sections:
+            return sections
+        
+        # reading plugins list from session
+        plugins = session_plugins.get()
+        
+        # if not present in the session then look up from DB
+        if plugins is None:
+            plugins = self.context.rpc_manager.call.project_get_plugins()
+        
+        plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
+        return plugins
+
+
     def get_visible_sections(self) -> list:
         """ Get sections visible for current user """
         result = list()
@@ -173,6 +190,7 @@ class Module(module.ModuleModel):
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
+        
             required_permissions = section_attrs.get("permissions", [])
             #
             if set(required_permissions).issubset(set(current_permissions)):
@@ -190,6 +208,7 @@ class Module(module.ModuleModel):
         #
         # log.info('result %s', result)
         return result
+
 
     def get_visible_subsections(self, section):
         """ Get subsections visible for current user """
@@ -263,6 +282,7 @@ class Module(module.ModuleModel):
     def route_section(self, section):  # pylint: disable=R0201
         """ Section route """
         g.theme.active_section = section
+
         #
         if section not in self.sections:
             return redirect(url_for("theme.access_denied"))
