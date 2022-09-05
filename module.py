@@ -165,18 +165,27 @@ class Module(module.ModuleModel):
         log.info('De-initializing module')
 
 
+    def is_current_user_admin(self) -> bool:
+        current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
+            g.auth.id, 
+            scope_id = 1
+        )
+        return 'global_admin' in current_perms
+
+
     def get_visible_plugins(self) -> list:
-        from tools import session_plugins
         sections = self.get_visible_sections()
-        if not sections:
+        if self.is_current_user_admin():
             return sections
         
         # reading plugins list from session
+        from tools import session_plugins
         plugins = session_plugins.get()
         
         # if not present in the session then look up from DB
         if plugins is None:
             plugins = self.context.rpc_manager.call.project_get_plugins()
+            session_plugins.set(plugins)
         
         plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
         return plugins
