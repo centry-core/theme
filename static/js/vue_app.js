@@ -1,7 +1,6 @@
 const vueCoreApp = {
     delimiters: ['[[', ']]'],
-    components: {
-    },
+    components: {},
     mounted() {
         this.patchActiveProject()
         activeProject.get().then(id => {
@@ -62,20 +61,33 @@ const vueAppFactory = appObject => Vue.createApp(appObject)
 window.vueApp = vueAppFactory(vueCoreApp)
 
 const register_component = (name, component) => {
-    component.props ?
-        !component.props.includes('instance_name') && component.props.push('instance_name')
-        :
-        component.props = ['instance_name']
-    console.debug('register_component', name, component)
-    const original_func = component.mounted
-    component.mounted = function () {
-        this.instance_name && this.$emit('register', this.instance_name, this)
-        original_func && original_func.bind(this)()
+    const patch_component_props = component => {
+        if (component.props !== undefined) {
+            if (Array.isArray(component.props)) {
+                !component.props.includes('instance_name') && component.props.push('instance_name')
+            } else {
+                if (!('instance_name' in component.props)) {
+                    component.props.instance_name = {type: String}
+                }
+            }
+        } else {
+            component.props = ['instance_name']
+        }
     }
-    component.emits ?
-        !component.emits.includes('register') && component.emits.push('register')
-        :
-        component.emits = ['register']
+    const patch_component_mounted = component => {
+        const original_func = component.mounted
+        component.mounted = function () {
+            this.instance_name && this.$emit('register', this.instance_name, this)
+            original_func && original_func.bind(this)()
+        }
+        component.emits ?
+            !component.emits.includes('register') && component.emits.push('register')
+            :
+            component.emits = ['register']
+    }
+    patch_component_props(component)
+    patch_component_mounted(component)
+    console.debug('register_component', name, component)
     // window.vueApp.component(name.toLowerCase(), component) // maybe we should move to lower-register components only
     window.vueApp.component(name, component)
 }
