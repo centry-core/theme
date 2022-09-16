@@ -2,10 +2,6 @@
     {%- set base_url = '<script src="%s"></script>' -%}
     {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}
 {%- endmacro -%}
-{%- macro link_url(file_path) -%}
-    {%- set base_url = '<link type="text/css" href="%s" rel="stylesheet"/>' -%}
-    {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}
-{%- endmacro -%}
 <!-- Core JS Files -->
 {{ script_url('assets/vendor/vue.global.js') }}
 
@@ -13,8 +9,9 @@
 {{ script_url('assets/vendor/bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js') }}
 <script src="{{ url_for('design-system.static', filename='assets/vendor/bootstrap-table/bootstrap-table.min.js') }}"
         defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
 {{ script_url('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}
+
 <!-- SocketIO -->
 {{ script_url('assets/vendor/socket.io.min.js') }}
 
@@ -23,6 +20,5 @@
 {{ script_url('assets/js/select.js') }}
 {{ script_url('assets/js/tooltips.js') }}
 
-{#{{ script_url('assets/js/review_usage.js') }}#}
 {{ script_url('assets/js/notification-master/notification.js') }}
 {{ script_url('assets/js/notifications.js') }}
