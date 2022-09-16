@@ -24,12 +24,12 @@ from collections import defaultdict
 from flask import redirect, url_for, g, request, Response
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
+from werkzeug.exceptions import NotFound
 
 import tools  # pylint: disable=E0401
 from tools import auth  # pylint: disable=E0401
 
 from .models.pd.google_analytics import GAConfiguration
-
 
 class Module(module.ModuleModel):
     """ Pylon module """
@@ -121,12 +121,16 @@ class Module(module.ModuleModel):
         log.info('Tools registration done')
 
     def _error_handler(self, error):
+
+        resp_code = 400
+        if isinstance(error, NotFound):
+            resp_code = 404
         log.error(
             "Error: (%s) %s:\n%s",
             type(error), error,
             "".join(traceback.format_tb(error.__traceback__)),
         )
-        return self.descriptor.render_template("access_denied.html"), 400
+        return self.descriptor.render_template("access_denied.html"), resp_code
 
     @property
     def google_analytics_config(self) -> GAConfiguration:
@@ -165,6 +169,33 @@ class Module(module.ModuleModel):
         """ De-init module """
         log.info('De-initializing module')
 
+
+    def is_current_user_admin(self) -> bool:
+        current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
+            g.auth.id, 
+            scope_id = 1
+        )
+        return 'global_admin' in current_perms
+
+
+    def get_visible_plugins(self) -> list:
+        sections = self.get_visible_sections()
+        if self.is_current_user_admin():
+            return sections
+        
+        # reading plugins list from session
+        from tools import session_plugins
+        plugins = session_plugins.get()
+        
+        # if not present in the session then look up from DB
+        if plugins is None:
+            plugins = self.context.rpc_manager.call.project_get_plugins()
+            session_plugins.set(plugins)
+        
+        plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
+        return plugins
+
+
     def get_visible_sections(self) -> list:
         """ Get sections visible for current user """
         result = list()
@@ -173,6 +204,7 @@ class Module(module.ModuleModel):
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
+        
             required_permissions = section_attrs.get("permissions", [])
             #
             if set(required_permissions).issubset(set(current_permissions)):
@@ -190,6 +222,7 @@ class Module(module.ModuleModel):
         #
         # log.info('result %s', result)
         return result
+
 
     def get_visible_subsections(self, section):
         """ Get subsections visible for current user """
@@ -263,6 +296,7 @@ class Module(module.ModuleModel):
     def route_section(self, section):  # pylint: disable=R0201
         """ Section route """
         g.theme.active_section = section
+
         #
         if section not in self.sections:
             return redirect(url_for("theme.access_denied"))

@@ -48,8 +48,7 @@
     <!-- Custom scripts-->
     <script src="{{ url_for('theme.static', filename='js/alert_bar.js') }}"></script>
 
-
-    <script src="{{ url_for('design-system.static', filename='assets/js/vue_components/TableCard.js') }}"></script>
+    {% include 'theme:part/vue_components.html' %}
 
     {% block scripts %}
         {{ template_slot('scripts', state) | safe }}

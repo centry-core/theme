@@ -45,7 +45,8 @@ const Navbar_centry = {
         'sections', 'subsections',
         'user', 'logo_url',
         'active_section', 'active_subsection',
-        'active_project'
+        'active_project',
+        'is_admin_user',
     ],
     template: `
 <nav class="navbar navbar-expand main-nav">
@@ -55,6 +56,7 @@ const Navbar_centry = {
         </a>
         <select class="selectpicker" data-style="btn-chapters" 
             name="section_select"
+            ref="sectionSelect"
             @change="handle_section_change" 
             :value="active_section"
             >
@@ -62,7 +64,7 @@ const Navbar_centry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100 mt-2" style="overflow-x: scroll">
+    <ul class="navbar-nav w-100" style="overflow-x: scroll">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
@@ -73,7 +75,7 @@ const Navbar_centry = {
         </li>
     </ul>
 
-    <select class="selectpicker" data-style="btn" data-dropdown-align-right="true"
+    <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true"
         name="project_select"
         id="project_select"
         v-if="projects.length > 0"
@@ -87,20 +89,19 @@ const Navbar_centry = {
             [[ project.name ]]
         </option>
     </select>
-    <div class="dropdown dropdown_action ml-1 mr-3">
-        <button class="btn btn-default btn-icon"
-                role="button"
-                id="userDropDown"
-                data-toggle="dropdown"
-                aria-expanded="false">
-            <i class="icon-user__18 icon__18x18 mt-1 ml-1"></i>
+    <div class="vl"></div>
+    <div class="dropdown ml-1">
+        <button class="btn btn-primary dropdown-toggle" type="button"
+                id="userDropDown" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <i class="far fa-user-circle"></i>
         </button>
-    
-        <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="userDropDown">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
             <h6 class="dropdown-header">[[ user.name ]]</h6>
             <h9 class="dropdown-header">[[ user.email ]]</h9>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
+            
         </div>
     </div>
 </nav>
@@ -108,10 +109,12 @@ const Navbar_centry = {
     data() {
         return {
             projects: [],
+            isAdmin: false,
         }
     },
     async mounted() {
         await this.fetch_projects()
+        this.isAdmin = this.is_admin_user
     },
     watch: {
         projects(newValue, oldValue) {
@@ -145,7 +148,22 @@ const Navbar_centry = {
         },
         async handle_project_change(event) {
             const new_id = await activeProject.set(event.target.value)
-            new_id !== null && location.reload()
+            if (!new_id) return
+
+            // get current plugins list
+            const newProject = this.projects.filter(proj => proj.id == new_id)[0]
+            const newSections = newProject.plugins
+            const currentSection = this.$refs.sectionSelect.value
+            const notAdmin = !this.is_admin_user
+
+            withinSections = newSections.filter(section => section == currentSection).length > 0 
+            if (!withinSections && newSections.length>0 && notAdmin){
+                newSection = newSections[0]
+                location.href = this.get_section_href(newSection)
+                this.$refs.sectionSelect.value = newSection
+            } else {
+                location.reload()
+            }
         }
     }
 }
