@@ -1,6 +1,6 @@
 const Locations = {
     delimiters: ['[[', ']]'],
-    props: ['public_regions', 'project_regions', 'location', 'parallel_runners', 'cpu', 'memory', 'modal_id'],
+    props: ['public_regions', 'project_regions', 'cloud_regions', 'location', 'parallel_runners', 'cpu', 'memory', 'modal_id'],
     emits: ['update:location', 'update:parallel_runners', 'update:cpu', 'update:memory'],
     template: `
     <div class="section">
@@ -25,6 +25,9 @@ const Locations = {
                 </optgroup>
                 <optgroup label="Project pool" v-if="project_regions_.length > 0">
                     <option v-for="item in project_regions_">[[ item ]]</option>
+                </optgroup>
+                <optgroup label="Cloud pool" v-if="cloud_regions_.length > 0">
+                    <option v-for="item in cloud_regions_">[[ item ]]</option>
                 </optgroup>
             </select>
         </div>
@@ -64,6 +67,7 @@ const Locations = {
             memory_: 4,
             public_regions_: ['default'],
             project_regions_: [],
+            cloud_regions_: [],
         }
     },
     mounted() {
@@ -73,6 +77,7 @@ const Locations = {
         if (this.$props.memory) this.memory_ = this.$props.memory
         if (this.$props.public_regions) this.public_regions_ = this.$props.public_regions
         if (this.$props.project_regions) this.project_regions_ = this.$props.project_regions
+        if (this.$props.cloud_regions) this.cloud_regions_ = this.$props.cloud_regions
         $('.selectpicker').selectpicker('refresh')
     },
     watch: {
