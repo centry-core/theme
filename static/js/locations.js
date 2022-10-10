@@ -78,7 +78,7 @@ const Locations = {
         if (this.$props.public_regions) this.public_regions_ = this.$props.public_regions
         if (this.$props.project_regions) this.project_regions_ = this.$props.project_regions
         if (this.$props.cloud_regions) this.cloud_regions_ = this.$props.cloud_regions
-        $('.selectpicker').selectpicker('refresh')
+        this.$nextTick(this.refresh_pickers)
     },
     watch: {
         location_(newValue) {
@@ -105,17 +105,10 @@ const Locations = {
         },
 
         public_regions_(newValue) {
-            this.$nextTick(() => {
-                $('.selectpicker').selectpicker('refresh')
-                $('.selectpicker').selectpicker('render')
-            })
-
+            this.$nextTick(this.refresh_pickers)
         },
         project_regions_(newValue) {
-            this.$nextTick(() => {
-                $('.selectpicker').selectpicker('refresh')
-                $('.selectpicker').selectpicker('render')
-            })
+            this.$nextTick(this.refresh_pickers)
         },
     },
     methods: {
@@ -123,14 +116,17 @@ const Locations = {
             console.log('fetching locations')
             const resp = await fetch(`/api/v1/shared/locations/${getSelectedProjectId()}`)
             if (resp.ok) {
-                const {public_regions, project_regions} = await resp.json()
+                const {public_regions, project_regions, cloud_regions} = await resp.json()
                 this.public_regions_ = public_regions
                 this.project_regions_ = project_regions
+                this.cloud_regions_ = cloud_regions
             } else {
                 console.warn('Couldn\'t fetch locations. Resp code: ', resp.status)
             }
-
-        }
+        },
+        refresh_pickers() {
+            $(this.$el).find('.selectpicker').selectpicker('redner').selectpicker('refresh')
+        },
     }
 }
 
