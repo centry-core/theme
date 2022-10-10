@@ -2,5 +2,6 @@
     {%- set base_url = '<script src="%s"></script>' -%}
     {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}
 {%- endmacro -%}
+
 {{ script_url('assets/js/vue_components/TableCard.js') }}
 {{ script_url('assets/js/vue_components/MultiselectDropdown.js') }}

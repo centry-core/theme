@@ -27,7 +27,13 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
         <!-- CSS FILES -->
-        {{ link_url('assets/vendor/fontawesome-free/css/all.min.css') }}
+        <!-- Loading the v6 core styles and the Solid and Brands styles -->
+        {{ link_url('assets/vendor/fontawesome-free/css/fontawesome.css') }}
+        {{ link_url('assets/vendor/fontawesome-free/css/brands.css') }}
+        {{ link_url('assets/vendor/fontawesome-free/css/solid.css') }}
+        <!-- update existing v5 CSS to use v6 icons and assets -->
+        {{ link_url('assets/vendor/fontawesome-free/css/v5-font-face.css') }}
+
         {{ link_url('assets/vendor/bootstrap-4.6.1-dist/css/bootstrap.min.css') }}
         {{ link_url('assets/vendor/nouislider/nouislider.css') }}
         {{ link_url('assets/vendor/bootstrap-table/bootstrap-table.min.css') }}
