@@ -74,27 +74,30 @@ const Navbar_centry = {
             </a>
         </li>
     </ul>
-
-    <select class="selectpicker" data-style="btn-projects" data-dropdown-align-right="true"
-        name="project_select"
-        id="project_select"
-        v-if="projects.length > 0"
-        :value="active_project"
-        @change="handle_project_change"
-    >
-        <option v-for="project in projects" 
-            :value="project.id" 
-            :key="project.id"
-        >
-            [[ project.name ]]
-        </option>
-    </select>
-    <div class="vl"></div>
-    <div class="dropdown ml-1">
-        <button class="btn btn-primary dropdown-toggle" type="button"
+    <div>
+         <select class="selectpicker dropdown-menu__simple font-weight-400 mr-2"
+             data-style="btn" 
+             data-dropdown-align-right="true"
+             name="project_select"
+             id="project_select"
+             v-if="projects.length > 0"
+             :value="active_project"
+             @change="handle_project_change"
+         >
+             <option v-for="project in projects" 
+                :value="project.id" 
+                :key="project.id"
+             >
+                [[ project.name ]]
+            </option>
+        </select>
+    </div>
+    
+    <div class="dropdown ml-1 mr-3">
+        <button class="btn btn-xs btn-table btn-icon__xs" type="button"
                 id="userDropDown" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-            <i class="far fa-user-circle"></i>
+            <i class="icon__16x16 icon-user"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
             <h6 class="dropdown-header">[[ user.name ]]</h6>
