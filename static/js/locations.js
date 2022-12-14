@@ -1,3 +1,64 @@
+const KubernetesLocation = {
+    delimiters: ['[[', ']]'],
+    props: ["cloud_settings", 'refresh_pickers'],
+    data() {
+        return {
+            namespaces: []
+        }
+    },
+    computed: {
+        settings: {
+            get() {
+                return this.cloud_settings;
+            },
+            set(v) {
+                this.$emit('input', v)
+            }
+        },
+    },
+    mounted() {
+        this.get_namespaces()
+        this.$nextTick(this.refresh_pickers)
+    },
+    methods: {
+        get_namespaces() {
+            fetch("/api/v1/kubernetes/get_namespaces", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(this.settings),
+            }).then((resp) => {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    console.warn("Couldn't fetch namespaces. Resp code: ", resp.status)
+                }
+            }).then((namespaces) => {
+                this.namespaces = namespaces
+            }).catch((error) => {
+                console.error(error)
+            }).finally(() => {
+                this.$nextTick(this.refresh_pickers)
+                this.$nextTick(this.refresh_pickers)
+            });
+        }
+
+    },
+    template: `
+        <div class="form-group w-100-imp">
+            <div class="custom-input m-3">
+                <p class="custom-input_desc mb-1">Namespace</p>
+                <div class="custom-input">
+                    <select class="selectpicker bootstrap-select__b" 
+                        v-model="settings.namespace"
+                    >
+                        <option v-for="item in namespaces">[[ item ]]</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 const AwsLocation = {
     delimiters: ['[[', ']]'],
     props: ["cloud_settings", 'refresh_pickers'],
@@ -90,6 +151,7 @@ const AwsLocation = {
 }
 
 register_component('AwsLocation', AwsLocation)
+register_component('KubernetesLocation', KubernetesLocation)
 
 
 const Locations = {
@@ -151,7 +213,12 @@ const Locations = {
 
     </div>
         <div class="row" v-if="is_cloud_location">
+        <template v-if="cloud_settings_.integration_name === 'aws_integration'">
             <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" />
+        </template>
+        <template v-if="cloud_settings_.integration_name === 'kubernetes'">
+            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" />
+        </template>
         </div>
 </div>
     `,
