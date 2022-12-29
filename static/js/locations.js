@@ -1,3 +1,133 @@
+const KubernetesLocation = {
+    delimiters: ['[[', ']]'],
+    props: ["cloud_settings", 'refresh_pickers'],
+    data() {
+        return this.initialState()
+    },
+    mounted() {
+        this.get_namespaces()
+        this.int_id = setInterval(() => this.get_capacity(), 10000)
+        this.$nextTick(this.refresh_pickers)
+    },
+    unmounted() {
+        clearInterval(this.int_id)
+    },
+    watch: {
+        'settings.namespace': {
+            handler() {
+                this.get_capacity()
+            },
+            immediate: true,
+        },
+        settings(newValue) {
+            this.$emit('update:cloud_settings', newValue)
+        }
+    },
+    methods: {
+        initialState() {
+            return {
+                settings: this.cloud_settings,
+                namespaces: [],
+                resources: {},
+                int_id: undefined,
+                error: {}
+            }
+        },
+        set_error(error_data) {
+            this.error = error_data
+        },
+        clear_errors() {
+            this.error = {}
+        },
+        set_data(data) {
+        },
+        clear_data() {
+            Object.assign(this.$data, this.initialState())
+            this.$emit('clear_data')
+        },
+        get_capacity() {
+            fetch("/api/v1/kubernetes/get_available_resources",
+                {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(this.settings)
+                }).then((resp) => {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    console.warn("Couldn't fetch resources. Resp code: ", resp.status)
+                }
+            }).then((resources) => {
+                this.resources = resources
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        clear() {
+            Object.assign(this.$data, this.initialState())
+            this.$nextTick(this.refresh_pickers)
+        },
+        get_namespaces() {
+            fetch("/api/v1/kubernetes/get_namespaces", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(this.settings),
+            }).then((resp) => {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    console.warn("Couldn't fetch namespaces. Resp code: ", resp.status)
+                }
+            }).then((namespaces) => {
+                this.namespaces = namespaces
+            }).catch((error) => {
+                console.log(error)
+            }).finally(() => {
+                this.$nextTick(this.refresh_pickers)
+                this.$nextTick(this.refresh_pickers)
+            });
+        }
+
+    },
+    template: `
+        <div class="form-group w-100-imp">
+            <div class="row">
+                <div class="col">
+                    <div class="card card-sm card-blue">
+                        <div class="card-header">[[ resources["cpu"] ]] Cores</div>
+                        <div class="card-body">Available CPU cores</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card card-sm card-blue">
+                        <div class="card-header">[[ resources["memory"] ]] Gigabytes</div>
+                        <div class="card-body">Available memory</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card card-sm card-blue">
+                        <div class="card-header">[[ resources["pods"] ]] Runners</div>
+                        <div class="card-body">Available runners</div>
+                    </div>
+                </div>
+            </div>
+            <div class="custom-input m-3">
+                <p class="custom-input_desc mb-1">Namespace</p>
+                <div class="custom-input select-validation"
+                    :class="{'invalid-select': this.error.msg}">
+                
+                    <select class="selectpicker bootstrap-select__b" 
+                        v-model="settings.namespace"
+                    >
+                        <option v-for="item in namespaces">[[ item ]]</option>
+                    </select>
+                    <span class="select_error-msg">[[ error['msg'] ]]</span>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 const AwsLocation = {
     delimiters: ['[[', ']]'],
     props: ["cloud_settings", 'refresh_pickers'],
@@ -90,6 +220,7 @@ const AwsLocation = {
 }
 
 register_component('AwsLocation', AwsLocation)
+register_component('KubernetesLocation', KubernetesLocation)
 
 
 const Locations = {
@@ -151,12 +282,19 @@ const Locations = {
 
     </div>
         <div class="row" v-if="is_cloud_location">
+        <template v-if="cloud_settings_.integration_name === 'aws_integration'">
             <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" />
+        </template>
+        <template v-if="cloud_settings_.integration_name === 'kubernetes'">
+            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+                @register="$root.register"
+                instance_name="kubernetes"
+            />
+        </template>
         </div>
 </div>
     `,
     data() {
-        console.log("data")
         return {
             location_: 'default',
             parallel_runners_: 1,
