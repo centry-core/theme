@@ -6,12 +6,9 @@ const KubernetesLocation = {
     },
     mounted() {
         this.get_namespaces()
-        this.int_id = setInterval(() => this.get_capacity(), 10000)
         this.$nextTick(this.refresh_pickers)
     },
-    unmounted() {
-        clearInterval(this.int_id)
-    },
+
     watch: {
         'settings.namespace': {
             handler() {
@@ -26,6 +23,7 @@ const KubernetesLocation = {
     methods: {
         initialState() {
             return {
+                refresh_btn_color: '#5933C6',
                 settings: this.cloud_settings,
                 namespaces: [],
                 resources: {},
@@ -59,6 +57,7 @@ const KubernetesLocation = {
                 }
             }).then((resources) => {
                 this.resources = resources
+                this.refresh_btn_color = '#5933C6'
             }).catch((error) => {
                 console.log(error)
             })
@@ -91,37 +90,33 @@ const KubernetesLocation = {
     },
     template: `
         <div class="form-group w-100-imp">
-            <div class="row">
-                <div class="col">
-                    <div class="card card-sm card-blue">
-                        <div class="card-header">[[ resources["cpu"] ]] Cores</div>
-                        <div class="card-body">Available CPU cores</div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card card-sm card-blue">
-                        <div class="card-header">[[ resources["memory"] ]] Gigabytes</div>
-                        <div class="card-body">Available memory</div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card card-sm card-blue">
-                        <div class="card-header">[[ resources["pods"] ]] Runners</div>
-                        <div class="card-body">Available runners</div>
-                    </div>
-                </div>
-            </div>
-            <div class="custom-input m-3">
+            <div class="custom-input mb-1"  style="width: 50%;">        
                 <p class="custom-input_desc mb-1">Namespace</p>
                 <div class="custom-input select-validation"
                     :class="{'invalid-select': this.error.msg}">
-                
                     <select class="selectpicker bootstrap-select__b" 
                         v-model="settings.namespace"
                     >
                         <option v-for="item in namespaces">[[ item ]]</option>
                     </select>
                     <span class="select_error-msg">[[ error['msg'] ]]</span>
+                    <p>
+                        <h13>
+                            Available resources: 
+                            runners - [[ resources["pods"] ]],
+                            CPU - [[ resources["cpu"] ]],
+                            memory - [[ resources["memory"] ]]Gb   
+                            <a
+                                style="cursor: pointer;"
+                                :style="{color: refresh_btn_color}" 
+                                @click="get_capacity"
+                                @mouseenter="refresh_btn_color = '#6C44DD'"
+                                @mousedown="refresh_btn_color = '#4627A0'"
+                            >
+                                Refresh
+                            </a>
+                        </h13>
+                    </p>
                 </div>
             </div>
         </div>
@@ -281,7 +276,7 @@ const Locations = {
         </div>
 
     </div>
-        <div class="row" v-if="is_cloud_location">
+        <div class="row pl-1" v-if="is_cloud_location">
         <template v-if="cloud_settings_.integration_name === 'aws_integration'">
             <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" />
         </template>
