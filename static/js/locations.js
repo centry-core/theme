@@ -106,6 +106,7 @@ const KubernetesLocation = {
                             runners - [[ resources["pods"] ]],
                             CPU - [[ resources["cpu"] ]],
                             memory - [[ resources["memory"] ]]Gb   
+                            &nbsp;&nbsp;
                             <a
                                 style="cursor: pointer;"
                                 :style="{color: refresh_btn_color}" 
@@ -113,7 +114,7 @@ const KubernetesLocation = {
                                 @mouseenter="refresh_btn_color = '#6C44DD'"
                                 @mousedown="refresh_btn_color = '#4627A0'"
                             >
-                                Refresh
+                              Refresh
                             </a>
                         </h13>
                     </p>
