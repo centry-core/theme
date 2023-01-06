@@ -12,6 +12,7 @@ const vueCoreApp = {
         return {
             project_id: undefined,
             registered_components: {},
+            custom_data: {}
         }
     },
     watch: {
@@ -92,9 +93,13 @@ const register_component = (name, component) => {
     window.vueApp.component(name, component)
 }
 window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7', 'h12'].includes(tag)
+window.vueApp.config.globalProperties.window = window
+// window.vueApp.config.productionTip = false
+// window.vueApp.config.devtools = false
 
 
 $(() => {
     window.vueVm = vueApp.mount('#vue_mountpoint')
+    window.V = window.vueVm
     document.dispatchEvent(new Event('vue_init'))
 })
