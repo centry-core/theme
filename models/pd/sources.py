@@ -64,5 +64,5 @@ class SourceLocal(SourceABC):
     @property
     def execution_json(self):
         return {
-            'bucket': self.path
+            'local_path': self.path
         }
