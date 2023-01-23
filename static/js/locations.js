@@ -12,7 +12,8 @@ const KubernetesLocation = {
     watch: {
         'settings.namespace': {
             handler() {
-                this.get_capacity()
+                if (!this.settings.scaling_cluster)
+                    this.get_capacity()
             },
             immediate: true,
         },
@@ -27,7 +28,6 @@ const KubernetesLocation = {
                 settings: this.cloud_settings,
                 namespaces: [],
                 resources: {},
-                int_id: undefined,
                 error: {}
             }
         },
@@ -53,13 +53,14 @@ const KubernetesLocation = {
                 if (resp.ok) {
                     return resp.json()
                 } else {
+                    this.set_error({
+                        msg: "Couldn't fetch available resources. It probably means the cluster uses auto-scaling."
+                    })
                     console.warn("Couldn't fetch resources. Resp code: ", resp.status)
                 }
             }).then((resources) => {
                 this.resources = resources
                 this.refresh_btn_color = '#5933C6'
-            }).catch((error) => {
-                console.log(error)
             })
         },
         clear() {
@@ -102,11 +103,11 @@ const KubernetesLocation = {
                     <span class="select_error-msg">[[ error['msg'] ]]</span>
                     <p>
                         <h13>
+                            <template v-if="!settings.scaling_cluster">
                             Available resources: 
                             runners - [[ resources["pods"] ]],
                             CPU - [[ resources["cpu"] ]],
                             memory - [[ resources["memory"] ]]Gb   
-                            &nbsp;&nbsp;
                             <a
                                 style="cursor: pointer;"
                                 :style="{color: refresh_btn_color}" 
@@ -116,6 +117,11 @@ const KubernetesLocation = {
                             >
                               Refresh
                             </a>
+                            </template>
+                            <template v-if="settings.scaling_cluster" >
+                               Unable to count resources for auto-scaling cluster. 
+                               Test may not work as expected if there is not enough scaling capacity.
+                            </template>
                         </h13>
                     </p>
                 </div>
@@ -128,42 +134,60 @@ const AwsLocation = {
     delimiters: ['[[', ']]'],
     props: ["cloud_settings", 'refresh_pickers'],
     data() {
-        return {
-            "aws_regions": [
-                "eu-north-1",
-                "ap-south-1",
-                "eu-west-3",
-                "eu-west-2",
-                "eu-west-1",
-                "ap-northeast-3",
-                "ap-northeast-2",
-                "me-south-1",
-                "ap-northeast-1",
-                "sa-east-1",
-                "ca-central-1",
-                "ap-east-1",
-                "ap-southeast-1",
-                "ap-southeast-2",
-                "eu-central-1",
-                "us-east-1",
-                "us-east-2",
-                "us-west-1",
-                "us-west-2",
-            ]
-        }
-    },
-    computed: {
-        settings: {
-            get() {
-                return this.cloud_settings;
-            },
-            set(v) {
-                this.$emit('input', v)
-            }
-        }
+        return this.initialState()
     },
     mounted() {
         this.$nextTick(this.refresh_pickers)
+    },
+    watch: {
+        settings(newValue) {
+            this.$emit('update:cloud_settings', newValue)
+        }
+    },
+    methods: {
+        initialState() {
+            return {
+                settings: this.cloud_settings,
+                aws_regions: [
+                    "eu-north-1",
+                    "ap-south-1",
+                    "eu-west-3",
+                    "eu-west-2",
+                    "eu-west-1",
+                    "ap-northeast-3",
+                    "ap-northeast-2",
+                    "me-south-1",
+                    "ap-northeast-1",
+                    "sa-east-1",
+                    "ca-central-1",
+                    "ap-east-1",
+                    "ap-southeast-1",
+                    "ap-southeast-2",
+                    "eu-central-1",
+                    "us-east-1",
+                    "us-east-2",
+                    "us-west-1",
+                    "us-west-2",
+                ],
+                error: {}
+            }
+        },
+        set_error(error_data) {
+            this.error = error_data
+        },
+        clear_errors() {
+            this.error = {}
+        },
+        set_data(data) {
+        },
+        clear_data() {
+            Object.assign(this.$data, this.initialState())
+            this.$emit('clear_data')
+        },
+        clear() {
+            Object.assign(this.$data, this.initialState())
+            this.$nextTick(this.refresh_pickers)
+        },
     },
     template:
         `
@@ -215,7 +239,97 @@ const AwsLocation = {
     `,
 }
 
+const GcpLocation = {
+    delimiters: ['[[', ']]'],
+    props: ["cloud_settings", 'refresh_pickers'],
+    data() {
+        return this.initialState()
+    },
+    mounted() {
+        this.get_zones()
+        this.$nextTick(this.refresh_pickers)
+    },
+    watch: {
+        settings(newValue) {
+            this.$emit('update:cloud_settings', newValue)
+        }
+    },
+    methods: {
+        initialState() {
+            return {
+                settings: this.cloud_settings,
+                gcp_zones: [this.cloud_settings.zone],
+                error: {}
+            }
+        },
+        set_error(error_data) {
+            this.error = error_data
+        },
+        clear_errors() {
+            this.error = {}
+        },
+        set_data(data) {
+        },
+        clear_data() {
+            Object.assign(this.$data, this.initialState())
+            this.$emit('clear_data')
+        },
+        clear() {
+            Object.assign(this.$data, this.initialState())
+            this.$nextTick(this.refresh_pickers)
+        },
+        get_zones() {
+            fetch("/api/v1/gcp_integration/get_zones",
+                {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(this.settings)
+                }).then((resp) => {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    console.warn("Couldn't fetch zones. Resp code: ", resp.status)
+                }
+            }).then((result) => {
+                this.gcp_zones = result
+                this.$nextTick(this.refresh_pickers)
+                this.$nextTick(this.refresh_pickers)
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+    },
+    template:
+        `<div class="form-group w-100-imp">
+            <div class="custom-input m-3">
+                <p class="custom-input_desc mb-1">Instance type</p>
+                <select class="selectpicker bootstrap-select__b" 
+                    data-style="btn" 
+                    v-model="settings.instance_type"
+                >
+                        <option value="spot">
+                            Spot instance
+                        </option>
+                        <option value="on-demand">
+                            On-demand instance
+                        </option>
+                </select>
+            </div>
+            <div class="custom-input m-3" >        
+                <p class="custom-input_desc mb-1">GCP Zones</p>
+                <select class="selectpicker bootstrap-select__b" 
+                    data-style="btn" 
+                    v-model="settings.zone"
+                >
+                        <option v-for="zone in gcp_zones">
+                            [[zone]]
+                        </option>
+                </select>
+            </div>
+        </div>`
+}
 register_component('AwsLocation', AwsLocation)
+register_component('GcpLocation', GcpLocation)
 register_component('KubernetesLocation', KubernetesLocation)
 
 
@@ -277,17 +391,29 @@ const Locations = {
         </div>
 
     </div>
-        <div class="row pl-1" v-if="is_cloud_location">
+    <div class="row pl-1" v-if="is_cloud_location">
         <template v-if="cloud_settings_.integration_name === 'aws_integration'">
-            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" />
+            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+                :key="cloud_settings_.id"
+                @register="$root.register"
+                instance_name="aws_integration"
+            />
         </template>
         <template v-if="cloud_settings_.integration_name === 'kubernetes'">
             <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+                :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="kubernetes"
             />
         </template>
-        </div>
+        <template v-if="cloud_settings_.integration_name === 'gcp_integration'">
+            <GcpLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+                :key="cloud_settings_.id"
+                @register="$root.register"
+                instance_name="gcp_integration"
+            />
+        </template>
+    </div>
 </div>
     `,
     data() {
@@ -311,7 +437,6 @@ const Locations = {
         }
     },
     mounted() {
-        console.log("mounted", this.$props)
         this.fetch_locations()
         if (this.$props.location) this.location_ = this.$props.location
         if (this.$props.parallel_runners) this.parallel_runners_ = this.$props.parallel_runners
@@ -320,6 +445,7 @@ const Locations = {
         if (this.$props.public_regions) this.public_regions_ = this.$props.public_regions
         if (this.$props.project_regions) this.project_regions_ = this.$props.project_regions
         if (this.$props.cloud_regions) this.cloud_regions_ = this.$props.cloud_regions
+        this.$nextTick(this.refresh_pickers)
         this.$nextTick(this.refresh_pickers)
     },
     watch: {
