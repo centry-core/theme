@@ -33,11 +33,9 @@ var ParamsTable = {
 
     parametersDeleteFormatter(value, row, index) {
         return `
-<!--        <div class="d-flex justify-content-end">-->
-            <button type="button" class="btn btn-24 btn-action" onclick="ParamsTable.deleteParams(${index}, this)">
-                <i class="fas fa-trash-alt"></i>
+            <button type="button" class="btn btn-default btn-xs btn-table btn-icon__xs" onclick="ParamsTable.deleteParams(${index}, this)">
+                <i class="icon__18x18 icon-delete"></i>
             </button>
-<!--        </div>-->
         `
     },
     inputFormatter(value, row, index, field) {
