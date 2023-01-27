@@ -216,7 +216,7 @@ class Module(module.ModuleModel):
                 #
                 location_result[section_attrs["location"]].append(item)
         #
-        log.info('location_result items %s', location_result.items())
+        # log.info('location_result items %s', location_result.items())
         for i in location_result.values():
             result.extend(sorted(i, key=lambda x: (-x["weight"], x["name"])))
         #

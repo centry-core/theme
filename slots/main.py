@@ -48,8 +48,6 @@ class Slot:  # pylint: disable=E1101,R0903
             alert_container_id ('alert_custom') - id of alert container on page
             overlay_max_width ('unset') - width limit for alert container
         """
-        from pylon.core.tools import log
-        log.info('slot [%s] payload  %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/alert_bar.html',
