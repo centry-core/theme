@@ -25,10 +25,12 @@ var ParamsTable = {
         `
     },
     addEmptyParamsRow: source => {
-        $(source).closest('.section').find('.params-table').bootstrapTable(
+        const $table = $(source).closest('.section').find('.params-table')
+        $table.bootstrapTable(
             'append',
             {"name": "", "default": "", "type": "string", "description": "", "action": ""}
         )
+        $table.css({display: 'table'})
     },
 
     parametersDeleteFormatter(value, row, index) {
@@ -46,10 +48,11 @@ var ParamsTable = {
         `
     },
     deleteParams: (index, source) => {
-        $(source).closest('.params-table').bootstrapTable('remove', {
+        const $table = $(source).closest('.params-table').bootstrapTable('remove', {
             field: '$index',
             values: [index]
         })
+        $table.bootstrapTable('getData').length === 0 && $table.css({display: 'none'})
     },
     updateCell: (el, row, field) => $(el.closest('table')).bootstrapTable(
         'updateCell',
