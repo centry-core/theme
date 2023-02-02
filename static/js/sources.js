@@ -48,11 +48,16 @@ const SourceCard = {
             get_active_tab,
             get: () => {
                 const active_tab = get_active_tab()
-                return Object.entries(tab_mapping[active_tab].input_mapping).reduce(
-                    (acc, item) => {
-                        acc[item[0]] = el.find(item[1]).val()
-                        return acc
-                    }, {name: active_tab})
+                let mapping_obj = Object.entries(tab_mapping[active_tab].input_mapping).reduce(
+                        (acc, item) => {
+                            acc[item[0]] = el.find(item[1]).val()
+                            return acc
+                        }, {name: active_tab})
+
+                if ($('#file')[0].files[0] !== undefined) {
+                    mapping_obj.file = $('#file')[0].files[0]
+                }
+                return mapping_obj
             },
             set: data => {
                 Object.entries(data).forEach(([k, v]) => {
