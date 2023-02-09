@@ -30,7 +30,7 @@ var ParamsTable = {
             'append',
             {"name": "", "default": "", "type": "string", "description": "", "action": ""}
         )
-        $table.css({display: 'table'})
+        $table.removeClass('empty_data')
     },
 
     parametersDeleteFormatter(value, row, index) {
@@ -52,7 +52,7 @@ var ParamsTable = {
             field: '$index',
             values: [index]
         })
-        $table.bootstrapTable('getData').length === 0 && $table.css({display: 'none'})
+        $table.bootstrapTable('getData').length === 0 && $table.addClass('empty_data')
     },
     updateCell: (el, row, field) => $(el.closest('table')).bootstrapTable(
         'updateCell',
@@ -103,7 +103,14 @@ var ParamsTable = {
 
 
 $(document).on('vue_init', () => {
-    $('.params-table').on('all.bs.table', () => {
+    const $pts = $('.params-table')
+    $pts.on('all.bs.table', () => {
         $('.selectpicker').selectpicker('render')
+    })
+    $pts.on('post-body.bs.table', () => {
+        $pts.each((_, t) => {
+            t = $(t)
+            t.bootstrapTable('getData').length === 0 ? t.addClass('empty_data') : t.removeClass('empty_data')
+        })
     })
 })
