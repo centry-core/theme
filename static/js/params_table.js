@@ -24,6 +24,13 @@ var ParamsTable = {
             </select>
         `
     },
+    removeParam: ev => {
+        if (ev.target.parentNode.parentNode.classList.contains("flex-row")) {
+            ev.target.parentNode.parentNode.remove();
+        } else {
+            ev.target.parentNode.parentNode.parentNode.remove();
+        }
+    },
     addEmptyParamsRow: source => {
         $(source).closest('.section').find('.params-table').bootstrapTable(
             'append',
