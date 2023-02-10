@@ -16,3 +16,7 @@
 test_parameters_error:empty {
     display: none;
 }
+
+.params-table.empty_data {
+    display: none;
+}
