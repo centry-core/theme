@@ -105,6 +105,9 @@ class Module(module.ModuleModel):
         # Init RPCs
         self.descriptor.init_rpcs()
         self.descriptor.init_slots()
+        self.descriptor.init_methods()
+        self.descriptor.init_inits()
+        #
         log.info('RPCs done')
         # log.info('%s descriptor %s', self.descriptor.name, self.__dict__)
         # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
@@ -116,6 +119,7 @@ class Module(module.ModuleModel):
             "Configuration",
             kind="holder",
             location="left",
+            weight=100,
         )
 
         # Register tool
@@ -142,7 +146,9 @@ class Module(module.ModuleModel):
         g.theme = Holder()
         g.theme.active_section = None
         g.theme.active_subsection = None
-
+        g.theme.active_mode = "default"
+        g.theme.active_parameter = None
+        #
         g.ga_id = request.cookies.get(
             self.google_analytics_config.cookie_name,
             str(uuid.uuid4())
@@ -173,8 +179,10 @@ class Module(module.ModuleModel):
 
 
     def is_current_user_admin(self) -> bool:
+        if g.auth.id == "-":
+            return False
         current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
-            g.auth.id, 
+            g.auth.id,
             scope_id = 1
         )
         return 'global_admin' in current_perms
@@ -184,16 +192,16 @@ class Module(module.ModuleModel):
         sections = self.get_visible_sections()
         if self.is_current_user_admin():
             return sections
-        
+
         # reading plugins list from session
         from tools import session_plugins
         plugins = session_plugins.get()
-        
+
         # if not present in the session then look up from DB
         if plugins is None:
             plugins = self.context.rpc_manager.call.project_get_plugins()
             session_plugins.set(plugins)
-        
+
         plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
         return plugins
 
@@ -206,7 +214,9 @@ class Module(module.ModuleModel):
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
-        
+            if section_attrs.get("hidden", False):
+                continue
+            #
             required_permissions = section_attrs.get("permissions", [])
             #
             if set(required_permissions).issubset(set(current_permissions)):
@@ -225,7 +235,6 @@ class Module(module.ModuleModel):
         # log.info('result %s', result)
         return result
 
-
     def get_visible_subsections(self, section):
         """ Get subsections visible for current user """
         result = list()
@@ -236,6 +245,9 @@ class Module(module.ModuleModel):
         current_permissions = auth.resolve_permissions()
         #
         for subsection_key, subsection_attrs in self.subsections[section].items():
+            if subsection_attrs.get("hidden", False):
+                continue
+            #
             required_permissions = subsection_attrs.get("permissions", [])
             #
             if set(required_permissions).issubset(set(current_permissions)):

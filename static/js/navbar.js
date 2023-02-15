@@ -42,10 +42,10 @@ const Navbar_centry = {
     delimiters: ['[[', ']]'],
     props: [
         'instance_name',
-        'sections', 'subsections',
+        'sections', 'subsections', 'modes',
         'user', 'logo_url',
         'active_section', 'active_subsection',
-        'active_project',
+        'active_project', 'active_mode', 'active_parameter',
         'is_admin_user',
     ],
     template: `
@@ -54,10 +54,10 @@ const Navbar_centry = {
         <a class="logo" href="/">
             <img :src="logo_url" alt="centry">
         </a>
-        <select class="selectpicker" data-style="btn-chapters" 
+        <select class="selectpicker" data-style="btn-chapters"
             name="section_select"
             ref="sectionSelect"
-            @change="handle_section_change" 
+            @change="handle_section_change"
             :value="active_section"
             >
             <option v-for="section in sections" :value="section.key" :key="section.key">[[ section.name ]]</option>
@@ -76,7 +76,7 @@ const Navbar_centry = {
     </ul>
     <div>
          <select class="selectpicker dropdown-menu__simple font-weight-400 mr-2"
-             data-style="btn" 
+             data-style="btn"
              data-dropdown-align-right="true"
              name="project_select"
              id="project_select"
@@ -84,15 +84,15 @@ const Navbar_centry = {
              :value="active_project"
              @change="handle_project_change"
          >
-             <option v-for="project in projects" 
-                :value="project.id" 
+             <option v-for="project in projects"
+                :value="project.id"
                 :key="project.id"
              >
                 [[ project.name ]]
             </option>
         </select>
     </div>
-    
+
     <div class="dropdown ml-1 mr-3">
         <button class="btn btn-xs btn-table btn-icon__xs" type="button"
                 id="userDropDown" data-toggle="dropdown"
@@ -102,9 +102,19 @@ const Navbar_centry = {
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
             <h6 class="dropdown-header">[[ user.name ]]</h6>
             <h9 class="dropdown-header">[[ user.email ]]</h9>
+            <div v-if="modes.length > 0" class="dropdown-divider"></div>
+            <div v-if="modes.length > 0" class="bootstrap-select">
+              <a
+                v-for="mode in modes"
+                :href="mode.href"
+                :class="{'dropdown-item': true, active: mode.key == active_mode }"
+              >
+                [[ mode.name ]]
+              </a>
+            </div>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
-            
+
         </div>
     </div>
 </nav>
@@ -126,7 +136,13 @@ const Navbar_centry = {
     },
     methods: {
         get_section_href(section_key) {
-            return `/-/${section_key}`
+            if (this.active_mode == "default" || this.active_mode == "project") {
+                return `/-/${section_key}`
+            } else if (this.active_parameter === null) {
+                return `/~/${this.active_mode}/~/${section_key}`
+            } else {
+                return `/~/${this.active_mode}/~/${this.active_parameter}/~/${section_key}`
+            }
         },
         get_subsection_href(subsection_key) {
             // if (subsection_key === this.active_subsection) {
@@ -142,11 +158,13 @@ const Navbar_centry = {
             location.href = '/forward-auth/logout'
         },
         async fetch_projects() {
-            const resp = await fetch('/api/v1/projects/project/')
-            if (resp.ok) {
-                const data = await resp.json()
-                this.projects = data
-                // $('#project_select').selectpicker('refresh')
+            if (this.active_mode == "default" || this.active_mode == "project") {
+                const resp = await fetch('/api/v1/projects/project/')
+                if (resp.ok) {
+                    const data = await resp.json()
+                    this.projects = data
+                    // $('#project_select').selectpicker('refresh')
+                }
             }
         },
         async handle_project_change(event) {
@@ -159,7 +177,7 @@ const Navbar_centry = {
             const currentSection = this.$refs.sectionSelect.value
             const notAdmin = !this.is_admin_user
 
-            withinSections = newSections.filter(section => section == currentSection).length > 0 
+            withinSections = newSections.filter(section => section == currentSection).length > 0
             if (!withinSections && newSections.length>0 && notAdmin){
                 newSection = newSections[0]
                 location.href = this.get_section_href(newSection)
