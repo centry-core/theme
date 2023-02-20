@@ -3,3 +3,10 @@
     width: 100%;
     z-index: 22;
 }
+
+#alertMain {
+    position: sticky;
+    width: 100%;
+    top: 10px;
+    z-index: 77;
+}

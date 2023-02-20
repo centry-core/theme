@@ -39,6 +39,7 @@
         {% else %}
             (async () => await activeProject.delete(false))()
         {% endif %}
+        $(document).on('vue_init', () => V.user = {{ tools.auth.current_user() | default({}) | tojson }})
     </script>
     <!-- Vue Application Root -->
     <script src="{{ url_for('theme.static', filename='js/vue_app.js') }}"></script>

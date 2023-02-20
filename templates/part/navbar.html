@@ -5,7 +5,9 @@
         :sections='{{ tools.theme.get_sections() | tojson }}'
         :subsections='{{ tools.theme.get_subsections() | tojson }}'
         :modes='{{ tools.theme.get_modes() | tojson }}'
-        :user='{{ tools.auth.current_user() | tojson }}'
+{#        :user='{{ tools.auth.current_user() | tojson }}'#}
+{#        Now user comes from vue root     #}
+        :user='user'
         :is_admin_user="{{ tools.theme.is_current_user_admin() | tojson }}"
 
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
@@ -14,7 +16,6 @@
         active_mode="{{ g.theme.active_mode }}"
         :active_parameter='{{ g.theme.active_parameter | tojson }}'
 
-{#        :active_project='{{ g.project.id | default(None | tojson) }}'#}
         :active_project="project_id"
 >
 </Navbar>
