@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col">
             <div class="test_parameters_error"></div>
-            <table class="table table-borderless params-table empty_data"
+            <table class="table table-borderless params-table empty_data mt-3"
                     {% if modal_id %} id="{{ modal_id }}_test_params" {% endif %}
                    data-toggle="table"
             >
@@ -49,7 +49,7 @@
                     >&nbsp;</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style="border-bottom: solid 1px #EAEDEF">
                 {% for row in default_params | default([]) %}
                     <tr>
                         <td {% if (row.name in disabled_names) %} class="disabled" {% endif %} >
@@ -74,7 +74,7 @@
         </div>
     </div>
 {% if not disable_add_params %}
-    <div class="row pt-2">
+    <div class="row pt-3">
         <div class="col">
             <button type="button" class="btn btn-sm btn-secondary"
                     onclick="ParamsTable.addEmptyParamsRow(this)">

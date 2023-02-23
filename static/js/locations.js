@@ -347,8 +347,8 @@ const Locations = {
             </p>
         </div>
     </div>
-    <div class="d-flex py-4 pl-1">
-        <div class="custom-input w-100-imp">
+    <div class="d-flex py-4">
+        <div class="custom-input w-100-imp displacement-ml-4">
             <p class="custom-input_desc font-semibold mb-1">Engine location</p>
             <select class="selectpicker bootstrap-select__b" data-style="btn" 
                 v-model="location_"
