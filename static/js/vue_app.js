@@ -10,6 +10,7 @@ const vueCoreApp = {
     },
     data() {
         return {
+            user: {},
             project_id: undefined,
             registered_components: {},
             custom_data: {}
