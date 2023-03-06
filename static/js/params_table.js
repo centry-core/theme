@@ -1,4 +1,43 @@
 var ParamsTable = {
+    checkboxFormatter (value, row, index, field) {
+        const isChecked = value.checked ? 'checked' : ''
+        return `
+            <label
+                class="mb-0 w-100 d-flex align-items-center custom-checkbox">
+                <input
+                    onchange="ParamsTable.updateCellCbx(this, '${index}', '${field}', ${value.title})" 
+                    ${isChecked}
+                    type="checkbox">
+                <span class="w-100 d-inline-block ml-3">${value.title}</span>
+            </label>
+        `
+    },
+    updateCellCbx: (el, index, field, title) => {
+        $(el.closest('table')).bootstrapTable(
+            'updateCell',
+            { index: +index, field: field, value: { title, checked: el.checked }}
+        )
+    },
+    checkboxFormatterSimple (value, row, index, field, edit_mode = true) {
+        const checked = value ? 'checked' : '';
+        const disabled = edit_mode ? '' : 'disabled';
+        return `
+            <label
+                class="mb-0 w-100 d-flex align-items-center custom-checkbox">
+                <input
+                    onchange="ParamsTable.updateCellCbxSimple(this, '${index}', '${field}')" 
+                    ${disabled}
+                    ${checked}
+                    type="checkbox">
+            </label>
+        `
+    },
+    updateCellCbxSimple: (el, index, field) => {
+        $(el.closest('table')).bootstrapTable(
+            'updateCell',
+            { index: +index, field: field, value: el.checked }
+        )
+    },
     dataTypeFormatter(value, row, index, field) {
         const is_disabled = row._type_class?.toLowerCase().includes('disabled')
         let options = is_disabled ? [value] : ['String', 'Number', 'List']
