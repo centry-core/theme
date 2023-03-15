@@ -1,0 +1,77 @@
+{% set disabled_keys = disabled_keys | default([]) -%}
+<!-- {% set hidden_columns = hidden_columns | default(['threshold']) -%} -->
+{% set disabled_columns = disabled_columns| default(['threshold']) %}
+{% set custom_formatters = custom_formatters | default({}) %}
+{% set disable_add_params = disable_add_params | default(True) %}
+
+<div class="section">
+    <div class="row mb-2">
+        <div class="col">
+            <p class="font-h5 font-bold">{{ caption | default("Default Caption") }}</p>
+            <p class="font-h6 font-weight-400">{{ description | default("Description") }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="test_parameters_error"></div>
+            <table class="table table-borderless params-table"
+                    {% if modal_id %} id="{{ modal_id }}_tresh_params" {% endif %}
+                   data-toggle="table"
+            >
+                <thead class="thead-light">
+                    <tr>
+                            <th scope="col" data-sortable="true" data-field="name"
+                                data-formatter="{{ custom_formatters.get('threshold', 'ThresholdParamsTable.thresholdTypeFormatter') }}"
+                                data-width="144" data-width-unit="px"
+                                {% if ('threshold' in disabled_columns) %} class="disabled" {% endif %}
+                            >
+                            THRESHOLD
+                            </th>
+                        <th scope="col" data-sortable="true" data-field="comparison"
+                            data-formatter="{{ custom_formatters.get('comparison', 'ThresholdParamsTable.comparisonTypeFormatter') }}"
+                        >
+                            COMPARISON
+                        </th>
+                        <th scope="col" data-sortable="true" data-field="value"
+                            data-formatter="{{ custom_formatters.get('value', 'ThresholdParamsTable.inputFormatter') }}"
+                        >
+                            VALUE
+                        </th>
+                        {% if not disable_add_params %}
+                            <th scope="col" data-field="action"
+                                data-formatter="{{ custom_formatters.get('action', 'ThresholdParamsTable.parametersDeleteFormatter') }}"
+                                data-width="56" data-width-unit="px"
+                            >&nbsp;</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in default_params | default([]) %}
+                    <tr>
+                        <td {% if (row.key in disabled_keys) %} class="disabled" {% endif %} >
+                            {{ row.name }}
+                        </td>
+                        <td>{{ row.comparison }}</td>
+                        <td >
+                            {{ row.value }}
+                        </td>
+                        {% if (row.key not in disabled_keys) %}
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% if not disable_add_params %}
+    <div class="row pt-2">
+        <div class="col">
+            <button type="button" class="btn btn-sm btn-secondary"
+                    onclick="ThresholdParamsTable.addEmptyParamsRow(this)">
+                <i class="fas fa-plus mr-2"></i>Add Threshold
+            </button>
+        </div>
+    </div>
+{% endif %}
+</div>
