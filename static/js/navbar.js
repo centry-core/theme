@@ -9,7 +9,7 @@ const NavbarCentry = {
         'is_admin_user',
     ],
     template: `
-<nav class="navbar navbar-expand main-nav" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
+<nav class="navbar navbar-expand main-nav justify-content-between" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
     <div class="d-flex chapters">
         <a class="logo" href="/">
             <img :src="logo_url" alt="centry">
@@ -24,7 +24,7 @@ const NavbarCentry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100" style="overflow-x: scroll; padding-top: 10px">
+    <ul class="navbar-nav w-100" style="overflow-x: scroll; padding-top: 10px" v-if="!isDeveloperMode">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
