@@ -1,11 +1,62 @@
 var ParamsTable = {
+    tagFormatter(value, row, index, field) {
+        if (!row.tags.length) return;
+
+        if (row.tags.length < 3) {
+            const listTagsBtn = row.tags.map(tag =>
+                `<button class="btn btn-xs btn-painted mr-1 rounded-pill"
+                style="--text-color: ${tag.color}; --brd-color: ${tag.color}">${tag.title}
+            </button>`
+            )
+            return listTagsBtn.join('');
+        }
+
+        const firstTag = row.tags[0];
+        const firstTagBtn = `<button class="btn btn-xs btn-painted mr-1 rounded-pill"
+            style="--text-color: ${firstTag.color}; --brd-color: ${firstTag.color}">${firstTag.title}
+        </button>`
+
+        const listTagsInfo = row.tags.slice(1).map(tag =>
+            `<div class="my-1 mx-3">
+                <button class="btn btn-xs btn-painted rounded-pill pl-2.5 pr-2.5" style="--text-color: ${tag.color }; --brd-color: ${tag.color}">
+                    ${tag.title}
+                </button>
+            </div>`).join("");
+        const sizeTags = row.tags.slice(1).length;
+        const randomId = `listtooltip_${new Date() + Math.floor(Math.random() * 1000)}`
+        const infoTags = `<button
+                                class="btn btn-xs btn-painted btn-painted__size rounded-pill px-2"
+                                style="--text-color: #757F99; --brd-color: #EAEDEF"
+                                data-toggle="${randomId}"
+                                data-html="true"
+                                data-offset="80% 20%"
+                                title="true">
+                                + ${sizeTags}
+                          </button>`
+
+        setTimeout(() => {
+            const attrTooltip = `[data-toggle="${randomId}"]`
+            $(attrTooltip).tooltip({
+                sanitize: false,
+                boundary: 'body',
+                template: `
+                    <div class="tooltip tooltip__custom" role="tooltip">
+                        <div class="tooltip-inner__custom d-flex flex-column">
+                            ${listTagsInfo}
+                        </div>
+                    </div>
+                `
+            })
+        },0);
+        return `${firstTagBtn}${infoTags}`
+    },
     checkboxFormatter (value, row, index, field) {
         const isChecked = value.checked ? 'checked' : ''
         return `
             <label
                 class="mb-0 w-100 d-flex align-items-center custom-checkbox">
                 <input
-                    onchange="ParamsTable.updateCellCbx(this, '${index}', '${field}', ${value.title})" 
+                    onchange="ParamsTable.updateCellCbx(this, '${index}', '${field}', '${value.title}')" 
                     ${isChecked}
                     type="checkbox">
                 <span class="w-100 d-inline-block ml-3">${value.title}</span>
