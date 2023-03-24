@@ -62,7 +62,7 @@ class Method:  # pylint: disable=E1101,R0903
             #
             required_permissions = mode_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 mode = {
                     "key": mode_key,
                     **mode_attrs
@@ -91,6 +91,7 @@ class Method:  # pylint: disable=E1101,R0903
         if mode not in self.modes or mode not in self.mode_sections:
             return result
         #
+        log.info(f"{self.modes=} {self.mode_sections=}")
         current_permissions = auth.resolve_permissions()
         location_result = defaultdict(list)
         #
@@ -100,7 +101,7 @@ class Method:  # pylint: disable=E1101,R0903
             #
             required_permissions = section_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 #
                 item = {
                     "key": section_key,
@@ -139,7 +140,7 @@ class Method:  # pylint: disable=E1101,R0903
             #
             required_permissions = subsection_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 item = {
                     "key": subsection_key,
                     **subsection_attrs
