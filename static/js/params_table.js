@@ -1,11 +1,11 @@
 var ParamsTable = {
     tagFormatter(value, row, index, field) {
-        if (!row.tags.length) return;
+        if (!row.tags.length) return '';
 
         if (row.tags.length < 3) {
             const listTagsBtn = row.tags.map(tag =>
                 `<button class="btn btn-xs btn-painted mr-1 rounded-pill"
-                style="--text-color: ${tag.color}; --brd-color: ${tag.color}">${tag.title}
+                style="--text-color: ${tag.hex}; --brd-color: ${tag.hex}">${tag.title}
             </button>`
             )
             return listTagsBtn.join('');
@@ -13,12 +13,12 @@ var ParamsTable = {
 
         const firstTag = row.tags[0];
         const firstTagBtn = `<button class="btn btn-xs btn-painted mr-1 rounded-pill"
-            style="--text-color: ${firstTag.color}; --brd-color: ${firstTag.color}">${firstTag.title}
+            style="--text-color: ${firstTag.hex}; --brd-color: ${firstTag.hex}">${firstTag.title}
         </button>`
 
         const listTagsInfo = row.tags.slice(1).map(tag =>
             `<div class="my-1 mx-3">
-                <button class="btn btn-xs btn-painted rounded-pill pl-2.5 pr-2.5" style="--text-color: ${tag.color }; --brd-color: ${tag.color}">
+                <button class="btn btn-xs btn-painted rounded-pill pl-2.5 pr-2.5" style="--text-color: ${tag.hex }; --brd-color: ${tag.hex}">
                     ${tag.title}
                 </button>
             </div>`).join("");
