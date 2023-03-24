@@ -67,8 +67,8 @@ const NavbarCentry = {
             <i class="icon__16x16 icon-user"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
-            <h6 class="dropdown-header">[[ user.name ]]</h6>
-            <h9 class="dropdown-header">[[ user.email ]]</h9>
+            <span class="dropdown-item-text px-3 font-h5">[[ user.name ]]</span>
+            <span class="dropdown-item-text px-3 font-h5">[[ user.email ]]</span>
             <div v-if="modes.length > 0" class="dropdown-divider"></div>
             <div v-if="modes.length > 0" class="bootstrap-select">
               <a
@@ -81,7 +81,6 @@ const NavbarCentry = {
             </div>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
-
         </div>
     </div>
 </nav>
