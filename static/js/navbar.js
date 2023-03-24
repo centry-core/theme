@@ -1,44 +1,4 @@
-// var projectSelectId = '#projectSelect';
-
-
-// function getProjectNameFromId(projectId) {
-//     return $(projectSelectId).find(`[project_id=${projectId}]`).val()
-// }
-
-
-// function setSelectedProjectOnPage(projectId) {
-//
-//     $(projectSelectId).selectpicker('val', getProjectNameFromId(projectId))
-// }
-
-
-// async function loadProject() {
-//     const projectId = await getSelectedProjectIdFromBackend();
-//     localStorage.setItem(selectedProjectLocalStorageKey, projectId);
-//     setSelectedProjectOnPage(projectId);
-// };
-
-
-// async function setProject(projectId) {
-//     localStorage.setItem(selectedProjectLocalStorageKey, projectId)
-//     await setSelectedProjectOnBackend(projectId)
-// };
-
-//
-// $(document).ready(() => {
-//     // Chapter dropdown init
-//     $('#chapterSelect').on('change', event => {
-//         location.search = $(event.target).find('option:selected').attr('data-href')
-//     })
-//
-//     // Project dropdown init
-//     // loadProject();
-//     $(projectSelectId).on('change', event => {
-//         // setProject($(event.target).find(':selected').attr('project_id')).then(() => location.reload())
-//     });
-// })
-
-const Navbar_centry = {
+const NavbarCentry = {
     delimiters: ['[[', ']]'],
     props: [
         'instance_name',
@@ -74,15 +34,18 @@ const Navbar_centry = {
             </a>
         </li>
     </ul>
+    
     <div>
-         <select class="selectpicker dropdown-menu__simple font-weight-400 mr-2"
-             data-style="btn"
-             data-dropdown-align-right="true"
-             name="project_select"
-             id="project_select"
-             v-if="projects.length > 0"
-             :value="active_project"
-             @change="handle_project_change"
+<!--      class="selectpicker dropdown-menu__simple font-weight-400 mr-2"     -->
+         <select 
+            class="font-weight-400 mr-2"
+            data-style="btn"
+            data-dropdown-align-right="true"
+            name="project_select"
+            id="project_select"
+            v-if="is_project_mode"
+            :value="active_project"
+            @change="handle_project_change"
          >
              <option v-for="project in projects"
                 :value="project.id"
@@ -92,7 +55,11 @@ const Navbar_centry = {
             </option>
         </select>
     </div>
-
+    
+    <div>
+        [[ active_mode ]]
+    </div>
+    
     <div class="dropdown ml-1 mr-3">
         <button class="btn btn-xs btn-table btn-icon__xs" type="button"
                 id="userDropDown" data-toggle="dropdown"
@@ -107,7 +74,7 @@ const Navbar_centry = {
               <a
                 v-for="mode in modes"
                 :href="mode.href"
-                :class="{'dropdown-item': true, active: mode.key == active_mode }"
+                :class="{'dropdown-item': true, active: mode.key === active_mode }"
               >
                 [[ mode.name ]]
               </a>
@@ -126,17 +93,28 @@ const Navbar_centry = {
         }
     },
     async mounted() {
-        await this.fetch_projects()
         this.isAdmin = this.is_admin_user
+    },
+    computed: {
+        is_project_mode() {
+            return ['default', 'project'].includes(this.active_mode)
+        }
     },
     watch: {
         projects(newValue, oldValue) {
             this.$nextTick(() => $('#project_select').selectpicker('refresh'))
+        },
+        active_mode(newValue) {
+            this.$nextTick(async () => {
+                if (this.is_project_mode) {
+                    await this.fetch_projects()
+                }
+            })
         }
     },
     methods: {
         get_section_href(section_key) {
-            if (this.active_mode == "default" || this.active_mode == "project") {
+            if (this.is_project_mode) {
                 return `/-/${section_key}`
             } else if (this.active_parameter === null) {
                 return `/~/${this.active_mode}/~/${section_key}`
@@ -158,13 +136,14 @@ const Navbar_centry = {
             location.href = '/forward-auth/logout'
         },
         async fetch_projects() {
-            if (this.active_mode == "default" || this.active_mode == "project") {
-                const resp = await fetch('/api/v1/projects/project/')
-                if (resp.ok) {
-                    const data = await resp.json()
-                    this.projects = data
-                    // $('#project_select').selectpicker('refresh')
-                }
+            const api_url = this.$root.build_api_url('projects', 'project', {
+                trailing_slash: true
+            })
+            // todo: use api_url
+            // const resp = await fetch(api_url)
+            const resp = await fetch('/api/v1/projects/project/')
+            if (resp.ok) {
+                this.projects = await resp.json()
             }
         },
         async handle_project_change(event) {
@@ -172,14 +151,14 @@ const Navbar_centry = {
             if (!new_id) return
 
             // get current plugins list
-            const newProject = this.projects.filter(proj => proj.id == new_id)[0]
+            // const newProject = this.projects.filter(proj => proj.id === new_id)[0]
+            const newProject = this.projects.find(proj => proj.id.toString() === new_id.toString())
             const newSections = newProject.plugins
             const currentSection = this.$refs.sectionSelect.value
-            const notAdmin = !this.is_admin_user
 
-            withinSections = newSections.filter(section => section == currentSection).length > 0
-            if (!withinSections && newSections.length>0 && notAdmin){
-                newSection = newSections[0]
+            const withinSections = newSections.filter(section => section === currentSection).length > 0
+            if (!withinSections && newSections.length > 0 && !this.isAdmin) {
+                const newSection = newSections[0]
                 location.href = this.get_section_href(newSection)
                 this.$refs.sectionSelect.value = newSection
             } else {
@@ -189,4 +168,4 @@ const Navbar_centry = {
     }
 }
 
-register_component('Navbar', Navbar_centry)
+register_component('Navbar', NavbarCentry)

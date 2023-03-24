@@ -13,10 +13,11 @@
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
         active_section="{{ g.theme.active_section }}"
         active_subsection="{{ g.theme.active_subsection }}"
-        active_mode="{{ g.theme.active_mode }}"
+        :active_mode="mode"
         :active_parameter='{{ g.theme.active_parameter | tojson }}'
 
         :active_project="project_id"
+
 >
 </Navbar>
 

@@ -17,14 +17,24 @@
 {% endif %}
 
 <body>
-<div id="vue_mountpoint" style="padding-top: 60px">
+
+<div id="vue_mountpoint" style="padding-top: 60px"
+     data-project-id="{{ tools.session_project.get() | string }}"
+     data-mode="{{ g.theme.active_mode | string }}"
+>
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}
+        <br />
+        active_mode: {{ g.theme.active_mode }}
+        <br />
+        vue active_mode: [[ mode ]]
+        <br />
         {% block content %}
             {{ template_slot('content', state) | safe }}
             {% if prefix %}{{ template_slot('%scontent' | format(prefix), state) | safe }}{% endif %}
         {% endblock %}
     {% endblock %}
+
 </div>
 
 {% block all_scripts %}
