@@ -1,43 +1,3 @@
-// var projectSelectId = '#projectSelect';
-
-
-// function getProjectNameFromId(projectId) {
-//     return $(projectSelectId).find(`[project_id=${projectId}]`).val()
-// }
-
-
-// function setSelectedProjectOnPage(projectId) {
-//
-//     $(projectSelectId).selectpicker('val', getProjectNameFromId(projectId))
-// }
-
-
-// async function loadProject() {
-//     const projectId = await getSelectedProjectIdFromBackend();
-//     localStorage.setItem(selectedProjectLocalStorageKey, projectId);
-//     setSelectedProjectOnPage(projectId);
-// };
-
-
-// async function setProject(projectId) {
-//     localStorage.setItem(selectedProjectLocalStorageKey, projectId)
-//     await setSelectedProjectOnBackend(projectId)
-// };
-
-//
-// $(document).ready(() => {
-//     // Chapter dropdown init
-//     $('#chapterSelect').on('change', event => {
-//         location.search = $(event.target).find('option:selected').attr('data-href')
-//     })
-//
-//     // Project dropdown init
-//     // loadProject();
-//     $(projectSelectId).on('change', event => {
-//         // setProject($(event.target).find(':selected').attr('project_id')).then(() => location.reload())
-//     });
-// })
-
 const Navbar_centry = {
     delimiters: ['[[', ']]'],
     props: [
@@ -49,7 +9,7 @@ const Navbar_centry = {
         'is_admin_user',
     ],
     template: `
-<nav class="navbar navbar-expand main-nav" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
+<nav class="navbar navbar-expand main-nav justify-content-between" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
     <div class="d-flex chapters">
         <a class="logo" href="/">
             <img :src="logo_url" alt="centry">
@@ -64,7 +24,7 @@ const Navbar_centry = {
         </select>
     </div>
 
-    <ul class="navbar-nav w-100" style="overflow-x: scroll; padding-top: 10px">
+    <ul class="navbar-nav w-100" style="overflow-x: scroll; padding-top: 10px" v-if="!isDeveloperMode">
         <li class="nav-item active" v-for="subsection in subsections" :key="subsection.key">
             <a :href="get_subsection_href(subsection.key)"
                :class="{'nav-link': true, active: subsection.key === active_subsection }"
@@ -100,21 +60,21 @@ const Navbar_centry = {
             <i class="icon__16x16 icon-user"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
-            <h6 class="dropdown-header">[[ user.name ]]</h6>
-            <h9 class="dropdown-header">[[ user.email ]]</h9>
+            <span class="dropdown-item-text px-3 font-h5">[[ user.name ]]</span>
+            <span class="dropdown-item-text px-3 font-h5">[[ user.email ]]</span>
             <div v-if="modes.length > 0" class="dropdown-divider"></div>
-            <div v-if="modes.length > 0" class="bootstrap-select">
-              <a
-                v-for="mode in modes"
-                :href="mode.href"
-                :class="{'dropdown-item': true, active: mode.key == active_mode }"
-              >
-                [[ mode.name ]]
-              </a>
-            </div>
+            <template v-if="modes.length > 0">
+                <a
+                    v-for="mode in modes"
+                    :href="mode.href"
+                    class="dropdown-item"
+                >
+                    <span class="d-inline-block">[[ mode.name ]]</span>
+                    <i v-if="mode.key == active_mode" class="icon__16x16 icon-check__16"></i>
+                </a>
+            </template>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
-
         </div>
     </div>
 </nav>
@@ -128,6 +88,11 @@ const Navbar_centry = {
     async mounted() {
         await this.fetch_projects()
         this.isAdmin = this.is_admin_user
+    },
+    computed: {
+      isDeveloperMode() {
+          return this.active_mode === 'developer';
+      }
     },
     watch: {
         projects(newValue, oldValue) {
