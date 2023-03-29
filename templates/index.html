@@ -24,11 +24,6 @@
 >
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}
-        <br />
-        active_mode: {{ g.theme.active_mode }}
-        <br />
-        vue active_mode: [[ mode ]]
-        <br />
         {% block content %}
             {{ template_slot('content', state) | safe }}
             {% if prefix %}{{ template_slot('%scontent' | format(prefix), state) | safe }}{% endif %}
