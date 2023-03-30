@@ -1,7 +1,13 @@
 from pylon.core.tools import web, log
 from pydantic import parse_obj_as
 
-from ..models.pd.sources import SourceGitHTTPS, SourceGitSSH, SourceArtifact, SourceLocal
+from ..models.pd.sources import (
+    SourceGitHTTPS, 
+    SourceGitSSH, 
+    SourceArtifact, 
+    SourceLocal,
+    SourceContainer,
+)
 
 from tools import rpc_tools
 
@@ -14,7 +20,8 @@ class RPC:
             'git_ssh': SourceGitSSH,
             'git_https': SourceGitHTTPS,
             'artifact': SourceArtifact,
-            'local': SourceLocal
+            'local': SourceLocal,
+            'container': SourceContainer,
         }
         try:
             model = _validation_map[value['name']]

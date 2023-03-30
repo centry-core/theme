@@ -31,6 +31,12 @@ const SourceCard = {
                 input_mapping: {
                     path: '#local_file'
                 },
+            },
+            container: {
+                tab_id: 'nav-container-image-tab',
+                input_mapping: {
+                    image_name: '#container_image'
+                },
             }
         }
         const get_active_tab = (active_tab_id = undefined) => {
@@ -63,10 +69,20 @@ const SourceCard = {
                 Object.entries(data).forEach(([k, v]) => {
                     if (k !== 'name') {
                         const input_id = tab_mapping[data.name]?.input_mapping[k]
+                        if (k == "file" || k == "file_meta"){
+                            if (k == "file"){
+                                $('#source-current-file').text(v)
+                            }   
+                            return
+                        }
                         input_id && el.find(input_id).val(v)
                         !input_id && console.error('Unknown source:', data.name, k)
                     }
                 })
+
+                if (data.name.includes('git')){
+                    el.find('a#nav-git-tab').tab('show')
+                }
                 el.find('a#' + tab_mapping[data.name]?.tab_id).tab('show')
             },
             clear: () => {
@@ -78,7 +94,10 @@ const SourceCard = {
                 el.find('input#repo_pass').val('')
                 el.find('input#repo_ssh_pass').val('')
                 el.find('input#file').val('')
+                el.find('span#source-current-file').text('Nothing selected')
                 el.find('input#local_file').val('')
+                el.find('input#container_image').val('')
+                el.find('a#nav-git-tab').tab('show')
                 el.find('a#' + tab_mapping['git_ssh']?.tab_id).tab('show')
             },
             setError: data => {

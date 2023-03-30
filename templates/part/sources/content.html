@@ -1,4 +1,4 @@
-{% set chapters = chapters | default(["git", "artifact", "local"]) -%}
+{% set chapters = chapters | default(["git", "artifact", "local", "container"]) -%}
 {% set container_id = container_id | default("source_card") -%}
 
 <div class="card card-x card-source" id="{{ container_id }}">
@@ -16,6 +16,10 @@
             {% if 'local' in chapters %}
                 <a class="nav-item nav-link" id="nav-local-file-tab" data-toggle="tab" href="#nav-local-file" role="tab"
                    aria-controls="nav-local-file" aria-selected="false">Local</a>
+            {% endif %}
+            {% if 'container' in chapters %}
+                <a class="nav-item nav-link" id="nav-container-image-tab" data-toggle="tab" href="#nav-container-image" role="tab"
+                   aria-controls="nav-container-image" aria-selected="false">Container</a>
             {% endif %}
         </div>
     </nav>
@@ -100,6 +104,8 @@
                             <h13>Please upload .zip file with your tests. Packaging guidelines.</h13>
                             <input type="file" class="form-control form-control-alternative" id="file" lang="en"
                                    multiple>
+                            
+                            <p> Current File: <span id="source-current-file">Nothing selected</span></p>
                             <div class="invalid-feedback" id="file_error"></div>
                         </div>
                     </div>
@@ -116,6 +122,20 @@
                             <input type="text" id="local_file" class="form-control form-control-alternative"
                                    placeholder="e.g. /tmp/test_code">
                             <div class="invalid-feedback" id="local_file_error"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if 'container' in chapters %}
+            <div class="tab-pane fade mt-2" id="nav-container-image" role="tabpanel" aria-labelledby="nav-container-image-tab">
+                <div class="carrier-sast-target">
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-control-label" for="local_file">Image name</label>
+                            <input type="text" id="container_image" class="form-control form-control-alternative"
+                                   placeholder="e.g. image:tag">
+                            <div class="invalid-feedback" id="container_image_error"></div>
                         </div>
                     </div>
                 </div>
