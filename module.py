@@ -21,6 +21,7 @@ import traceback
 import uuid
 from collections import defaultdict
 
+import flask
 from flask import redirect, url_for, g, request, Response
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
@@ -120,6 +121,7 @@ class Module(module.ModuleModel):
             "Configuration",
             kind="holder",
             location="left",
+            permissions=["configuration"],
             weight=100,
         )
 
@@ -208,7 +210,7 @@ class Module(module.ModuleModel):
         """ Get sections visible for current user """
         result = list()
         #
-        current_permissions = auth.resolve_permissions()
+        current_permissions = auth.resolve_permissions(mode=flask.g.theme.active_mode)
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
