@@ -5,7 +5,7 @@ const vueCoreApp = {
         return {
             user: {},
             project_id: undefined,
-            mode: '',
+            mode: undefined,
             registered_components: {},
             custom_data: {}
         }
