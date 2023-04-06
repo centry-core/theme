@@ -244,7 +244,7 @@ class Module(module.ModuleModel):
         #
         current_permissions = auth.resolve_permissions()
         #
-        log.info(f"{self.subsections=} {current_permissions=}")
+        # log.info(f"{self.subsections=} {current_permissions=}")
         for subsection_key, subsection_attrs in self.subsections[section].items():
             if subsection_attrs.get("hidden", False):
                 continue
