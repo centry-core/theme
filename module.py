@@ -242,9 +242,9 @@ class Module(module.ModuleModel):
         if section not in self.subsections:
             return result
         #
-        current_permissions = auth.resolve_permissions()
+        current_permissions = auth.resolve_permissions(mode=g.theme.active_mode)
         #
-        # log.info(f"{self.subsections=} {current_permissions=}")
+        log.info(f"{self.subsections[section].items()=}")
         for subsection_key, subsection_attrs in self.subsections[section].items():
             if subsection_attrs.get("hidden", False):
                 continue
@@ -320,7 +320,9 @@ class Module(module.ModuleModel):
         section_permissions = section_attrs.get("permissions", [])
 
         if section_permissions and not auth.has_access(
-                auth.resolve_permissions(), section_permissions):
+                auth.resolve_permissions(mode=g.theme.active_mode),
+                section_permissions):
+            log.info(f"Section {section} access denied")
             return redirect(url_for("theme.access_denied"))
 
         #
@@ -371,7 +373,7 @@ class Module(module.ModuleModel):
         subsection_permissions = subsection_attrs.get("permissions", [])
 
         if subsection_permissions and not auth.has_access(
-                auth.resolve_permissions(), subsection_permissions
+                auth.resolve_permissions(mode=g.theme.active_mode), subsection_permissions
         ):
             return redirect(url_for("theme.access_denied"))
 
@@ -421,7 +423,7 @@ class Module(module.ModuleModel):
         log.info(f"{page_attrs=}")
         #
         if page_permissions and not auth.has_access(
-                auth.resolve_permissions(), page_permissions):
+                auth.resolve_permissions(mode=g.theme.active_mode), page_permissions):
             return redirect(url_for("theme.access_denied"))
 
         if page_kind == "route":
