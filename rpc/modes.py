@@ -1,5 +1,5 @@
 from pylon.core.tools import web, log
-from tools import rpc_tools
+from tools import rpc_tools, auth
 
 
 class RPC:
@@ -14,6 +14,7 @@ class RPC:
             **kvargs,
     ):
         permissions = permissions or []
+        auth.update_local_permissions(permissions)
         if key in self.modes:
             raise ValueError(f"Mode is already present: {key}")
         #
@@ -66,6 +67,7 @@ class RPC:
             self.mode_sections[mode] = dict()
         #
         permissions = permissions or []
+        auth.update_local_permissions(permissions)
         if key in self.mode_sections[mode]:
             raise ValueError(f"Section is already present: {key}")
         #
@@ -107,6 +109,7 @@ class RPC:
             self.mode_subsections[mode] = dict()
         #
         permissions = permissions or []
+        auth.update_local_permissions(permissions)
         if section not in self.mode_subsections[mode]:
             self.mode_subsections[mode][section] = dict()
         #
@@ -153,6 +156,9 @@ class RPC:
         if section not in self.mode_pages[mode]:
             self.mode_pages[mode][section] = dict()
         #
+        permissions = kvargs.get("permissions", [])
+        auth.update_local_permissions(permissions)
+
         if subsection not in self.mode_pages[mode][section]:
             self.mode_pages[mode][section][subsection] = dict()
         #

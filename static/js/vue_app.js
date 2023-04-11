@@ -1,20 +1,26 @@
 const vueCoreApp = {
     delimiters: ['[[', ']]'],
     components: {},
-    mounted() {
-        this.patchActiveProject()
-        activeProject.get().then(id => {
-            this.project_id = id
-        })
-        console.info('VueApp mounted')
-    },
     data() {
         return {
             user: {},
             project_id: undefined,
+            mode: undefined,
             registered_components: {},
             custom_data: {}
         }
+    },
+    mounted() {
+        this.mode = this.$el.parentElement.dataset.mode
+        // this.project_id = this.mode === 'administration' ? this.mode : this.$el.parentElement.dataset.projectId
+        this.project_id = parseInt(this.$el.parentElement.dataset.projectId)
+
+        this.patchActiveProject()
+        // activeProject.get().then(id => {
+        //     this.project_id = id
+        // })
+        console.info('VueApp mounted')
+        $(() => document.dispatchEvent(new Event('vue_init')))
     },
     watch: {
         async project_id(newValue, oldValue) {
@@ -55,6 +61,9 @@ const vueCoreApp = {
                 this.project_id = null
                 await memoized.delete(make_request)
             }
+        },
+        build_api_url(plugin, file_name, options = {}) {
+            return `/api/v${options.api_version || 1}/${plugin}/${file_name}/${options.mode || this.mode}${options.trailing_slash ? '/' : ''}`
         }
     }
 }
@@ -102,5 +111,4 @@ window.vueApp.config.globalProperties.window = window
 $(() => {
     window.vueVm = vueApp.mount('#vue_mountpoint')
     window.V = window.vueVm
-    document.dispatchEvent(new Event('vue_init'))
 })

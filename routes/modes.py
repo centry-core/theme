@@ -52,6 +52,7 @@ class Route:  # pylint: disable=E1101,R0903
     @web.route("/~/<mode>/~/<parameter>/~/", endpoint="route_mode_index_with_parameter")
     def _route_mode_index(self, mode, parameter):  # pylint: disable=R0201
         """ Index route """
+        log.info(f"Route: mode index {mode}")
         if mode not in self.modes:
             return redirect(url_for("theme.access_denied"))
         if mode not in self.mode_landing:
@@ -60,6 +61,7 @@ class Route:  # pylint: disable=E1101,R0903
         g.theme.active_mode = mode
         g.theme.active_parameter = parameter
         #
+        log.info(f"{mode=}")
         landing_kind = self.mode_landing[mode].get("kind", "default")
         #
         if landing_kind == "holder":
@@ -103,6 +105,9 @@ class Route:  # pylint: disable=E1101,R0903
     @web.route("/~/<mode>/~/<parameter>/~/<section>/", endpoint="route_mode_section_with_parameter")
     def _route_mode_section(self, mode, parameter, section):  # pylint: disable=R0201
         """ Section route """
+        log.info("Route mode section: %s %s %s", mode, parameter, section)
+        log.info(f"{mode=}")
+
         if mode not in self.modes:
             return redirect(url_for("theme.access_denied"))
         if mode not in self.mode_sections:
@@ -161,6 +166,9 @@ class Route:  # pylint: disable=E1101,R0903
     @web.route("/~/<mode>/~/<parameter>/~/<section>/<subsection>/", endpoint="route_mode_section_subsection_with_parameter")
     def _route_mode_section_subsection(self, mode, parameter, section, subsection):  # pylint: disable=R0201
         """ Subsection route """
+        log.info("Route mode section subsection: %s %s %s %s", mode, parameter, section, subsection)
+        log.info(f"{mode=}")
+
         if mode not in self.modes:
             return redirect(url_for("theme.access_denied"))
         if mode not in self.mode_subsections:
@@ -206,6 +214,7 @@ class Route:  # pylint: disable=E1101,R0903
     @web.route("/~/<mode>/~/<parameter>/~/<section>/<subsection>/<page>", endpoint="route_mode_section_subsection_page_with_parameter")
     def _route_mode_section_subsection_page(self, mode, parameter, section, subsection, page):  # pylint: disable=R0201
         """ Page route """
+        log.info("Route mode section subsection page: %s %s %s %s %s", mode, parameter, section, subsection, page)
         if mode not in self.modes:
             return redirect(url_for("theme.access_denied"))
         if mode not in self.mode_pages:

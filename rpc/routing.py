@@ -1,5 +1,5 @@
 from pylon.core.tools import web, log
-from tools import rpc_tools
+from tools import rpc_tools, auth
 
 
 class RPC:
@@ -34,6 +34,7 @@ class RPC:
             **kvargs,
     ):
         permissions = permissions or []
+        auth.update_local_permissions(permissions)
         if key in self.sections:
             raise ValueError(f"Section is already present: {key}")
         #
@@ -66,6 +67,7 @@ class RPC:
             **kvargs,
     ):
         permissions = permissions or []
+        auth.update_local_permissions(permissions)
         if section not in self.subsections:
             self.subsections[section] = dict()
         #
@@ -100,6 +102,8 @@ class RPC:
             kind="slot",
             **kvargs,
     ):
+        permissions = kvargs.get("permissions", [])
+        auth.update_local_permissions(permissions)
         if section not in self.pages:
             self.pages[section] = dict()
         #
@@ -134,4 +138,3 @@ class RPC:
             )
         #
         self.pages[section][subsection].pop(key)
-

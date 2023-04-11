@@ -19,6 +19,7 @@
 
 from collections import defaultdict
 
+import flask
 from flask import g
 
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
@@ -53,7 +54,6 @@ class Method:  # pylint: disable=E1101,R0903
     def _get_modes(  # pylint: disable=R0913
             self,
     ):
-        current_permissions = auth.resolve_permissions()
         #
         modes = list()
         for mode_key, mode_attrs in self.modes.items():
@@ -61,8 +61,9 @@ class Method:  # pylint: disable=E1101,R0903
                 continue
             #
             required_permissions = mode_attrs.get("permissions", [])
+            current_permissions = auth.resolve_permissions(mode=mode_key)
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 mode = {
                     "key": mode_key,
                     **mode_attrs
@@ -91,7 +92,8 @@ class Method:  # pylint: disable=E1101,R0903
         if mode not in self.modes or mode not in self.mode_sections:
             return result
         #
-        current_permissions = auth.resolve_permissions()
+        log.info(f"{self.modes=} {self.mode_sections=}")
+        current_permissions = auth.resolve_permissions(mode)
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.mode_sections[mode].items():
@@ -100,7 +102,7 @@ class Method:  # pylint: disable=E1101,R0903
             #
             required_permissions = section_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 #
                 item = {
                     "key": section_key,
@@ -131,7 +133,7 @@ class Method:  # pylint: disable=E1101,R0903
         if section not in self.mode_subsections[mode]:
             return result
         #
-        current_permissions = auth.resolve_permissions()
+        current_permissions = auth.resolve_permissions(mode)
         #
         for subsection_key, subsection_attrs in self.mode_subsections[mode][section].items():
             if subsection_attrs.get("hidden", False):
@@ -139,7 +141,7 @@ class Method:  # pylint: disable=E1101,R0903
             #
             required_permissions = subsection_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 item = {
                     "key": subsection_key,
                     **subsection_attrs

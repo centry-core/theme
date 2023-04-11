@@ -21,6 +21,7 @@ import traceback
 import uuid
 from collections import defaultdict
 
+import flask
 from flask import redirect, url_for, g, request, Response
 from pylon.core.tools import log, web, module  # pylint: disable=E0611,E0401
 from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
@@ -30,6 +31,7 @@ import tools  # pylint: disable=E0401
 from tools import auth  # pylint: disable=E0401
 
 from .models.pd.google_analytics import GAConfiguration
+
 
 class Module(module.ModuleModel):
     """ Pylon module """
@@ -119,6 +121,7 @@ class Module(module.ModuleModel):
             "Configuration",
             kind="holder",
             location="left",
+            permissions=["configuration"],
             weight=100,
         )
 
@@ -177,16 +180,14 @@ class Module(module.ModuleModel):
         """ De-init module """
         log.info('De-initializing module')
 
-
     def is_current_user_admin(self) -> bool:
         if g.auth.id == "-":
             return False
         current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
             g.auth.id,
-            scope_id = 1
+            scope_id=1
         )
         return 'global_admin' in current_perms
-
 
     def get_visible_plugins(self) -> list:
         sections = self.get_visible_sections()
@@ -205,12 +206,11 @@ class Module(module.ModuleModel):
         plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
         return plugins
 
-
     def get_visible_sections(self) -> list:
         """ Get sections visible for current user """
         result = list()
         #
-        current_permissions = auth.resolve_permissions()
+        current_permissions = auth.resolve_permissions(mode=flask.g.theme.active_mode)
         location_result = defaultdict(list)
         #
         for section_key, section_attrs in self.sections.items():
@@ -219,7 +219,7 @@ class Module(module.ModuleModel):
             #
             required_permissions = section_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 #
                 item = {
                     "key": section_key,
@@ -242,15 +242,16 @@ class Module(module.ModuleModel):
         if section not in self.subsections:
             return result
         #
-        current_permissions = auth.resolve_permissions()
+        current_permissions = auth.resolve_permissions(mode=g.theme.active_mode)
         #
+        log.info(f"{self.subsections[section].items()=}")
         for subsection_key, subsection_attrs in self.subsections[section].items():
             if subsection_attrs.get("hidden", False):
                 continue
             #
             required_permissions = subsection_attrs.get("permissions", [])
             #
-            if set(required_permissions).issubset(set(current_permissions)):
+            if auth.has_access(current_permissions, required_permissions):
                 item = {
                     "key": subsection_key,
                     **subsection_attrs
@@ -275,11 +276,11 @@ class Module(module.ModuleModel):
     def index(self):  # pylint: disable=R0201
         """ Index route """
         landing_kind = self.landing.get("kind", "default")
-        # log.info('Index landing kind %s', landing_kind)
+        log.info('Index landing kind %s', landing_kind)
         #
         if landing_kind == "holder":
             sections = self.get_visible_sections()
-            # log.info('Index holder sections %s', sections)
+            log.info('Index holder sections %s', sections)
             if sections:
                 return redirect(
                     url_for(
@@ -310,13 +311,20 @@ class Module(module.ModuleModel):
     def route_section(self, section):  # pylint: disable=R0201
         """ Section route """
         g.theme.active_section = section
-
         #
         if section not in self.sections:
             return redirect(url_for("theme.access_denied"))
         #
         section_attrs = self.sections[section]
         section_kind = section_attrs.get("kind", "default")
+        section_permissions = section_attrs.get("permissions", [])
+
+        if section_permissions and not auth.has_access(
+                auth.resolve_permissions(mode=g.theme.active_mode),
+                section_permissions):
+            log.info(f"Section {section} access denied")
+            return redirect(url_for("theme.access_denied"))
+
         #
         if section_kind == "holder":
             subsections = self.get_visible_subsections(section)
@@ -353,6 +361,7 @@ class Module(module.ModuleModel):
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
+        log.info(f"{self.subsections=}")
         if section not in self.subsections:
             return redirect(url_for("theme.access_denied"))
         #
@@ -361,6 +370,13 @@ class Module(module.ModuleModel):
         #
         subsection_attrs = self.subsections[section][subsection]
         subsection_kind = subsection_attrs.get("kind", "default")
+        subsection_permissions = subsection_attrs.get("permissions", [])
+
+        if subsection_permissions and not auth.has_access(
+                auth.resolve_permissions(mode=g.theme.active_mode), subsection_permissions
+        ):
+            return redirect(url_for("theme.access_denied"))
+
         #
         if subsection_kind == "route":
             return redirect(
@@ -385,11 +401,13 @@ class Module(module.ModuleModel):
         return redirect(url_for("theme.access_denied"))
 
     @web.route("/-/<section>/<subsection>/<page>")
-    def route_section_subsection_page(self, section, subsection, page):  # pylint: disable=R0201
+    def route_section_subsection_page(self, section, subsection, page
+    ):  # pylint: disable=R0201
         """ Page route """
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
+        log.info(f"{self.pages=}")
         if section not in self.pages:
             return redirect(url_for("theme.access_denied"))
         #
@@ -401,7 +419,13 @@ class Module(module.ModuleModel):
         #
         page_attrs = self.pages[section][subsection][page]
         page_kind = page_attrs.get("kind", "default")
+        page_permissions = page_attrs.get("permissions", [])
+        log.info(f"{page_attrs=}")
         #
+        if page_permissions and not auth.has_access(
+                auth.resolve_permissions(mode=g.theme.active_mode), page_permissions):
+            return redirect(url_for("theme.access_denied"))
+
         if page_kind == "route":
             return redirect(
                 url_for(

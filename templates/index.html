@@ -17,7 +17,11 @@
 {% endif %}
 
 <body>
-<div id="vue_mountpoint" style="padding-top: 60px">
+
+<div id="vue_mountpoint" style="padding-top: 60px"
+     data-project-id="{{ tools.session_project.get() | string }}"
+     data-mode="{{ g.theme.active_mode | string }}"
+>
     {% block all_content %}
         {% include 'theme:part/navbar.html' %}
         {% block content %}
@@ -25,6 +29,7 @@
             {% if prefix %}{{ template_slot('%scontent' | format(prefix), state) | safe }}{% endif %}
         {% endblock %}
     {% endblock %}
+
 </div>
 
 {% block all_scripts %}
