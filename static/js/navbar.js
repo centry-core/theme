@@ -36,7 +36,6 @@ const NavbarCentry = {
     </ul>
     
     <div>
-<!--      class="selectpicker dropdown-menu__simple font-weight-400 mr-2"     -->
          <select 
             class="font-weight-400 mr-2"
             data-style="btn"
