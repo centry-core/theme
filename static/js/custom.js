@@ -1,8 +1,8 @@
 window.activeProject = {
-    backendUrl: '/api/v1/projects/session',
+    backendUrl: () => new URL('/api/v1/projects/session', location.origin),
     localStorageKey: 'selectedProject',
     fetch: async () => {
-        const resp = await fetch(activeProject.backendUrl)
+        const resp = await fetch(activeProject.backendUrl())
         if (resp.ok) {
             const projectData = await resp.json()
             return projectData.id
@@ -22,7 +22,7 @@ window.activeProject = {
     },
     set: async id => {
         // console.log('setting proj id', id)
-        const resp = await fetch(`${activeProject.backendUrl}/${id}`, {
+        const resp = await fetch(`${activeProject.backendUrl()}/${id}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: {}
@@ -39,7 +39,7 @@ window.activeProject = {
     set_local: id => localStorage.setItem(activeProject.localStorageKey, id),
     delete: async (make_request = true) => {
         localStorage.removeItem(activeProject.localStorageKey)
-        make_request && await fetch(activeProject.backendUrl, {
+        make_request && await fetch(activeProject.backendUrl(), {
             method: 'DELETE',
         })
     }
