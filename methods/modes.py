@@ -60,10 +60,8 @@ class Method:  # pylint: disable=E1101,R0903
             if mode_attrs.get("hidden", False):
                 continue
             #
-            required_permissions = mode_attrs.get("permissions", [])
-            current_permissions = auth.resolve_permissions(mode=mode_key)
-            #
-            if auth.has_access(current_permissions, required_permissions):
+            if mode_key in ("developer", "default") \
+                    or auth.resolve_permissions(mode=mode_key):
                 mode = {
                     "key": mode_key,
                     **mode_attrs
