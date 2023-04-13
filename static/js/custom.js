@@ -38,8 +38,9 @@ window.activeProject = {
     },
     set_local: id => localStorage.setItem(activeProject.localStorageKey, id),
     delete: async (make_request = true) => {
+        const projectId = localStorage.getItem(activeProject.localStorageKey)
         localStorage.removeItem(activeProject.localStorageKey)
-        make_request && await fetch(activeProject.backendUrl(), {
+        make_request && await fetch(`${activeProject.backendUrl()}/${projectId}`, {
             method: 'DELETE',
         })
     }
@@ -55,7 +56,7 @@ window.wait_for = async (prop_name, root = window, poll_length = 500) => {
 }
 
 const format_numbers = () => {
-    const number_formatter = Intl.NumberFormat('en', { notation: 'compact' })
+    const number_formatter = Intl.NumberFormat('en', {notation: 'compact'})
     $('.compact-format').each((_, i) => {
         if (!isNaN(i.innerText)) {
             i.innerText = number_formatter.format(i.innerText)
