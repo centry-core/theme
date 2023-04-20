@@ -121,7 +121,13 @@ class Module(module.ModuleModel):
             "Configuration",
             kind="holder",
             location="left",
-            permissions=["configuration"],
+            permissions={
+                "permissions": ["configuration"],
+                "recommended_roles": {
+                    "administration": {"admin": True, "editor": False, "viewer": False},
+                    "default": {"admin": True, "editor": False, "viewer": False},
+                }
+            },
             weight=100,
         )
 
