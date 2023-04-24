@@ -121,7 +121,13 @@ class Module(module.ModuleModel):
             "Configuration",
             kind="holder",
             location="left",
-            permissions=["configuration"],
+            permissions={
+                "permissions": ["configuration"],
+                "recommended_roles": {
+                    "administration": {"admin": True, "editor": False, "viewer": False},
+                    "default": {"admin": True, "editor": False, "viewer": False},
+                }
+            },
             weight=100,
         )
 
@@ -185,7 +191,6 @@ class Module(module.ModuleModel):
             return False
         current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
             g.auth.id,
-            scope_id=1
         )
         return 'global_admin' in current_perms
 
