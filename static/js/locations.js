@@ -44,7 +44,8 @@ const KubernetesLocation = {
             this.$emit('clear_data')
         },
         get_capacity() {
-            fetch("/api/v1/kubernetes/get_available_resources",
+            const api_url = V.build_api_url('kubernetes', 'get_available_resources')
+            fetch(api_url,
                 {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -68,7 +69,8 @@ const KubernetesLocation = {
             this.$nextTick(this.refresh_pickers)
         },
         get_namespaces() {
-            fetch("/api/v1/kubernetes/get_namespaces", {
+            const api_url = V.build_api_url('kubernetes', 'get_namespaces')
+            fetch(api_url, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this.settings),
