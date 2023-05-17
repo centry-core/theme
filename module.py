@@ -187,12 +187,13 @@ class Module(module.ModuleModel):
         log.info('De-initializing module')
 
     def is_current_user_admin(self) -> bool:
-        if g.auth.id == "-":
-            return False
-        current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
-            g.auth.id,
-        )
-        return 'global_admin' in current_perms
+        return False
+        # if g.auth.id == "-":
+        #     return False
+        # current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
+        #     g.auth.id,
+        # )
+        # return 'global_admin' in current_perms
 
     def get_visible_plugins(self) -> list:
         sections = self.get_visible_sections()
