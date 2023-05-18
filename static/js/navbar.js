@@ -6,7 +6,6 @@ const NavbarCentry = {
         'user', 'logo_url',
         'active_section', 'active_subsection',
         'active_project', 'active_mode', 'active_parameter',
-        'is_admin_user',
     ],
     template: `
 <nav class="navbar navbar-expand main-nav justify-content-between" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
@@ -88,11 +87,7 @@ const NavbarCentry = {
     data() {
         return {
             projects: [],
-            isAdmin: false,
         }
-    },
-    async mounted() {
-        this.isAdmin = this.is_admin_user
     },
     computed: {
         is_project_mode() {
@@ -159,7 +154,7 @@ const NavbarCentry = {
             const currentSection = this.$refs.sectionSelect.value
 
             const withinSections = newSections.filter(section => section === currentSection).length > 0
-            if (!withinSections && newSections.length > 0 && !this.isAdmin) {
+            if (!withinSections && newSections.length > 0) {
                 const newSection = newSections[0]
                 location.href = this.get_section_href(newSection)
                 this.$refs.sectionSelect.value = newSection
