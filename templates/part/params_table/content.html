@@ -2,6 +2,7 @@
 {% set hidden_columns = hidden_columns | default(['type']) -%}
 {% set custom_formatters = custom_formatters | default({}) %}
 {% set disable_add_params = disable_add_params | default(False) %}
+{% set default_params = default_params | default([]) %}
 
 <div class="section">
     <div class="row">
@@ -13,7 +14,7 @@
     <div class="row">
         <div class="col">
             <div class="test_parameters_error"></div>
-            <table class="table table-borderless params-table empty_data mt-3"
+            <table class="table table-borderless params-table mt-3 {% if default_params | length == 0 %}empty_data{% endif %}"
                     {% if modal_id %} id="{{ modal_id }}_test_params" {% endif %}
                    data-toggle="table"
             >
@@ -50,7 +51,7 @@
                 </tr>
                 </thead>
                 <tbody style="border-bottom: solid 1px #EAEDEF">
-                {% for row in default_params | default([]) %}
+                {% for row in default_params %}
                     <tr>
                         <td {% if (row.name in disabled_names) %} class="disabled" {% endif %} >
                             {{ row.name }}

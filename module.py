@@ -28,8 +28,7 @@ from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
 from werkzeug.exceptions import NotFound
 
 import tools  # pylint: disable=E0401
-from tools import auth  # pylint: disable=E0401
-
+from tools import auth
 from .models.pd.google_analytics import GAConfiguration
 
 
@@ -186,27 +185,19 @@ class Module(module.ModuleModel):
         """ De-init module """
         log.info('De-initializing module')
 
-    def is_current_user_admin(self) -> bool:
-        if g.auth.id == "-":
-            return False
-        current_perms = self.context.rpc_manager.call.auth_get_user_permissions(
-            g.auth.id,
-        )
-        return 'global_admin' in current_perms
-
     def get_visible_plugins(self) -> list:
         sections = self.get_visible_sections()
-        if self.is_current_user_admin():
-            return sections
 
         # reading plugins list from session
-        from tools import session_plugins
-        plugins = session_plugins.get()
+        plugins = tools.session_plugins.get()
 
         # if not present in the session then look up from DB
         if plugins is None:
-            plugins = self.context.rpc_manager.call.project_get_plugins()
-            session_plugins.set(plugins)
+            project_id = tools.session_project.get()
+            if project_id:
+                project = self.context.rpc_manager.call.project_get_or_404()
+                plugins = project.plugins
+                tools.session_plugins.set(plugins)
 
         plugins = list(filter(lambda sec: sec['key'] in plugins, sections))
         return plugins
