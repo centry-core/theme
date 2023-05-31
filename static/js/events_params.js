@@ -66,7 +66,7 @@ var EventParamsTable = {
     addEmptyParamsRow: source => {
         $(source).closest('.section').find('.params-table').bootstrapTable(
             'append',
-            {"source": "", "target": "", "event": "", "action": ""}
+            {"source": null, "target": null, "event": null, "action": null}
         )
     },
 
