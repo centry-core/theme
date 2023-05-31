@@ -1,3 +1,5 @@
+from typing import Union
+
 from pylon.core.tools import web, log
 from pydantic import parse_obj_as
 
@@ -15,7 +17,10 @@ from tools import rpc_tools
 class RPC:
     @web.rpc('parse_source', 'parse_source')
     @rpc_tools.wrap_exceptions(ValueError)
-    def parse_source(self, value: dict):
+    def parse_source(self, value: dict) -> Union[
+        SourceGitSSH, SourceGitHTTPS, SourceArtifact,
+        SourceLocal, SourceContainer
+    ]:
         _validation_map = {
             'git_ssh': SourceGitSSH,
             'git_https': SourceGitHTTPS,
