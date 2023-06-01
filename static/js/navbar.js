@@ -68,15 +68,16 @@ const NavbarCentry = {
             <span class="dropdown-item-text px-3 font-h5">[[ user.name ]]</span>
             <span class="dropdown-item-text px-3 font-h5">[[ user.email ]]</span>
             <div v-if="modes.length > 0" class="dropdown-divider"></div>
-            <div v-if="modes.length > 0" class="bootstrap-select">
-              <a
-                v-for="mode in modes"
-                :href="mode.href"
-                :class="{'dropdown-item': true, active: mode.key === active_mode }"
-              >
-                [[ mode.name ]]
-              </a>
-            </div>
+            <template v-if="modes.length > 0">
+                <a
+                    v-for="mode in modes"
+                    :href="mode.href"
+                    class="dropdown-item"
+                >
+                    <span class="d-inline-block">[[ mode.name ]]</span>
+                    <i v-if="mode.key === active_mode" class="icon__16x16 icon-check__16"></i>
+                </a>
+            </template>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
         </div>
@@ -91,6 +92,9 @@ const NavbarCentry = {
     computed: {
         is_project_mode() {
             return ['default', 'project'].includes(this.active_mode)
+        },
+        isDeveloperMode() {
+            return this.active_mode === 'developer';
         }
     },
     watch: {
