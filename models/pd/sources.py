@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from pydantic import BaseModel, validator, AnyUrl, parse_obj_as, root_validator, constr
+from pydantic import BaseModel, validator
 from typing import Optional, Union
 
 
@@ -15,39 +15,36 @@ class SourceABC(ABC, BaseModel):
             return field.default
         return value
 
+    class Config:
+        fields = {
+            'repo_branch': 'branch',
+            'repo_user': 'username',
+            'repo_pass': 'password',
+            'repo_key': 'private_key'
+        }
+        allow_population_by_field_name = True
+
 
 class SourceGitSSH(SourceABC):
     repo: str
-    private_key: str
-    branch: Optional[str] = 'main'
-    password: Optional[str]
+    repo_key: str
+    repo_branch: Optional[str] = 'main'
+    repo_pass: Optional[str]
 
     @property
     def execution_json(self):
-        return {
-            'git': {
-                'repo': self.repo,
-                'repo_branch': self.branch,
-                'repo_key': self.private_key,
-                'password': self.password
-            }
-        }
+        return {'git': self.dict(exclude_none=True)}
 
 
 class SourceGitHTTPS(SourceABC):
     repo: str
-    branch: Optional[str] = 'main'
-    username: Optional[str]
-    password: Optional[str]
+    repo_branch: Optional[str] = 'main'
+    repo_user: Optional[str]
+    repo_pass: Optional[str]
 
     @property
     def execution_json(self):
-        return {
-            'git': {
-                'repo': self.repo,
-                'repo_branch': self.branch
-            }
-        }
+        return {'git': self.dict(exclude_none=True)}
 
 
 class SourceArtifact(SourceABC):
