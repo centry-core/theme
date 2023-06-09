@@ -1,0 +1,55 @@
+{% set disabled_keys = disabled_keys | default([]) -%}
+{% set disabled_columns = disabled_columns| default(['threshold']) %}
+{% set custom_formatters = custom_formatters | default({}) %}
+{% set disable_add_params = disable_add_params | default(True) %}
+
+<div class="section">
+    <div class="row">
+        <div class="col">
+            <div class="test_parameters_error"></div>
+            <table class="table table-borderless params-table"
+                    {% if modal_id %} id="{{ modal_id }}_events_params" {% endif %}
+                   data-toggle="table"
+            >
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" data-visible="false" data-field="id"
+                        >
+                            ID
+                        </th>
+                        <th scope="col" data-sortable="true" data-field="old_value"
+                            data-formatter="{{ custom_formatters.get('source', 'EventParamsTable.sourceFormatter') }}"
+                        >
+                            SOURCE COLUMN
+                        </th>
+                        <th scope="col" data-sortable="true" data-field="new_value"
+                            data-formatter="{{ custom_formatters.get('target', 'EventParamsTable.targetFormatter') }}"
+                        >
+                            TARGET COLUMN
+                        </th>                    
+                        <th scope="col" data-sortable="true" data-field="event"
+                            data-formatter="{{ custom_formatters.get('event', 'EventParamsTable.eventFormatter') }}"
+                        >
+                            EVENT
+                        </th>
+                        <th scope="col" data-field="action"
+                            data-formatter="{{ custom_formatters.get('action', 'EventParamsTable.parametersDeleteFormatter') }}"
+                        >&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col">
+            <button type="button" class="btn btn-sm btn-secondary"
+                    onclick="EventParamsTable.addEmptyParamsRow(this)">
+                <i class="fas fa-plus mr-2"></i>Event
+            </button>
+        </div>
+    </div>
+
+</div>
