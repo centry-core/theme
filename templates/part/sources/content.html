@@ -83,7 +83,7 @@
                                         <div class="invalid-feedback" id="repo_user_error"></div>
                                     </div>
                                     <div class="col">
-                                        <p class="font-h5 font-semibold">Git Password</p>
+                                        <p class="font-h5 font-semibold mb-1">Git Password</p>
                                         <input type="text" id="repo_pass" class="form-control form-control-alternative"
                                                placeholder="(optional)">
                                         <div class="invalid-feedback" id="repo_pass_error"></div>
@@ -100,13 +100,18 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group" id="fileUpload">
-                            <label class="form-control-label" for="file">Test package</label>
-                            <h13>Please upload .zip file with your tests. Packaging guidelines.</h13>
-                            <input type="file" class="form-control form-control-alternative" id="file" lang="en"
-                                   multiple>
-                            
-                            <p> Current File: <span id="source-current-file">Nothing selected</span></p>
-                            <div class="invalid-feedback" id="file_error"></div>
+                            <label class="form-control-label font-h5 font-weight-bold" for="file">[File] or [Test package]</label>
+                            <p class="font-h6 text-gray-700 font-weight-400 mb-2">Upload .zip file with test script.</p>
+                            <div class="mb-3">
+                                <div id="dragDropArea" class="drop-area">
+                                    <input type="file" id="file" class="form-control form-control-alternative"
+                                           accept=".zip"
+                                           onchange="uploadSingleFile(this.files)">
+                                    <label for="file" class="mb-0 d-flex align-items-center justify-content-center">Drag & drop file or <span>&nbsp;browse</span></label>
+                                    <div class="invalid-feedback" id="file_error"></div>
+                                </div>
+                                <div id="previewArea" class="preview-area"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,9 +122,9 @@
                 <div class="carrier-sast-target">
                     <div class="row">
                         <div class="col">
-                            <label class="form-control-label" for="local_file">Path to control-tower mount of
-                                tests</label>
-                            <input type="text" id="local_file" class="form-control form-control-alternative"
+                            <label class="form-control-label font-h5 font-semibold" for="local_file">File path</label>
+                            <p class="font-h6 font-weight-400">Path to control-tower mount of tests</p>
+                            <input type="text" id="local_file" class="form-control form-control-alternative mt-2"
                                    placeholder="e.g. /tmp/test_code">
                             <div class="invalid-feedback" id="local_file_error"></div>
                         </div>

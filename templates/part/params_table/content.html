@@ -22,7 +22,7 @@
                 <tr>
                     <th scope="col" data-sortable="true" data-field="name"
                         data-formatter="{{ custom_formatters.get('name', 'ParamsTable.inputFormatter') }}"
-                        data-width="144" data-width-unit="px"
+                        data-width="30" data-width-unit="%"
                     >
                         Name
                     </th>
@@ -34,13 +34,14 @@
                     {% if ("type" not in hidden_columns) %}
                         <th scope="col" data-sortable="true" data-field="type"
                             data-formatter="{{ custom_formatters.get('type', 'ParamsTable.dataTypeFormatter') }}"
-                            data-width="144" data-width-unit="px"
+                            data-width="30" data-width-unit="%"
                         >
                             Data Type
                         </th>
                     {% endif %}
                     <th scope="col" data-sortable="true" data-field="description"
                         data-formatter="{{ custom_formatters.get('description', 'ParamsTable.inputFormatter') }}"
+                        data-width="30" data-width-unit="%"
                     >
                         Description
                     </th>
