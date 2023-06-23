@@ -454,7 +454,8 @@ const Locations = {
     watch: {
         location_(newValue) {
             this.$emit('update:location', newValue)
-            if (this.$props.cloud_settings.id === this.chosen_location_settings.id) {
+            if (this.$props.cloud_settings.id === this.chosen_location_settings.id && 
+                this.$props.cloud_settings.project_id === this.chosen_location_settings.project_id) {
                 this.cloud_settings_ = {...this.chosen_location_settings, ...this.$props.cloud_settings}
             } else
                 this.cloud_settings_ = this.chosen_location_settings
@@ -633,7 +634,8 @@ const UILocations = {
     watch: {
         location_(newValue) {
             this.$emit('update:location', newValue)
-            if (this.$props.cloud_settings.id === this.chosen_location_settings.id) {
+            if (this.$props.cloud_settings.id === this.chosen_location_settings.id && 
+                this.$props.cloud_settings.project_id === this.chosen_location_settings.project_id) {
                 this.cloud_settings_ = {...this.chosen_location_settings, ...this.$props.cloud_settings}
             } else
                 this.cloud_settings_ = this.chosen_location_settings
