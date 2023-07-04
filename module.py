@@ -357,7 +357,7 @@ class Module(module.ModuleModel):
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
-        log.info(f"{self.subsections=}")
+        # log.info(f"{self.subsections=}")
         if section not in self.subsections:
             return redirect(url_for("theme.access_denied"))
         #
