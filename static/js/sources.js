@@ -23,7 +23,8 @@ const SourceCard = {
             artifact: {
                 tab_id: 'nav-file-tab',
                 input_mapping: {
-                    file: '#file'
+                    file: '#file',
+                    file_name: '.file_name'
                 },
             },
             local: {
@@ -54,14 +55,26 @@ const SourceCard = {
             get_active_tab,
             get: () => {
                 const active_tab = get_active_tab()
-                let mapping_obj = Object.entries(tab_mapping[active_tab].input_mapping).reduce(
+                let mapping_obj
+                if (active_tab === 'artifact') {
+                    const file_input = el.find(tab_mapping[active_tab].input_mapping.file)[0]
+                    const file_name = file_input === undefined ?
+                        el.find(tab_mapping[active_tab].input_mapping.file_name) :
+                        file_input.files[0].name
+                    mapping_obj = {
+                        name: active_tab,
+                        file_name
+                    }
+                    if (file_input) {
+                        mapping_obj.file = file_input.files[0]
+                    }
+                } else {
+                    mapping_obj = Object.entries(tab_mapping[active_tab].input_mapping).reduce(
                         (acc, item) => {
                             acc[item[0]] = el.find(item[1]).val()
                             return acc
-                        }, {name: active_tab})
-
-                if ($('#file')[0].files[0] !== undefined) {
-                    mapping_obj.file = $('#file')[0].files[0]
+                        }, {name: active_tab}
+                    )
                 }
                 return mapping_obj
             },
@@ -69,10 +82,10 @@ const SourceCard = {
                 Object.entries(data).forEach(([k, v]) => {
                     if (k !== 'name') {
                         const input_id = tab_mapping[data.name]?.input_mapping[k]
-                        if (k == "file" || k == "file_meta"){
-                            if (k == "file"){
+                        if (k == "file" || k == "file_meta") {
+                            if (k == "file") {
                                 $('#source-current-file').text(v)
-                            }   
+                            }
                             return
                         }
                         input_id && el.find(input_id).val(v)
@@ -80,7 +93,7 @@ const SourceCard = {
                     }
                 })
 
-                if (data.name.includes('git')){
+                if (data.name.includes('git')) {
                     el.find('a#nav-git-tab').tab('show')
                 }
                 el.find('a#' + tab_mapping[data.name]?.tab_id).tab('show')
