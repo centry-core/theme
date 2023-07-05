@@ -49,7 +49,7 @@ class SourceGitHTTPS(SourceABC):
 
 class SourceArtifact(SourceABC):
     file_name: str
-    bucket: str = 'tasks'
+    bucket: str = 'tests'
 
     @property
     def execution_json(self):
