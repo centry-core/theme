@@ -27,8 +27,8 @@ class SourceABC(ABC, BaseModel):
 
 class SourceGitSSH(SourceABC):
     repo: str
-    repo_key: str
     repo_branch: Optional[str] = 'main'
+    repo_key: str
     repo_pass: Optional[str]
 
     @property
@@ -48,13 +48,13 @@ class SourceGitHTTPS(SourceABC):
 
 
 class SourceArtifact(SourceABC):
-    file_meta: Optional[dict]
-    file: Union[str, dict]
+    file_name: str
+    bucket: str = 'tests'
 
     @property
     def execution_json(self):
         return {
-            'artifact': {'file': self.file, 'file_meta': self.file_meta}
+            'artifact': self.dict()
         }
 
 
