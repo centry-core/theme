@@ -240,7 +240,7 @@ class Module(module.ModuleModel):
         #
         current_permissions = auth.resolve_permissions(mode=g.theme.active_mode)
         #
-        log.info(f"{self.subsections[section].items()=}")
+        # log.info(f"{self.subsections[section].items()=}")
         for subsection_key, subsection_attrs in self.subsections[section].items():
             if subsection_attrs.get("hidden", False):
                 continue
@@ -403,7 +403,7 @@ class Module(module.ModuleModel):
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
-        log.info(f"{self.pages=}")
+        # log.info(f"{self.pages=}")
         if section not in self.pages:
             return redirect(url_for("theme.access_denied"))
         #
