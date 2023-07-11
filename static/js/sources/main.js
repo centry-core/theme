@@ -22,10 +22,7 @@ const SourceCard = {
             },
             artifact: {
                 tab_id: 'nav-file-tab',
-                input_mapping: {
-                    file: '#file',
-                    file_name: '.file_name'
-                },
+                input_mapping: {},
             },
             local: {
                 tab_id: 'nav-local-file-tab',
@@ -57,16 +54,13 @@ const SourceCard = {
                 const active_tab = get_active_tab()
                 let mapping_obj
                 if (active_tab === 'artifact') {
-                    const file_input = el.find(tab_mapping[active_tab].input_mapping.file)[0]
-                    const file_name = file_input === undefined ?
-                        el.find(tab_mapping[active_tab].input_mapping.file_name) :
-                        file_input.files[0].name
+                    const instance_name = el.find('div[instance_name]').attr('instance_name')
                     mapping_obj = {
                         name: active_tab,
-                        file_name
+                        file_name: V[instance_name].file?.name,
                     }
-                    if (file_input) {
-                        mapping_obj.file = file_input.files[0]
+                    if (V[instance_name].file.size) {
+                        mapping_obj.file = V[instance_name].file
                     }
                 } else {
                     mapping_obj = Object.entries(tab_mapping[active_tab].input_mapping).reduce(
@@ -82,9 +76,10 @@ const SourceCard = {
                 Object.entries(data).forEach(([k, v]) => {
                     if (k !== 'name') {
                         const input_id = tab_mapping[data.name]?.input_mapping[k]
-                        if (k == "file" || k == "file_meta") {
-                            if (k == "file") {
-                                $('#source-current-file').text(v)
+                        if (['file_name', 'bucket'].includes(k)) {
+                            if (k === "file_name") {
+                                const instance_name = el.find('div[instance_name]').attr('instance_name')
+                                V[instance_name].file = {name: v}
                             }
                             return
                         }
@@ -99,6 +94,8 @@ const SourceCard = {
                 el.find('a#' + tab_mapping[data.name]?.tab_id).tab('show')
             },
             clear: () => {
+                const artifact_instance_name = el.find('div[instance_name]').attr('instance_name')
+                V.registered_components[artifact_instance_name]?.handle_delete_file()
                 el.find('input#repo').val('')
                 el.find('input#repo_key').val('')
                 el.find('input#repo_branch').val('')
@@ -107,7 +104,6 @@ const SourceCard = {
                 el.find('input#repo_pass').val('')
                 el.find('input#repo_ssh_pass').val('')
                 el.find('input#file').val('')
-                el.find('span#source-current-file').text('Nothing selected')
                 el.find('input#local_file').val('')
                 el.find('input#container_image').val('')
                 el.find('a#nav-git-tab').tab('show')
@@ -115,15 +111,21 @@ const SourceCard = {
             },
             setError: data => {
                 const active_tab = get_active_tab()
-                data.forEach(({loc, msg}) => {
-                    const input_mapping = tab_mapping[active_tab]?.input_mapping
-                    input_mapping && loc.forEach(l => {
-                        if (l in input_mapping) {
-                            el.find(input_mapping[l]).addClass('is-invalid')
-                            el.find(input_mapping[l] + '_error').text(msg)
-                        }
+                if (active_tab === 'artifact') {
+                    const artifact_instance_name = el.find('div[instance_name]').attr('instance_name')
+                    V.registered_components[artifact_instance_name]?.set_error(data)
+                } else {
+                    data.forEach(({loc, msg}) => {
+                        const input_mapping = tab_mapping[active_tab]?.input_mapping
+                        input_mapping && loc.forEach(l => {
+                            if (l in input_mapping) {
+                                el.find(input_mapping[l]).addClass('is-invalid')
+                                el.find(input_mapping[l] + '_error').text(msg)
+                            }
+                        })
                     })
-                })
+                }
+
             },
             clearErrors: () => {
                 Object.values(tab_mapping).reduce((acc, item) => {
