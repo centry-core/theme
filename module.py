@@ -190,8 +190,6 @@ class Module(module.ModuleModel):
 
         # reading plugins list from session
         plugins = tools.session_plugins.get()
-        log.info('QWE sections %s', sections)
-        log.info('QWE plugins %s', plugins)
 
         # if not present in the session then look up from DB
         if plugins is None:
