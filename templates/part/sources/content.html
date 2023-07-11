@@ -96,26 +96,11 @@
             </div>
         {% endif %}
         {% if 'artifact' in chapters %}
-            <div class="tab-pane fade mt-2" id="nav-file" role="tabpanel" aria-labelledby="nav-file-tab">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group" id="fileUpload">
-                            <label class="form-control-label font-h5 font-weight-bold" for="file">[File] or [Test package]</label>
-                            <p class="font-h6 text-gray-700 font-weight-400 mb-2">Upload .zip file with test script.</p>
-                            <div class="mb-3">
-                                <div id="dragDropArea" class="drop-area">
-                                    <input type="file" id="file" class="form-control form-control-alternative"
-                                           accept=".zip"
-                                           onchange="uploadSingleFile(this.files)">
-                                    <label for="file" class="mb-0 d-flex align-items-center justify-content-center">Drag & drop file or <span>&nbsp;browse</span></label>
-                                    <div class="invalid-feedback" id="file_error"></div>
-                                </div>
-                                <div id="previewArea" class="preview-area"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Artifact-Source-Tab
+                @register="register"
+                tab_id="nav-file"
+                instance_name="{{ container_id }}_artifact"
+            ></Artifact-Source-Tab>
         {% endif %}
         {% if 'local' in chapters %}
             <div class="tab-pane fade mt-2" id="nav-local-file" role="tabpanel" aria-labelledby="nav-local-file-tab">
