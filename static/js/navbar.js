@@ -138,7 +138,7 @@ const NavbarCentry = {
             })
             // todo: use api_url
             // const resp = await fetch(api_url)
-            const resp = await fetch('/api/v1/projects/project/')
+            const resp = await fetch(api_url)
             if (resp.ok) {
                 this.projects = await resp.json()
             }
