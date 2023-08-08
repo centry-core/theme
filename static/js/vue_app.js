@@ -63,7 +63,17 @@ const vueCoreApp = {
             }
         },
         build_api_url(plugin, file_name, options = {}) {
-            return `/api/v${options.api_version || 1}/${plugin}/${file_name}/${options.mode || this.mode}${options.trailing_slash ? '/' : ''}`
+            const opts = Object.assign({
+                mode: this.mode || 'default',
+                api_version: 1,
+                trailing_slash: false,
+                skip_mode: false
+            }, options)
+            const {mode, api_version, trailing_slash, skip_mode} = opts
+            const struct = ['/api', `v${api_version}`, plugin, file_name]
+            !skip_mode && struct.push(mode)
+            !!trailing_slash && struct.push('')
+            return struct.join('/')
         }
     }
 }
