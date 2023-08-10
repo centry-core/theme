@@ -114,6 +114,7 @@ const register_component = (name, component) => {
 }
 window.vueApp.config.compilerOptions.isCustomElement = tag => ['h9', 'h13', 'h7', 'h12'].includes(tag)
 window.vueApp.config.globalProperties.window = window
+window.vueApp.config.globalProperties.navigator = navigator
 // window.vueApp.config.productionTip = false
 // window.vueApp.config.devtools = false
 
