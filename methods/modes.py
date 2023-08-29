@@ -25,7 +25,7 @@ from flask import g
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import web  # pylint: disable=E0611,E0401
 
-from tools import auth  # pylint: disable=E0401
+from tools import auth , config as c
 
 
 class Method:  # pylint: disable=E1101,R0903
@@ -48,7 +48,7 @@ class Method:  # pylint: disable=E1101,R0903
         self.mode_subsections = dict()  # mode_key -> section_key -> subsection_key -> {name, kind, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.mode_pages = dict()  # mode_key -> section_key -> subsection_key -> page_key -> {kind, prefix|route|url}  # pylint: disable=C0301
         #
-        self.register_mode(key="default", name="Project", href="/", weight=100)
+        self.register_mode(key=c.DEFAULT_MODE, name="Project", href="/", weight=100)
 
     @web.method("get_modes")
     def _get_modes(  # pylint: disable=R0913
