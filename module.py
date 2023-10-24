@@ -28,7 +28,7 @@ from pylon.core.tools.context import Context as Holder  # pylint: disable=E0401
 from werkzeug.exceptions import NotFound
 
 import tools  # pylint: disable=E0401
-from tools import auth
+from tools import auth, config as c
 from .models.pd.google_analytics import GAConfiguration
 
 
@@ -72,13 +72,15 @@ class Module(module.ModuleModel):
                 "uri": re.escape("/favicon.ico"),
             },
         ]
+        self.bp = None
+
 
     def init(self):
         """ Init module """
         log.info('Initializing module')
 
         # Init Blueprint
-        self.descriptor.init_blueprint(
+        self.bp = self.descriptor.init_blueprint(
             url_prefix='/',
             static_url_prefix='/',
             # use_template_prefix=False
@@ -154,7 +156,7 @@ class Module(module.ModuleModel):
         g.theme = Holder()
         g.theme.active_section = None
         g.theme.active_subsection = None
-        g.theme.active_mode = "default"
+        g.theme.active_mode = c.DEFAULT_MODE
         g.theme.active_parameter = None
         #
         g.ga_id = request.cookies.get(
