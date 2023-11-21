@@ -175,12 +175,16 @@ class Module(module.ModuleModel):
         )
         for key, value in additional_headers.items():
             response.headers[key] = value
-
-        Response.set_cookie(
-            response,
-            self.google_analytics_config.cookie_name,
-            g.ga_id
-        )
+        #
+        try:
+            Response.set_cookie(
+                response,
+                self.google_analytics_config.cookie_name,
+                g.ga_id
+            )
+        except:  # pylint: disable=W0702
+            pass
+        #
         return response
 
     def deinit(self):  # pylint: disable=R0201
