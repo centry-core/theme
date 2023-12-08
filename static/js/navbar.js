@@ -3,7 +3,7 @@ const NavbarCentry = {
     props: [
         'instance_name',
         'sections', 'subsections', 'modes',
-        'user', 'logo_url',
+        'user', 'logo_url', 'logout_url',
         'active_section', 'active_subsection',
         'active_project', 'active_mode', 'active_parameter',
     ],
@@ -130,7 +130,7 @@ const NavbarCentry = {
         },
         async handle_logout() {
             await activeProject.delete()
-            location.href = '/forward-auth/logout'
+            location.href = this.logout_url
         },
         async fetch_projects() {
             const api_url = this.$root.build_api_url('projects', 'project', {
