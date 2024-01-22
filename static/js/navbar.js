@@ -3,7 +3,7 @@ const NavbarCentry = {
     props: [
         'instance_name',
         'sections', 'subsections', 'modes',
-        'user', 'logo_url', 'logout_url',
+        'user', 'logo_url', 'logout_url', 'change_password_url',
         'active_section', 'active_subsection',
         'active_project', 'active_mode', 'active_parameter',
     ],
@@ -33,9 +33,9 @@ const NavbarCentry = {
             </a>
         </li>
     </ul>
-    
+
     <div>
-         <select 
+         <select
             class="font-weight-400 mr-2"
             data-style="btn"
             data-dropdown-align-right="true"
@@ -53,11 +53,11 @@ const NavbarCentry = {
             </option>
         </select>
     </div>
-    
+
     <div>
         [[ active_mode ]]
     </div>
-    
+
     <div class="dropdown ml-1 mr-3">
         <button class="btn btn-xs btn-table btn-icon__xs" type="button"
                 id="userDropDown" data-toggle="dropdown"
@@ -79,6 +79,7 @@ const NavbarCentry = {
                 </a>
             </template>
             <div class="dropdown-divider"></div>
+            <button class="dropdown-item" type="button" @click.prevent="handle_change_password">Change password</button>
             <button class="dropdown-item" type="button" @click.prevent="handle_logout">Logout</button>
         </div>
     </div>
@@ -131,6 +132,9 @@ const NavbarCentry = {
         async handle_logout() {
             await activeProject.delete()
             location.href = this.logout_url
+        },
+        async handle_change_password() {
+            location.href = this.change_password_url
         },
         async fetch_projects() {
             const api_url = this.$root.build_api_url('projects', 'project', {

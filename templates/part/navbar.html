@@ -12,6 +12,7 @@
 
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
         logout_url="{{ tools.theme.descriptor.config.get('logout_url', '/forward-auth/logout') }}"
+        change_password_url="{{ tools.theme.descriptor.config.get('change_password_url', '/auth/realms/carrier/account/password') }}"
         active_section="{{ g.theme.active_section }}"
         active_subsection="{{ g.theme.active_subsection }}"
         :active_mode="mode"
