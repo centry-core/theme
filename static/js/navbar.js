@@ -134,7 +134,9 @@ const NavbarCentry = {
             location.href = this.logout_url
         },
         async handle_change_password() {
-            location.href = this.change_password_url
+            if (this.change_password_url != '' && this.change_password_url != '#') {
+              location.href = this.change_password_url
+            }
         },
         async fetch_projects() {
             const api_url = this.$root.build_api_url('projects', 'project', {
