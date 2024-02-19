@@ -61,6 +61,7 @@ class Method:  # pylint: disable=E1101,R0903
                 continue
             #
             if mode_key in ("developer", "default") \
+                    or mode_attrs.get("public", False) \
                     or auth.resolve_permissions(mode=mode_key):
                 mode = {
                     "key": mode_key,
