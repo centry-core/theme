@@ -40,7 +40,7 @@ class Module(module.ModuleModel):
         self.descriptor = descriptor
 
         # Registry
-        self.landing = {"kind": "holder"}  # {kind, prefix|route|url}
+        self.landing = self.descriptor.config.get("landing", {"kind": "holder"})  # {kind, prefix|route|url}
         self.sections = dict()  # section_key -> {name, kind, location, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.subsections = dict()  # section_key -> subsection_key -> {name, kind, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.pages = dict()  # section_key -> subsection_key -> page_key -> {kind, prefix|route|url}  # pylint: disable=C0301
@@ -116,7 +116,7 @@ class Module(module.ModuleModel):
         # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
         # log.info('Self func %s', self.register_section)
         # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
-
+        #
         self.register_section(
             "configuration",
             "Configuration",
@@ -131,7 +131,7 @@ class Module(module.ModuleModel):
             },
             weight=100,
         )
-
+        #
         # Register tool
         self.descriptor.register_tool('theme', self)
         log.info('Tools registration done')
