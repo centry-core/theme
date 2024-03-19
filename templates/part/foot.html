@@ -1,3 +1,7 @@
+<!-- URL prefix -->
+<script>
+  window.url_prefix = '{{ tools.context.url_prefix }}';
+</script>
 {%- macro script_url(file_path) -%}
     {%- set base_url = '<script src="%s"></script>' -%}
     {{ base_url | format(url_for('design-system.static', filename=file_path)) | safe }}

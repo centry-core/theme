@@ -48,7 +48,14 @@ class Method:  # pylint: disable=E1101,R0903
         self.mode_subsections = dict()  # mode_key -> section_key -> subsection_key -> {name, kind, permissions, icon_class, prefix|route|url}  # pylint: disable=C0301
         self.mode_pages = dict()  # mode_key -> section_key -> subsection_key -> page_key -> {kind, prefix|route|url}  # pylint: disable=C0301
         #
-        self.register_mode(key=c.DEFAULT_MODE, name="Project", href="/", weight=100)
+        default_mode_uri = self.descriptor.config.get("default_mode_uri", "/")
+        #
+        self.register_mode(
+            key=c.DEFAULT_MODE,
+            name="Project",
+            href=f"{self.context.url_prefix}{default_mode_uri}",
+            weight=100,
+        )
 
     @web.method("get_modes")
     def _get_modes(  # pylint: disable=R0913
@@ -69,7 +76,7 @@ class Method:  # pylint: disable=E1101,R0903
                 }
                 #
                 if "href" not in mode:
-                    mode["href"] = f'/~/{mode["key"]}/~/'
+                    mode["href"] = f'{self.context.url_prefix}/~/{mode["key"]}/~/'
                 #
                 modes.append(mode)
             #

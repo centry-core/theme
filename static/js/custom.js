@@ -1,5 +1,5 @@
 window.activeProject = {
-    backendUrl: () => new URL('/api/v1/projects/session', location.origin),
+    backendUrl: () => new URL(window.url_prefix + '/api/v1/projects/session', location.origin),
     localStorageKey: 'selectedProject',
     fetch: async () => {
         const resp = await fetch(activeProject.backendUrl())

@@ -4,7 +4,8 @@ const ArtifactSourceTab = {
         return {
             uid: undefined,
             file: null,
-            highlight_drop_area: false
+            highlight_drop_area: false,
+            url_prefix: window.url_prefix,
         }
     },
     mounted() {
@@ -39,7 +40,7 @@ const ArtifactSourceTab = {
         @drop.stop.prevent="handle_drop"
         :instance_name="instance_name"
     >
-        <label class="form-control-label font-h5 font-weight-bold" 
+        <label class="form-control-label font-h5 font-weight-bold"
             :for="input_id"
         >
             [File] or [Test package]
@@ -52,27 +53,27 @@ const ArtifactSourceTab = {
                 <input type="file" class="form-control form-control-alternative"
                     accept=".zip"
                     ref="file_input"
-                    :id="input_id" 
+                    :id="input_id"
                     @change="handle_file"
                 >
                 <label class="mb-0 d-flex align-items-center justify-content-center"
-                    :for="input_id" 
+                    :for="input_id"
                 >
                     Drag & drop file or <span>&nbsp;browse</span>
                 </label>
                 <div class="invalid-feedback" id="file_error"></div>
             </div>
             <div class="preview-area">
-                <div class="preview-area_item" 
+                <div class="preview-area_item"
                     v-if="file"
                 >
                     <span>{{ file?.name }}</span>
-                    <button class="btn btn-16" 
-                        style="background: url('/design-system/static/assets/ico/close_notify_icon.svg') no-repeat center"
+                    <button class="btn btn-16"
+                        style="background: url('{{ url_prefix }}/design-system/static/assets/ico/close_notify_icon.svg') no-repeat center"
                         @click="handle_delete_file"
                     ></button>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
     `

@@ -10,7 +10,7 @@ const NavbarCentry = {
     template: `
 <nav class="navbar navbar-expand main-nav justify-content-between" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
     <div class="d-flex chapters">
-        <a class="logo" href="/">
+        <a class="logo" href="[[ url_prefix ]]/">
             <img :src="logo_url" alt="centry">
         </a>
         <select class="selectpicker" data-style="btn-chapters"
@@ -88,6 +88,7 @@ const NavbarCentry = {
     data() {
         return {
             projects: [],
+            url_prefix: window.url_prefix,
         }
     },
     computed: {
@@ -113,11 +114,11 @@ const NavbarCentry = {
     methods: {
         get_section_href(section_key) {
             if (this.is_project_mode) {
-                return `/-/${section_key}`
+                return window.url_prefix + `/-/${section_key}`
             } else if (this.active_parameter === null) {
-                return `/~/${this.active_mode}/~/${section_key}`
+                return window.url_prefix + `/~/${this.active_mode}/~/${section_key}`
             } else {
-                return `/~/${this.active_mode}/~/${this.active_parameter}/~/${section_key}`
+                return window.url_prefix + `/~/${this.active_mode}/~/${this.active_parameter}/~/${section_key}`
             }
         },
         get_subsection_href(subsection_key) {

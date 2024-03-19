@@ -93,11 +93,11 @@ const KubernetesLocation = {
     },
     template: `
         <div class="form-group w-100-imp">
-            <div class="custom-input mb-1"  style="width: 50%;">        
+            <div class="custom-input mb-1"  style="width: 50%;">
                 <p class="custom-input_desc mb-1">Namespace</p>
                 <div class="custom-input select-validation"
                     :class="{'invalid-select': this.error.msg}">
-                    <select class="selectpicker bootstrap-select__b" 
+                    <select class="selectpicker bootstrap-select__b"
                         v-model="settings.namespace"
                     >
                         <option v-for="item in namespaces">[[ item ]]</option>
@@ -106,13 +106,13 @@ const KubernetesLocation = {
                     <p>
                         <h13>
                             <template v-if="!settings.scaling_cluster">
-                            Available resources: 
+                            Available resources:
                             runners - [[ resources["pods"] ]],
                             CPU - [[ resources["cpu"] ]],
-                            memory - [[ resources["memory"] ]]Gb   
+                            memory - [[ resources["memory"] ]]Gb
                             <a
                                 style="cursor: pointer;"
-                                :style="{color: refresh_btn_color}" 
+                                :style="{color: refresh_btn_color}"
                                 @click="get_capacity"
                                 @mouseenter="refresh_btn_color = '#6C44DD'"
                                 @mousedown="refresh_btn_color = '#4627A0'"
@@ -121,7 +121,7 @@ const KubernetesLocation = {
                             </a>
                             </template>
                             <template v-if="settings.scaling_cluster" >
-                               Unable to count resources for auto-scaling cluster. 
+                               Unable to count resources for auto-scaling cluster.
                                Test may not work as expected if there is not enough scaling capacity.
                             </template>
                         </h13>
@@ -196,8 +196,8 @@ const AwsLocation = {
     <div class="form-group w-100-imp">
             <div class="custom-input m-3">
                 <p class="custom-input_desc mb-1">Instance type</p>
-                <select class="selectpicker bootstrap-select__b" 
-                    data-style="btn" 
+                <select class="selectpicker bootstrap-select__b"
+                    data-style="btn"
                     v-model="settings.instance_type"
                 >
                         <option value="spot">
@@ -208,10 +208,10 @@ const AwsLocation = {
                         </option>
                 </select>
             </div>
-            <div class="custom-input m-3" >        
+            <div class="custom-input m-3" >
                 <p class="custom-input_desc mb-1">AWS Region</p>
-                <select class="selectpicker bootstrap-select__b" 
-                    data-style="btn" 
+                <select class="selectpicker bootstrap-select__b"
+                    data-style="btn"
                     v-model="settings.region_name"
                 >
                         <option v-for="region in aws_regions">
@@ -219,21 +219,21 @@ const AwsLocation = {
                         </option>
                 </select>
             </div>
-            <div class="custom-input m-3" > 
+            <div class="custom-input m-3" >
                 <p class="custom-input_desc mb-1">Security groups</p>
-                <input type="text" v-model="settings.security_groups" 
-                class="form-control form-control-alternative"  
+                <input type="text" v-model="settings.security_groups"
+                class="form-control form-control-alternative"
                 placeholder="Leave empty for default value"/>
             </div>
-            <div class="custom-input m-3" > 
+            <div class="custom-input m-3" >
                 <p class="custom-input_desc mb-1">Image ID</p>
-                <input type="text" v-model="settings.image_id" 
+                <input type="text" v-model="settings.image_id"
                 placeholder="Leave empty for default value"
                 class="form-control form-control-alternative" />
             </div>
-            <div class="custom-input m-3" > 
+            <div class="custom-input m-3" >
                 <p class="custom-input_desc mb-1">Subnet ID</p>
-                <input type="text" v-model="settings.subnet_id" 
+                <input type="text" v-model="settings.subnet_id"
                 placeholder="Leave empty for default value"
                 class="form-control form-control-alternative" />
             </div>
@@ -281,7 +281,7 @@ const GcpLocation = {
             this.$nextTick(this.refresh_pickers)
         },
         get_zones() {
-            fetch("/api/v1/gcp_integration/get_zones",
+            fetch(window.url_prefix + "/api/v1/gcp_integration/get_zones",
                 {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -305,8 +305,8 @@ const GcpLocation = {
         `<div class="form-group w-100-imp">
             <div class="custom-input m-3">
                 <p class="custom-input_desc mb-1">Instance type</p>
-                <select class="selectpicker bootstrap-select__b" 
-                    data-style="btn" 
+                <select class="selectpicker bootstrap-select__b"
+                    data-style="btn"
                     v-model="settings.instance_type"
                 >
                         <option value="spot">
@@ -317,10 +317,10 @@ const GcpLocation = {
                         </option>
                 </select>
             </div>
-            <div class="custom-input m-3" >        
+            <div class="custom-input m-3" >
                 <p class="custom-input_desc mb-1">GCP Zones</p>
-                <select class="selectpicker bootstrap-select__b" 
-                    data-style="btn" 
+                <select class="selectpicker bootstrap-select__b"
+                    data-style="btn"
                     v-model="settings.zone"
                 >
                         <option v-for="zone in gcp_zones">
@@ -352,7 +352,7 @@ const Locations = {
     <div class="d-flex py-4">
         <div class="custom-input w-100-imp displacement-ml-4">
             <p class="custom-input_desc font-semibold mb-1">Engine location</p>
-            <select class="selectpicker bootstrap-select__b" data-style="btn" 
+            <select class="selectpicker bootstrap-select__b" data-style="btn"
                 v-model="location_"
             >
                 <optgroup label="Public pool" v-if="public_regions_.length > 0">
@@ -368,7 +368,7 @@ const Locations = {
         </div>
         <div class="custom-input ml-3">
             <p class="custom-input_desc font-semibold mb-1">Runners</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="parallel_runners"
                 :uniq_id="modal_id + '_parallel'"
                 @change="val => (parallel_runners_ = val)"
@@ -376,7 +376,7 @@ const Locations = {
         </div>
         <div class="custom-input ml-3">
             <p class="custom-input_desc font-semibold mb-1">CPU Cores</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="cpu"
                 :uniq_id="modal_id + '_cpu'"
                 @change="val => (cpu_ = val)"
@@ -384,7 +384,7 @@ const Locations = {
         </div>
         <div class="custom-input mx-3">
             <p class="custom-input_desc font-semibold mb-1">Memory, Gb</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="memory"
                 :uniq_id="modal_id + '_memory'"
                 @change="val => (memory_ = val)"
@@ -394,21 +394,21 @@ const Locations = {
     </div>
     <div class="row pl-1" v-if="is_cloud_location">
         <template v-if="cloud_settings_.integration_name === 'aws_integration'">
-            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="aws_integration"
             />
         </template>
         <template v-if="cloud_settings_.integration_name === 'kubernetes'">
-            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="kubernetes"
             />
         </template>
         <template v-if="cloud_settings_.integration_name === 'gcp_integration'">
-            <GcpLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <GcpLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="gcp_integration"
@@ -454,7 +454,7 @@ const Locations = {
     watch: {
         location_(newValue) {
             this.$emit('update:location', newValue)
-            if (this.$props.cloud_settings.id === this.chosen_location_settings.id && 
+            if (this.$props.cloud_settings.id === this.chosen_location_settings.id &&
                 this.$props.cloud_settings.project_id === this.chosen_location_settings.project_id) {
                 this.cloud_settings_ = {...this.chosen_location_settings, ...this.$props.cloud_settings}
             } else
@@ -532,7 +532,7 @@ const UILocations = {
     <div class="d-flex py-4">
         <div class="custom-input w-100-imp displacement-ml-4">
             <p class="custom-input_desc font-semibold mb-1">Engine location</p>
-            <select class="selectpicker bootstrap-select__b" data-style="btn" 
+            <select class="selectpicker bootstrap-select__b" data-style="btn"
                 v-model="location_"
             >
                 <optgroup label="Public pool" v-if="public_regions_.length > 0">
@@ -549,7 +549,7 @@ const UILocations = {
     <!--
         <div class="custom-input ml-3">
             <p class="custom-input_desc font-semibold mb-1">Runners</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="parallel_runners"
                 :uniq_id="modal_id + '_parallel'"
                 @change="val => (parallel_runners_ = val)"
@@ -558,7 +558,7 @@ const UILocations = {
     -->
         <div class="custom-input ml-3">
             <p class="custom-input_desc font-semibold mb-1">CPU Cores</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="cpu"
                 :uniq_id="modal_id + '_cpu'"
                 @change="val => (cpu_ = val)"
@@ -566,7 +566,7 @@ const UILocations = {
         </div>
         <div class="custom-input mx-3">
             <p class="custom-input_desc font-semibold mb-1">Memory, Gb</p>
-            <input-stepper 
+            <input-stepper
                 :default-value="memory"
                 :uniq_id="modal_id + '_memory'"
                 @change="val => (memory_ = val)"
@@ -576,21 +576,21 @@ const UILocations = {
     </div>
     <div class="row pl-1" v-if="is_cloud_location">
         <template v-if="cloud_settings_.integration_name === 'aws_integration'">
-            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <AwsLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="aws_integration"
             />
         </template>
         <template v-if="cloud_settings_.integration_name === 'kubernetes'">
-            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <KubernetesLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="kubernetes"
             />
         </template>
         <template v-if="cloud_settings_.integration_name === 'gcp_integration'">
-            <GcpLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers" 
+            <GcpLocation :cloud_settings="cloud_settings_" :refresh_pickers="refresh_pickers"
                 :key="cloud_settings_.id"
                 @register="$root.register"
                 instance_name="gcp_integration"
@@ -634,7 +634,7 @@ const UILocations = {
     watch: {
         location_(newValue) {
             this.$emit('update:location', newValue)
-            if (this.$props.cloud_settings.id === this.chosen_location_settings.id && 
+            if (this.$props.cloud_settings.id === this.chosen_location_settings.id &&
                 this.$props.cloud_settings.project_id === this.chosen_location_settings.project_id) {
                 this.cloud_settings_ = {...this.chosen_location_settings, ...this.$props.cloud_settings}
             } else
@@ -675,7 +675,7 @@ const UILocations = {
     methods: {
         async fetch_locations() {
             console.log('fetching locations')
-            const resp = await fetch(`/api/v1/shared/locations/${getSelectedProjectId()}`)
+            const resp = await fetch(window.url_prefix + `/api/v1/shared/locations/${getSelectedProjectId()}`)
             if (resp.ok) {
                 const {public_regions, project_regions, cloud_regions} = await resp.json()
                 this.public_regions_ = public_regions
