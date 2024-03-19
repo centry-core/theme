@@ -70,7 +70,14 @@ const vueCoreApp = {
                 skip_mode: false
             }, options)
             const {mode, api_version, trailing_slash, skip_mode} = opts
-            const struct = [window.url_prefix, '/api', `v${api_version}`, plugin, file_name]
+            const struct = []
+            if (window.url_prefix.trim()) {
+              struct.push('window.url_prefix')
+            }
+            struct.push('/api')
+            struct.push(`v${api_version}`)
+            struct.push(plugin)
+            struct.push(file_name)
             !skip_mode && struct.push(mode)
             !!trailing_slash && struct.push('')
             return struct.join('/')
