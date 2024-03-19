@@ -69,7 +69,7 @@ const ArtifactSourceTab = {
                 >
                     <span>{{ file?.name }}</span>
                     <button class="btn btn-16"
-                        :style="`background: url('${url_prefix}/design-system/static/assets/ico/close_notify_icon.svg') no-repeat center`"
+                        :style="background: url('${url_prefix}/design-system/static/assets/ico/close_notify_icon.svg') no-repeat center"
                         @click="handle_delete_file"
                     ></button>
                 </div>
