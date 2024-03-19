@@ -72,7 +72,7 @@ const vueCoreApp = {
             const {mode, api_version, trailing_slash, skip_mode} = opts
             const struct = []
             if (window.url_prefix.trim()) {
-              struct.push('window.url_prefix')
+              struct.push(window.url_prefix)
             }
             struct.push('/api')
             struct.push(`v${api_version}`)
