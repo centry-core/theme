@@ -10,6 +10,7 @@
         :user='user'
 {#        :is_admin_user="{{ tools.theme.is_current_user_admin() | tojson }}"#}
 
+        logo_target="{{ tools.context.url_prefix }}/"
         logo_url="{{ url_for('design-system.static', filename='assets/ico/logo.svg') }}"
         logout_url="{{ tools.theme.descriptor.config.get('logout_url', '/forward-auth/logout') }}"
         change_password_url="{{ tools.theme.descriptor.config.get('change_password_url', '/auth/realms/carrier/account/password') }}"

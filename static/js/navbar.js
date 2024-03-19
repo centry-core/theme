@@ -3,14 +3,14 @@ const NavbarCentry = {
     props: [
         'instance_name',
         'sections', 'subsections', 'modes',
-        'user', 'logo_url', 'logout_url', 'change_password_url',
+        'user', 'logo_target', 'logo_url', 'logout_url', 'change_password_url',
         'active_section', 'active_subsection',
         'active_project', 'active_mode', 'active_parameter',
     ],
     template: `
 <nav class="navbar navbar-expand main-nav justify-content-between" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
     <div class="d-flex chapters">
-        <a class="logo" href="[[ url_prefix ]]/">
+        <a class="logo" :href="logo_target">
             <img :src="logo_url" alt="centry">
         </a>
         <select class="selectpicker" data-style="btn-chapters"
