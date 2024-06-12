@@ -150,6 +150,8 @@ const AwsLocation = {
         initialState() {
             return {
                 settings: this.cloud_settings,
+                aws_instances: ["auto", "t2.medium", "t2.large", "t2.xlarge", "m5.large", "m5.xlarge", "m5.2xlarge",
+                 "m5.4xlarge", "m5.8xlarge", "m5.12xlarge"],
                 aws_regions: [
                     "eu-north-1",
                     "ap-south-1",
@@ -195,7 +197,7 @@ const AwsLocation = {
         `
     <div class="form-group w-100-imp">
             <div class="custom-input m-3">
-                <p class="custom-input_desc mb-1">Instance type</p>
+                <p class="custom-input_desc mb-1">Type</p>
                 <select class="selectpicker bootstrap-select__b"
                     data-style="btn"
                     v-model="settings.instance_type"
@@ -205,6 +207,17 @@ const AwsLocation = {
                         </option>
                         <option value="on-demand">
                             On-demand instance
+                        </option>
+                </select>
+            </div>
+            <div class="custom-input m-3" >
+                <p class="custom-input_desc mb-1">Instance type</p>
+                <select class="selectpicker bootstrap-select__b"
+                    data-style="btn"
+                    v-model="settings.ec2_instance_type"
+                >
+                        <option v-for="instance in aws_instances">
+                            [[instance]]
                         </option>
                 </select>
             </div>
