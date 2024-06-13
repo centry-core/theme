@@ -364,7 +364,7 @@ const Locations = {
     </div>
     <div class="d-flex py-4">
         <div class="custom-input w-100-imp displacement-ml-4">
-            <p class="custom-input_desc font-semibold mb-1">Engine location</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">Engine location</p>
             <select class="selectpicker bootstrap-select__b" data-style="btn"
                 v-model="location_"
             >
@@ -380,7 +380,7 @@ const Locations = {
             </select>
         </div>
         <div class="custom-input ml-3">
-            <p class="custom-input_desc font-semibold mb-1">Runners</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">Runners</p>
             <input-stepper
                 :default-value="parallel_runners"
                 :uniq_id="modal_id + '_parallel'"
@@ -388,7 +388,7 @@ const Locations = {
             ></input-stepper>
         </div>
         <div class="custom-input ml-3">
-            <p class="custom-input_desc font-semibold mb-1">CPU Cores</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">CPU Cores</p>
             <input-stepper
                 :default-value="cpu"
                 :uniq_id="modal_id + '_cpu'"
@@ -396,7 +396,7 @@ const Locations = {
             ></input-stepper>
         </div>
         <div class="custom-input mx-3">
-            <p class="custom-input_desc font-semibold mb-1">Memory, Gb</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">Memory, Gb</p>
             <input-stepper
                 :default-value="memory"
                 :uniq_id="modal_id + '_memory'"
@@ -544,7 +544,7 @@ const UILocations = {
     </div>
     <div class="d-flex py-4">
         <div class="custom-input w-100-imp displacement-ml-4">
-            <p class="custom-input_desc font-semibold mb-1">Engine location</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">Engine location</p>
             <select class="selectpicker bootstrap-select__b" data-style="btn"
                 v-model="location_"
             >
@@ -570,7 +570,7 @@ const UILocations = {
         </div>
     -->
         <div class="custom-input ml-3">
-            <p class="custom-input_desc font-semibold mb-1">CPU Cores</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">CPU Cores</p>
             <input-stepper
                 :default-value="cpu"
                 :uniq_id="modal_id + '_cpu'"
@@ -578,7 +578,7 @@ const UILocations = {
             ></input-stepper>
         </div>
         <div class="custom-input mx-3">
-            <p class="custom-input_desc font-semibold mb-1">Memory, Gb</p>
+            <p class="custom-input_desc font-semibold mb-1 font-h5">Memory, Gb</p>
             <input-stepper
                 :default-value="memory"
                 :uniq_id="modal_id + '_memory'"

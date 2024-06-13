@@ -54,7 +54,7 @@ const NavbarCentry = {
         </select>
     </div>
 
-    <div>
+    <div class="active-mode mx-3">
         [[ active_mode ]]
     </div>
 
@@ -62,11 +62,24 @@ const NavbarCentry = {
         <button class="btn btn-xs btn-table btn-icon__xs" type="button"
                 id="userDropDown" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-            <i class="icon__16x16 icon-user"></i>
+            <i class="icon__14x14 icon-user"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropDown">
             <span class="dropdown-item-text px-3 font-h5">[[ user.name ]]</span>
             <span class="dropdown-item-text px-3 font-h5">[[ user.email ]]</span>
+            <span class="dropdown-item-text px-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0 font-h5">Dark mode</p>
+                    <label class="custom-toggle" for="cbxDarkMode" onclick="event.stopPropagation()">
+                        <input
+                            id="cbxDarkMode"
+                            name="isDarkTheme"
+                            v-model="isDarkTheme"
+                            type="checkbox">
+                        <span class="custom-toggle_slider round"></span>
+                    </label>
+                </div>
+            </span>
             <div v-if="modes.length > 0" class="dropdown-divider"></div>
             <template v-if="modes.length > 0">
                 <a
@@ -89,6 +102,7 @@ const NavbarCentry = {
         return {
             projects: [],
             url_prefix: window.url_prefix,
+            isDarkTheme: false,
         }
     },
     computed: {
@@ -109,7 +123,19 @@ const NavbarCentry = {
                     await this.fetch_projects()
                 }
             })
+        },
+        isDarkTheme(newValue) {
+            if (newValue) {
+                $('body').addClass('th-dark');
+                localStorage.setItem("darkMode", "true");
+            } else {
+                $('body').removeClass('th-dark');
+                localStorage.setItem("darkMode", "false");
+            }
         }
+    },
+    mounted() {
+        this.isDarkTheme = JSON.parse(localStorage.getItem("darkMode"));
     },
     methods: {
         get_section_href(section_key) {
