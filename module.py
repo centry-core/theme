@@ -180,7 +180,9 @@ class Module(module.ModuleModel):
             Response.set_cookie(
                 response,
                 self.google_analytics_config.cookie_name,
-                g.ga_id
+                g.ga_id,
+                secure=c.APP_SCHEME == "https",
+                httponly=True,
             )
         except:  # pylint: disable=W0702
             pass
