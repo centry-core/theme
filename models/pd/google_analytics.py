@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 
 
 class GAConfiguration(BaseModel):

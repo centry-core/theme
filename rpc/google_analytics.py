@@ -3,7 +3,7 @@ from typing import List
 import requests
 from pylon.core.tools import web, log
 from tools import rpc_tools
-from pydantic import parse_obj_as, ValidationError
+from pydantic.v1 import parse_obj_as, ValidationError
 
 from ..models.pd.google_analytics import GAEvent
 
