@@ -16,7 +16,7 @@ class RPC:
         permissions = permissions or []
         auth.update_local_permissions(permissions)
         if key in self.modes:
-            raise ValueError(f"Mode is already present: {key}")
+            log.warning("Mode is already present: %s", key)
         #
         self.modes[key] = {
             "name": name,
@@ -69,7 +69,7 @@ class RPC:
         permissions = permissions or []
         auth.update_local_permissions(permissions)
         if key in self.mode_sections[mode]:
-            raise ValueError(f"Section is already present: {key}")
+            log.warning("Section is already present: %s", key)
         #
         self.mode_sections[mode][key] = {
             "name": name,
@@ -114,7 +114,7 @@ class RPC:
             self.mode_subsections[mode][section] = dict()
         #
         if key in self.mode_subsections[mode][section]:
-            raise ValueError(f"Subsection is already present: {section}:{key}")
+            log.warning("Subsection is already present: %s:%s", section, key)
         #
         self.mode_subsections[mode][section][key] = {
             "name": name,
@@ -163,8 +163,8 @@ class RPC:
             self.mode_pages[mode][section][subsection] = dict()
         #
         if key in self.mode_pages[mode][section][subsection]:
-            raise ValueError(
-                f"Page is already present: {section}:{subsection}:{key}"
+            log.warning(
+                "Page is already present: %s:%s:%s", section, subsection, key,
             )
         #
         self.mode_pages[mode][section][subsection][key] = {

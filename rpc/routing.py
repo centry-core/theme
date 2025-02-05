@@ -36,7 +36,7 @@ class RPC:
         permissions = permissions or []
         auth.update_local_permissions(permissions)
         if key in self.sections:
-            raise ValueError(f"Section is already present: {key}")
+            log.warning("Section is already present: %s", key)
         #
         self.sections[key] = {
             "name": name,
@@ -72,7 +72,7 @@ class RPC:
             self.subsections[section] = dict()
         #
         if key in self.subsections[section]:
-            raise ValueError(f"Subsection is already present: {section}:{key}")
+            log.warning("Subsection is already present: %s:%s", section, key)
         #
         self.subsections[section][key] = {
             "name": name,
@@ -111,8 +111,8 @@ class RPC:
             self.pages[section][subsection] = dict()
         #
         if key in self.pages[section][subsection]:
-            raise ValueError(
-                f"Page is already present: {section}:{subsection}:{key}"
+            log.warning(
+                "Page is already present: %s:%s:%s", section, subsection, key,
             )
         #
         self.pages[section][subsection][key] = {
