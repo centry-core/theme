@@ -272,7 +272,7 @@ class Module(module.ModuleModel):
         """ Connect handler """
 
     @auth.decorators.sio_disconnect()
-    def sio_disconnect(self, sid, **kwargs):
+    def sio_disconnect(self, sid, *args, **kwargs):
         """ Disconnect handler """
 
     # Routes
