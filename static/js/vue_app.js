@@ -73,8 +73,10 @@ const vueCoreApp = {
             const struct = []
             if (window.url_prefix.trim()) {
               struct.push(window.url_prefix)
+              struct.push('api')
+            } else {
+              struct.push('/api')
             }
-            struct.push('/api')
             struct.push(`v${api_version}`)
             struct.push(plugin)
             struct.push(file_name)
