@@ -15,7 +15,6 @@ class Slot:  # pylint: disable=E1101,R0903
         hidden_columns::
         """
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/thresholds_params/content.html',
@@ -25,7 +24,6 @@ class Slot:  # pylint: disable=E1101,R0903
     @web.slot('thresholds_params_scripts')
     def params_table_scripts(self, context, slot, payload):
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/thresholds_params/scripts.html',
@@ -34,7 +32,6 @@ class Slot:  # pylint: disable=E1101,R0903
     @web.slot('thresholds_params_styles')
     def params_table_styles(self, context, slot, payload):
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/thresholds_params/styles.html',

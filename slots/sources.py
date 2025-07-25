@@ -10,7 +10,6 @@ class Slot:  # pylint: disable=E1101,R0903
 
         """
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/sources/content.html',
@@ -20,7 +19,6 @@ class Slot:  # pylint: disable=E1101,R0903
     @web.slot('sources_scripts')
     def params_table_scripts(self, context, slot, payload):
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/sources/scripts.html',
@@ -29,7 +27,6 @@ class Slot:  # pylint: disable=E1101,R0903
     @web.slot('sources_styles')
     def params_table_styles(self, context, slot, payload):
         from pylon.core.tools import log
-        log.info('slot: [%s], payload: %s', slot, payload)
         with context.app.app_context():
             return self.descriptor.render_template(
                 'part/sources/styles.html',

@@ -98,7 +98,6 @@ class Method:  # pylint: disable=E1101,R0903
         if mode not in self.modes or mode not in self.mode_sections:
             return result
         #
-        log.info(f"{self.modes=} {self.mode_sections=}")
         current_permissions = auth.resolve_permissions(mode)
         location_result = defaultdict(list)
         #

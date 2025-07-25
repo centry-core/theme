@@ -112,10 +112,6 @@ class Module(module.ModuleModel):
         self.descriptor.init_inits()
         #
         log.info('RPCs done')
-        # log.info('%s descriptor %s', self.descriptor.name, self.__dict__)
-        # log.info('Theme descriptor module %s', self.descriptor.module.__dict__)
-        # log.info('Self func %s', self.register_section)
-        # log.info('Rpc func %s', self.context.rpc_manager.call.theme_register_section)
         #
         self.register_section(
             "configuration",
@@ -232,11 +228,9 @@ class Module(module.ModuleModel):
                 #
                 location_result[section_attrs["location"]].append(item)
         #
-        # log.info('location_result items %s', location_result.items())
         for i in location_result.values():
             result.extend(sorted(i, key=lambda x: (-x["weight"], x["name"])))
         #
-        # log.info('result %s', result)
         return result
 
     def get_visible_subsections(self, section):
@@ -248,7 +242,6 @@ class Module(module.ModuleModel):
         #
         current_permissions = auth.resolve_permissions(mode=g.theme.active_mode)
         #
-        # log.info(f"{self.subsections[section].items()=}")
         for subsection_key, subsection_attrs in self.subsections[section].items():
             if subsection_attrs.get("hidden", False):
                 continue
@@ -280,11 +273,9 @@ class Module(module.ModuleModel):
     def index(self):  # pylint: disable=R0201
         """ Index route """
         landing_kind = self.landing.get("kind", "default")
-        log.info('Index landing kind %s', landing_kind)
         #
         if landing_kind == "holder":
             sections = self.get_visible_sections()
-            log.info('Index holder sections %s', sections)
             if sections:
                 return redirect(
                     url_for(
@@ -326,7 +317,6 @@ class Module(module.ModuleModel):
         if section_permissions and not auth.has_access(
                 auth.resolve_permissions(mode=g.theme.active_mode),
                 section_permissions):
-            log.info(f"Section {section} access denied")
             return redirect(url_for("theme.access_denied"))
 
         #
@@ -365,7 +355,6 @@ class Module(module.ModuleModel):
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
-        # log.info(f"{self.subsections=}")
         if section not in self.subsections:
             return redirect(url_for("theme.access_denied"))
         #
@@ -411,7 +400,6 @@ class Module(module.ModuleModel):
         g.theme.active_section = section
         g.theme.active_subsection = subsection
         #
-        # log.info(f"{self.pages=}")
         if section not in self.pages:
             return redirect(url_for("theme.access_denied"))
         #
@@ -424,7 +412,6 @@ class Module(module.ModuleModel):
         page_attrs = self.pages[section][subsection][page]
         page_kind = page_attrs.get("kind", "default")
         page_permissions = page_attrs.get("permissions", [])
-        log.info(f"{page_attrs=}")
         #
         if page_permissions and not auth.has_access(
                 auth.resolve_permissions(mode=g.theme.active_mode), page_permissions):
