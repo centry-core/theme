@@ -261,12 +261,14 @@ class Module(module.ModuleModel):
         return result
 
     @auth.decorators.sio_connect()
-    def sio_connect(self, sid, environ):
+    def sio_connect(self, sid, environ, *args, **kwargs):
         """ Connect handler """
+        log.debug("SIO connect: %s, %s, %s, %s", sid, environ, args, kwargs)
 
     @auth.decorators.sio_disconnect()
     def sio_disconnect(self, sid, *args, **kwargs):
         """ Disconnect handler """
+        log.debug("SIO disconnect: %s, %s, %s", sid, args, kwargs)
 
     # Routes
     @web.route("/")
