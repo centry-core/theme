@@ -1,2 +1,2 @@
 # theme
-Theme for carrier UI
+Theme for Centry 'core' UI

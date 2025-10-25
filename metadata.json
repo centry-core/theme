@@ -1,6 +1,6 @@
 {
-  "name": "Theme of carrier ui",
-  "version": "0.3",
-  "depends_on": ["shared", "auth"],
-  "init_after": ["shared"]
+  "name": "Theme of Centry 'core' UI",
+  "version": "0.9",
+  "depends_on": [],
+  "init_after": ["auth"]
 }
