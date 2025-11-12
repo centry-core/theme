@@ -74,6 +74,9 @@ class Module(module.ModuleModel):
         ]
         self.bp = None
 
+    def preload(self):
+        """ Preload handler """
+        self.descriptor.register_tool('theme', self)
 
     def init(self):
         """ Init module """
